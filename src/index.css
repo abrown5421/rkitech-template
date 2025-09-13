@@ -1,0 +1,13 @@
+html, body {
+  margin: 0px;
+  padding: 0px;
+  overflow-x: hidden !important;
+}
+
+::-webkit-scrollbar {
+  display: none !important;
+}
+
+.component-root {
+  transition: all 0.3s ease;
+}
