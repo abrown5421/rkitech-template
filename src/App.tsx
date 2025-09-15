@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from './app/hooks';
 import { startLoading, stopLoading } from './features/loader/loadingSlice';
 import Loader from './features/loader/Loader';
 import Navbar from './features/navbar/Navbar';
+import Home from './features/home/Home';
 
 const App: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -29,8 +30,9 @@ const App: React.FC = () => {
           <Loader target="userProfile" type="Bars" variant={2} />
         </Container>
       ) : (
-        <Container tailwindClasses="h-full w-full">
+        <Container tailwindClasses="h-full w-full flex-col">
           <Navbar />
+          <Home />
         </Container>
       )}
     </Container>
