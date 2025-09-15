@@ -4,4 +4,6 @@ export interface LoadingState {
 
 export interface LoaderProps {
   target: string; 
+  type: "Dots" | "Bars" | "Spinner" | "Progress";
+  variant: number;
 }
