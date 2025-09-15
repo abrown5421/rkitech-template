@@ -22,8 +22,8 @@ const dispatch = useAppDispatch();
 
   return (
     <Container tailwindClasses="flex-col w-screen h-screen z-30 relative bg-gray-900">
-      <Container tailwindClasses="h-full w-full justify-center align-center">
-        <Loader target="userProfile" />
+      <Container tailwindClasses="h-full w-full justify-center items-center">
+        <Loader target="userProfile" type="Bars" variant={2}/>
       </Container>
     </Container>
   );
