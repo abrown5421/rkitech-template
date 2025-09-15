@@ -1,11 +1,13 @@
 import React, { useEffect } from 'react';
 import { Container } from 'rkitech-components';
-import { useAppDispatch } from './app/hooks';
+import { useAppDispatch, useAppSelector } from './app/hooks';
 import { startLoading, stopLoading } from './features/loader/loadingSlice';
 import Loader from './features/loader/Loader';
+import Navbar from './features/navbar/Navbar';
 
 const App: React.FC = () => {
-const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
+  const isLoading = useAppSelector((state) => state.loading["userProfile"] ?? false);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -22,9 +24,15 @@ const dispatch = useAppDispatch();
 
   return (
     <Container tailwindClasses="flex-col w-screen h-screen z-30 relative bg-gray-900">
-      <Container tailwindClasses="h-full w-full justify-center items-center">
-        <Loader target="userProfile" type="Bars" variant={2}/>
-      </Container>
+      {isLoading ? (
+        <Container tailwindClasses="h-full w-full justify-center items-center">
+          <Loader target="userProfile" type="Bars" variant={2} />
+        </Container>
+      ) : (
+        <Container tailwindClasses="h-full w-full">
+          <Navbar />
+        </Container>
+      )}
     </Container>
   );
 };
