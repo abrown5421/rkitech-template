@@ -11,7 +11,7 @@ const Navbar: React.FC = () => {
                 exitAnimation: 'animate__fadeOut',
                 isEntering: true
             }}
-            tailwindClasses='w-full h-[54px] bg-gray-50 justify-between items-center'
+            tailwindClasses='w-full h-[54px] bg-gray-50 justify-between items-center relative z-40 shadow-[0_2px_4px_rgba(0,0,0,0.15)]'
         >
             <Container 
                 animationObject={{
