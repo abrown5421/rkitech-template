@@ -12,6 +12,8 @@ const Modal: React.FC = () => {
 
     if (!modal.open && !isClosing && !isOverlayClosing) return null;
 
+    console.log(modal.entrance, modal.exit)
+
     const handleClose = async () => {
         setIsClosing(true);
         try {
@@ -29,7 +31,7 @@ const Modal: React.FC = () => {
             }, 500);
         }
     };
-
+    
     return (
         <Container
             animationObject={{
@@ -41,8 +43,8 @@ const Modal: React.FC = () => {
         >
             <Container
                 animationObject={{
-                    entranceAnimation: 'animate__flipInX',
-                    exitAnimation: 'animate__flipOutX',
+                    entranceAnimation: modal.entrance || 'animate__flipInX',
+                    exitAnimation: modal.exit || 'animate__flipOutX',
                     isEntering: modal.open && !isClosing,
                 }}
                 tailwindClasses="flex-col bg-gray-50 rounded-2xl p-4 m-4 w-full md:w-1/2 lg:w-1/3 xl:w-1/4"
