@@ -5,6 +5,7 @@ import { startLoading, stopLoading } from './features/loader/loadingSlice';
 import Loader from './features/loader/Loader';
 import Navbar from './features/navbar/Navbar';
 import Home from './features/home/Home';
+import Modal from './features/modal/Modal';
 
 const App: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -33,6 +34,7 @@ const App: React.FC = () => {
         <Container tailwindClasses="h-full w-full flex-col">
           <Navbar />
           <Home />
+          <Modal />
         </Container>
       )}
     </Container>
