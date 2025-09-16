@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import type { ActivePageState } from "./activePageTypes";
+import type { ActivePageState } from "../globalTypes.ts/activePageTypes";
 
 const initialState: ActivePageState = {
   activePageName: "Home",
