@@ -7,6 +7,8 @@ const initialState: ModalProps = {
     title: "",
     body: "",
     closeable: true,
+    entrance: undefined,
+    exit: undefined,
     action: [],
 };
 
@@ -20,6 +22,8 @@ const modalSlice = createSlice({
             state.body = action.payload.body;
             state.closeable = action.payload.closeable;
             state.action = action.payload.action;
+            state.entrance = action.payload.entrance;
+            state.exit = action.payload.exit; 
         },
         closeModal: (state) => {
             state.open = false;
@@ -27,6 +31,8 @@ const modalSlice = createSlice({
             state.body = "";
             state.closeable = true;
             state.action = [];
+            state.entrance = undefined;
+            state.exit = undefined;
         },
         setModalTitle: (state, action: PayloadAction<string>) => {
             state.title = action.payload;
