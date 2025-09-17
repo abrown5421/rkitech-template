@@ -10,6 +10,17 @@ const Alert: React.FC = () => {
     const [isClosing, setIsClosing] = React.useState(false);
     const autoCloseTimer = useRef<number | null>(null);
 
+    const positionClasses = {
+        "top-left": "top-[50px] left-0",
+        "top-center": "top-[50px] left-1/2 -translate-x-1/2",
+        "top-right": "top-[50px] right-0",
+        "bottom-left": "bottom-0 left-0",
+        "bottom-center": "bottom-0 left-1/2 -translate-x-1/2",
+        "bottom-right": "bottom-0 right-0",
+    };
+
+    const tailwindPosition = positionClasses[alert.orientation ?? "bottom-right"];
+
     useEffect(() => {
         if (alert.open) {
             setIsClosing(false);
@@ -40,7 +51,6 @@ const Alert: React.FC = () => {
             : `text-${colorString}`;
 
     const handleClose = () => {
-        // Stop any pending auto-close
         if (autoCloseTimer.current) {
             clearTimeout(autoCloseTimer.current);
         }
@@ -58,7 +68,7 @@ const Alert: React.FC = () => {
                 exitAnimation: alert.exit || 'animate__slideOutRight',
                 isEntering: alert.open && !isClosing,
             }}
-            tailwindClasses={`flex-row justify-between gap-10 m-4 p-1 z-50 bg-${colorString}/20 rounded border-2 border-${colorString} absolute bottom-0 right-0`}
+            tailwindClasses={`flex-row justify-between gap-10 m-4 p-1 z-50 bg-${colorString}/20 rounded border-2 border-${colorString} absolute  ${tailwindPosition}`}
         >
             <Text text={alert.body} tailwindClasses={textColorClass} />
             {alert.closeable && (
