@@ -4,7 +4,6 @@ import fs from 'fs-extra';
 import path from 'path';
 import camelCase from 'camelcase';
 import { blankTemplate } from './templates/blank.js';
-
 import { program } from 'commander';
 
 program
@@ -15,12 +14,9 @@ program
     const folderName = camelCase(componentName); 
 
     const templateName = options.template;
-
-    const templateMap = {
-      blank: blankTemplate,
-    };
-
+    const templateMap = { blank: blankTemplate };
     const templateFn = templateMap[templateName];
+
     if (!templateFn) {
       console.error(`Template "${templateName}" not found.`);
       process.exit(1);
@@ -39,7 +35,23 @@ program
 
     console.log(`✅ Created page at ${componentFilePath}`);
     console.log(`✅ Created types file at ${typesFilePath}`);
-  });
 
+    const pagesJsonPath = path.join(process.cwd(), 'shared/pages.json');
+    const pages = fs.readJsonSync(pagesJsonPath);
+
+    const newPage = {
+      pageName: componentNamePascal,
+      pageActive: true,
+      pageColor: "",
+      pageEntranceAnimation: "",
+      pageExitAnimation: "",
+      pageContent: ""
+    };
+
+    pages.push(newPage);
+    fs.writeJsonSync(pagesJsonPath, pages, { spaces: 2 });
+
+    console.log(`✅ Added page record to shared/pages.json`);
+  });
 
 program.parse(process.argv);

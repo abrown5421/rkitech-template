@@ -1,0 +1,18 @@
+[
+  {
+    "pageName": "Home",
+    "pageActive": true,
+    "pageColor": "",
+    "pageEntranceAnimation": "",
+    "pageExitAnimation": "",
+    "pageContent": ""
+  },
+  {
+    "pageName": "TestPage",
+    "pageActive": true,
+    "pageColor": "",
+    "pageEntranceAnimation": "",
+    "pageExitAnimation": "",
+    "pageContent": ""
+  }
+]
