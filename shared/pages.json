@@ -1,15 +1,7 @@
 [
   {
     "pageName": "Home",
-    "pageActive": true,
-    "pageColor": "",
-    "pageIntensity": "",
-    "pageEntranceAnimation": "",
-    "pageExitAnimation": "",
-    "pageContent": ""
-  },
-  {
-    "pageName": "TestPage",
+    "pagePath": "/",
     "pageActive": true,
     "pageColor": "",
     "pageIntensity": "",
