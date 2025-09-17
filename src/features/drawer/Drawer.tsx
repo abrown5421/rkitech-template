@@ -47,6 +47,7 @@ const Drawer: React.FC = () => {
                     isEntering: drawer.open && !isClosing,
                 }}
                 tailwindClasses={`z-40 bg-${colorString} absolute ${tailwindPosition}`}
+                onClick={(e) => e.stopPropagation()}
             >
                 <Container tailwindClasses="flex-col h-full w-full relative">
                     
