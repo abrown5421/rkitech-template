@@ -3,6 +3,7 @@ import { Button, Container } from 'rkitech-components';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { openModal } from '../modal/modalSlice';
 import { openAlert } from '../alert/alertSlice';
+import { openDrawer } from '../drawer/drawerSlice'; // ✅ import this
 
 const Home: React.FC = () => {
     const dispatch = useAppDispatch();
@@ -30,7 +31,26 @@ const Home: React.FC = () => {
                 color: "emerald",
                 intensity: 500,
                 entrance: "animate__slideInRight",
-                exit: "animate__slideOutRight"
+                exit: "animate__slideOutRight",
+            })
+        );
+    };
+
+    const handleOpenDrawer = () => {
+        dispatch(
+            openDrawer({
+                title: "Drawer Title",
+                color: "blue",
+                intensity: 500,
+                entrance: "animate__slideInRight",
+                exit: "animate__slideOutRight",
+                orientation: "right",
+                action: [
+                    { actionName: "Close", actionColor: "red", actionIntensity: 500, actionFunction: () => console.log("Drawer action clicked!") }
+                ],
+                link: [
+                    { linkName: "Go to Profile", linkFunction: () => console.log("Navigate to profile!") }
+                ]
             })
         );
     };
@@ -51,7 +71,7 @@ const Home: React.FC = () => {
                 <Button onClick={handleOpenAlert} tailwindClasses='py-1 px-5 rounded-xl border-2 cursor-pointer text-gray-50 bg-amber-500 border-amber-500 hover:bg-transparent hover:text-amber-500'>
                     Open alert
                 </Button>
-                <Button tailwindClasses='py-1 px-5 rounded-xl border-2 cursor-pointer text-gray-50 bg-amber-500 border-amber-500 hover:bg-transparent hover:text-amber-500'>
+                <Button onClick={handleOpenDrawer} tailwindClasses='py-1 px-5 rounded-xl border-2 cursor-pointer text-gray-50 bg-amber-500 border-amber-500 hover:bg-transparent hover:text-amber-500'>
                     Open drawer
                 </Button>
             </Container>
