@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import type { EntranceAnimation, ExitAnimation, TailwindColor, TailwindIntensity } from "rkitech-components";
 
 export type DrawerOrientation =
@@ -29,6 +30,7 @@ export interface DrawerAction {
 
 export interface DrawerLink {
     linkName: string;
+    linkIcon?: ReactNode;
     linkTextColor?: TailwindColor;
     linkTextIntensity?: TailwindIntensity;
     linkFunction: (() => void) | (() => Promise<void>) | (() => any) | (() => Promise<any>);
