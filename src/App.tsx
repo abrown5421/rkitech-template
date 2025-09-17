@@ -1,13 +1,16 @@
 import React, { useEffect } from 'react';
-import { Container } from 'rkitech-components';
+import { Container, type EntranceAnimation, type ExitAnimation, type TailwindColor, type TailwindIntensity } from 'rkitech-components';
 import { useAppDispatch, useAppSelector } from './app/hooks';
 import { startLoading, stopLoading } from './features/loader/loadingSlice';
 import Loader from './features/loader/Loader';
 import Navbar from './features/navbar/Navbar';
-import Home from './features/home/Home';
 import Modal from './features/modal/Modal';
 import Alert from './features/alert/Alert';
 import Drawer from './features/drawer/Drawer';
+import pages from '../shared/pages.json';
+import { Route, Routes } from 'react-router-dom';
+import PageShell from './features/pageShell/PageShell';
+import type { RenderMethod } from './features/pageShell/pageShellTypes';
 
 const App: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -35,7 +38,34 @@ const App: React.FC = () => {
       ) : (
         <Container tailwindClasses="h-full w-full flex-col">
           <Navbar />
-          <Home />
+          
+          <Routes>
+            {pages
+              .filter((p) => p.pageActive)
+              .map((p) => {
+                let routePath = p.pagePath;
+                
+                return (
+                  <Route
+                    path={routePath}
+                    element={
+                      <PageShell
+                        pageName={p.pageName}
+                        pageRenderMethod={p.pageRenderMethod as RenderMethod} 
+                        pageActive={p.pageActive}
+                        pagePath={p.pagePath}
+                        pageContent={p.pageContent}
+                        pageColor={p.pageColor as unknown as TailwindColor}
+                        pageIntensity={p.pageIntensity as unknown as TailwindIntensity}
+                        pageEntranceAnimation={p.pageEntranceAnimation as unknown as EntranceAnimation}
+                        pageExitAnimation={p.pageExitAnimation as unknown as ExitAnimation}
+                      />
+                    }
+                  />
+                );
+              })}
+          </Routes>
+          
           <Modal />
           <Alert />
           <Drawer />
