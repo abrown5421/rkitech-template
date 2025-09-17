@@ -43,6 +43,7 @@ program
       pageName: componentNamePascal,
       pageActive: true,
       pageColor: "",
+      pageIntensity: "",
       pageEntranceAnimation: "",
       pageExitAnimation: "",
       pageContent: ""
