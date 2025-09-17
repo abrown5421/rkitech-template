@@ -3,6 +3,7 @@
     "pageName": "Home",
     "pageActive": true,
     "pageColor": "",
+    "pageIntensity": "",
     "pageEntranceAnimation": "",
     "pageExitAnimation": "",
     "pageContent": ""
@@ -11,6 +12,7 @@
     "pageName": "TestPage",
     "pageActive": true,
     "pageColor": "",
+    "pageIntensity": "",
     "pageEntranceAnimation": "",
     "pageExitAnimation": "",
     "pageContent": ""
