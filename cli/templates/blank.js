@@ -8,15 +8,9 @@ const ${componentName}: React.FC<${componentName}Props> = () => {
 
     return (
         <Container 
-            animationObject={{
-                entranceAnimation: 'animate__fadeInUpBig',
-                exitAnimation: 'animate__fadeOutDownBig',
-                isEntering: activePage.activePageIn && activePage.activePageName === '${componentName}'
-            }}
-            tailwindClasses='h-[calc(100vh-54px)] bg-gray-50 p-5 flex-row'
+            tailwindClasses=''
         >
-            <Container tailwindClasses='flex-col flex-1'>column one</Container>
-            <Container tailwindClasses='flex-col flex-1'>column two</Container>
+            ${componentName}
         </Container>
     );
 };

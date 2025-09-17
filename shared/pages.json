@@ -1,9 +1,9 @@
 [
   {
     "pageName": "Home",
-    "pageActive": true,
-    "pageRenderMethod": "static",
     "pagePath": "/",
+    "pageRenderMethod": "static",
+    "pageActive": true,
     "pageColor": "gray",
     "pageIntensity": "50",
     "pageEntranceAnimation": "animate__fadeInUpBig",
