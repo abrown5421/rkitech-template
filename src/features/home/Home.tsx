@@ -3,7 +3,7 @@ import { Button, Container } from 'rkitech-components';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { openModal } from '../modal/modalSlice';
 import { openAlert } from '../alert/alertSlice';
-import { openDrawer } from '../drawer/drawerSlice'; // ✅ import this
+import { openDrawer } from '../drawer/drawerSlice'; 
 
 const Home: React.FC = () => {
     const dispatch = useAppDispatch();
@@ -40,16 +40,18 @@ const Home: React.FC = () => {
         dispatch(
             openDrawer({
                 title: "Drawer Title",
-                color: "blue",
-                intensity: 500,
+                color: "gray",
+                intensity: 50,
                 entrance: "animate__slideInRight",
                 exit: "animate__slideOutRight",
                 orientation: "right",
                 action: [
-                    { actionName: "Close", actionColor: "red", actionIntensity: 500, actionFunction: () => console.log("Drawer action clicked!") }
+                    { actionName: "Close", actionColor: "amber", actionIntensity: 500, actionFunction: () => console.log("Drawer action clicked!") }
                 ],
                 link: [
-                    { linkName: "Go to Profile", linkFunction: () => console.log("Navigate to profile!") }
+                    { linkName: "Home", linkFunction: () => console.log("Navigate to profile!") },
+                    { linkName: "About", linkFunction: () => console.log("Navigate to profile!") },
+                    { linkName: "Docs", linkFunction: () => console.log("Navigate to profile!") },
                 ]
             })
         );
