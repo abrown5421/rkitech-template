@@ -13,7 +13,7 @@ const initialState: AlertProps = {
     textIntensity: 50,
     entrance: "animate__slideInRight",
     exit: "animate__slideOutRight",
-    orientation: "top-right", // ✅ default
+    orientation: "top-right", 
 };
 
 const alertSlice = createSlice({
@@ -30,7 +30,7 @@ const alertSlice = createSlice({
             state.textIntensity = action.payload.textIntensity;
             state.entrance = action.payload.entrance;
             state.exit = action.payload.exit;
-            state.orientation = action.payload.orientation; // ✅ added
+            state.orientation = action.payload.orientation;
         },
         closeAlert: (state) => {
             state.open = false;
