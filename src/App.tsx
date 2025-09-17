@@ -6,6 +6,7 @@ import Loader from './features/loader/Loader';
 import Navbar from './features/navbar/Navbar';
 import Home from './features/home/Home';
 import Modal from './features/modal/Modal';
+import Alert from './features/alert/Alert';
 
 const App: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -35,6 +36,7 @@ const App: React.FC = () => {
           <Navbar />
           <Home />
           <Modal />
+          <Alert />
         </Container>
       )}
     </Container>

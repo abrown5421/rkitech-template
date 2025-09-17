@@ -2,11 +2,11 @@ import React from 'react';
 import { Button, Container } from 'rkitech-components';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { openModal } from '../modal/modalSlice';
+import { openAlert } from '../alert/alertSlice';
 
 const Home: React.FC = () => {
     const dispatch = useAppDispatch();
     const activePage = useAppSelector((state) => state.activePage);
-
 
     const handleOpenModal = () => {
         dispatch(
@@ -15,27 +15,22 @@ const Home: React.FC = () => {
                 body: "Are you sure you want to proceed?",
                 closeable: true,
                 action: [
-                    {
-                        actionName: "No",
-                        actionColor: "gray",
-                        actionIntensity: 500,
-                        actionTextColor: "gray",
-                        actionTextIntensity: 50,
-                        actionFunction: () => {
-                            console.log("Cancelled!");
-                        },
-                    },
-                    {
-                        actionName: "Yes",
-                        actionColor: "amber",
-                        actionIntensity: 500,
-                        actionTextColor: "gray",
-                        actionTextIntensity: 50,
-                        actionFunction: () => {
-                            console.log("Confirmed!");
-                        },
-                    },
+                    { actionName: "No", actionColor: "gray", actionIntensity: 500, actionFunction: () => console.log("Cancelled!") },
+                    { actionName: "Yes", actionColor: "amber", actionIntensity: 500, actionFunction: () => console.log("Confirmed!") },
                 ],
+            })
+        );
+    };
+
+    const handleOpenAlert = () => {
+        dispatch(
+            openAlert({
+                body: "This is an alert message!",
+                closeable: true,
+                color: "emerald",
+                intensity: 500,
+                entrance: "animate__slideInRight",
+                exit: "animate__slideOutRight",
             })
         );
     };
@@ -53,7 +48,7 @@ const Home: React.FC = () => {
                 <Button onClick={handleOpenModal} tailwindClasses='py-1 px-5 rounded-xl border-2 cursor-pointer text-gray-50 bg-amber-500 border-amber-500 hover:bg-transparent hover:text-amber-500'>
                     Open modal
                 </Button>
-                <Button tailwindClasses='py-1 px-5 rounded-xl border-2 cursor-pointer text-gray-50 bg-amber-500 border-amber-500 hover:bg-transparent hover:text-amber-500'>
+                <Button onClick={handleOpenAlert} tailwindClasses='py-1 px-5 rounded-xl border-2 cursor-pointer text-gray-50 bg-amber-500 border-amber-500 hover:bg-transparent hover:text-amber-500'>
                     Open alert
                 </Button>
                 <Button tailwindClasses='py-1 px-5 rounded-xl border-2 cursor-pointer text-gray-50 bg-amber-500 border-amber-500 hover:bg-transparent hover:text-amber-500'>
@@ -63,4 +58,5 @@ const Home: React.FC = () => {
         </Container>
     );
 };
+
 export default Home;
