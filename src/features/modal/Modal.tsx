@@ -37,7 +37,7 @@ const Modal: React.FC = () => {
                 exitAnimation: 'animate__fadeOut',
                 isEntering: modal.open && !isOverlayClosing,
             }}
-            tailwindClasses="w-full h-full justify-center items-center z-50 bg-gray-950/60 absolute top-0"
+            tailwindClasses="w-full h-full justify-center items-center z-40 bg-gray-950/60 absolute top-0"
         >
             <Container
                 animationObject={{
