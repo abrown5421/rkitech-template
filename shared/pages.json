@@ -1,12 +1,13 @@
 [
   {
     "pageName": "Home",
-    "pagePath": "/",
     "pageActive": true,
-    "pageColor": "",
-    "pageIntensity": "",
-    "pageEntranceAnimation": "",
-    "pageExitAnimation": "",
+    "pageRenderMethod": "static",
+    "pagePath": "/",
+    "pageColor": "gray",
+    "pageIntensity": "50",
+    "pageEntranceAnimation": "animate__fadeInUpBig",
+    "pageExitAnimation": "animate__fadeOutDownBig",
     "pageContent": ""
   }
 ]

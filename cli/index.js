@@ -1,58 +1,43 @@
 #!/usr/bin/env node
 
-import fs from 'fs-extra';
+import fs from 'fs';
 import path from 'path';
-import camelCase from 'camelcase';
-import { blankTemplate } from './templates/blank.js';
-import { program } from 'commander';
+import kebabCase from 'lodash.kebabcase'; 
+import { twoColumnTemplate } from './templates/two-column';
 
-program
-  .command('new-page <componentName>')
-  .option('--template <templateName>', 'Template to use', 'blank')
-  .action((componentName, options) => {
-    const componentNamePascal = camelCase(componentName, { pascalCase: true }); 
-    const folderName = camelCase(componentName); 
+const args = process.argv.slice(2);
+const command = args[0];
+const pageName = args[1]; 
 
-    const templateName = options.template;
-    const templateMap = { blank: blankTemplate };
-    const templateFn = templateMap[templateName];
-
-    if (!templateFn) {
-      console.error(`Template "${templateName}" not found.`);
-      process.exit(1);
+if (command === 'new-page' && pageName) {
+    const folderName = pageName[0].toLowerCase() + pageName.slice(1); 
+    const folderPath = path.join(process.cwd(), 'features', folderName);
+    
+    if (!fs.existsSync(folderPath)) {
+        fs.mkdirSync(folderPath, { recursive: true });
     }
 
-    const folderPath = path.join(process.cwd(), 'src/features', folderName);
-    fs.ensureDirSync(folderPath);
+    const pageFile = path.join(folderPath, `${pageName}.tsx`); 
+    const typesFile = path.join(folderPath, `${folderName}Types.ts`); 
 
-    const componentFilePath = path.join(folderPath, `${componentNamePascal}.tsx`);
-    const componentContent = templateFn(componentNamePascal, folderName);
-    fs.writeFileSync(componentFilePath, componentContent);
+    fs.writeFileSync(pageFile, twoColumnTemplate(pageName));
+    fs.writeFileSync(typesFile, `export interface ${pageName}Props {}\n`);
 
-    const typesFilePath = path.join(folderPath, `${folderName}Types.ts`);
-    const typesContent = `export interface ${componentNamePascal}Props {\n  // add props here\n}\n`;
-    fs.writeFileSync(typesFilePath, typesContent);
+    const pagePath = kebabCase(pageName); 
 
-    console.log(`✅ Created page at ${componentFilePath}`);
-    console.log(`✅ Created types file at ${typesFilePath}`);
+    const pagesJsonPath = path.join(process.cwd(), 'shared', 'pages.json');
+    const pages = JSON.parse(fs.readFileSync(pagesJsonPath, 'utf-8'));
 
-    const pagesJsonPath = path.join(process.cwd(), 'shared/pages.json');
-    const pages = fs.readJsonSync(pagesJsonPath);
+    pages.push({
+        pageName,
+        pagePath,              
+        pageActive: false,
+        pageColor: "",
+        pageEntranceAnimation: "",
+        pageExitAnimation: "",
+        pageContent: ""
+    });
 
-    const newPage = {
-      pageName: componentNamePascal,
-      pageActive: true,
-      pageColor: "",
-      pageIntensity: "",
-      pageEntranceAnimation: "",
-      pageExitAnimation: "",
-      pageContent: ""
-    };
-
-    pages.push(newPage);
-    fs.writeJsonSync(pagesJsonPath, pages, { spaces: 2 });
-
-    console.log(`✅ Added page record to shared/pages.json`);
-  });
-
-program.parse(process.argv);
+    fs.writeFileSync(pagesJsonPath, JSON.stringify(pages, null, 4));
+    console.log(`Page ${pageName} created at ${folderPath} with path '${pagePath}'`);
+}
