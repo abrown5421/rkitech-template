@@ -49,9 +49,17 @@ const Home: React.FC = () => {
             }}
             tailwindClasses='h-[calc(100vh-54px)] bg-gray-50 p-5'
         >
-            <Button onClick={handleOpenModal}>
-                Open modal
-            </Button>
+            <Container tailwindClasses='flex-row gap-4 h-[50px]'>
+                <Button onClick={handleOpenModal} tailwindClasses='py-1 px-5 rounded-xl border-2 cursor-pointer text-gray-50 bg-amber-500 border-amber-500 hover:bg-transparent hover:text-amber-500'>
+                    Open modal
+                </Button>
+                <Button tailwindClasses='py-1 px-5 rounded-xl border-2 cursor-pointer text-gray-50 bg-amber-500 border-amber-500 hover:bg-transparent hover:text-amber-500'>
+                    Open alert
+                </Button>
+                <Button tailwindClasses='py-1 px-5 rounded-xl border-2 cursor-pointer text-gray-50 bg-amber-500 border-amber-500 hover:bg-transparent hover:text-amber-500'>
+                    Open drawer
+                </Button>
+            </Container>
         </Container>
     );
 };
