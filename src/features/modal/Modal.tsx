@@ -12,8 +12,6 @@ const Modal: React.FC = () => {
 
     if (!modal.open && !isClosing && !isOverlayClosing) return null;
 
-    console.log(modal.entrance, modal.exit)
-
     const handleClose = async () => {
         setIsClosing(true);
         try {
