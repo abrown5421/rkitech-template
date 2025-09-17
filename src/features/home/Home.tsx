@@ -30,7 +30,7 @@ const Home: React.FC = () => {
                 color: "emerald",
                 intensity: 500,
                 entrance: "animate__slideInRight",
-                exit: "animate__slideOutRight",
+                exit: "animate__slideOutRight"
             })
         );
     };
