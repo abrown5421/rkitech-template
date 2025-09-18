@@ -105,7 +105,7 @@ async function updatePageShell(pageName: string, componentName: string, folderNa
     
     const importStatement = `import ${componentName} from '../${folderName}/${componentName}';`;
     
-    const conditionalRender = `            {activePage.activePageName === '${pageName}' && <${componentName} />}`;
+    const conditionalRender = `{activePage.activePageName === '${pageName}' && <${componentName} />}`;
     
     let updatedContent = currentContent;
     
