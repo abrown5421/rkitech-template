@@ -1,0 +1,14 @@
+[
+    {
+        "pageName": "Home",
+        "pagePath": "/",
+        "pageRenderMethod": "static",
+        "pageActive": false,
+        "pageColor": "gray",
+        "pageIntensity": 50,
+        "pageEntranceAnimation": "animate__backInRight",
+        "pageExitAnimation": "animate__backOutDown",
+        "pageContent": "",
+        "pageID": "f865a623-a392-4450-9f41-1b76faa4fe4a"
+    }
+]
