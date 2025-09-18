@@ -1,15 +1,15 @@
 import React from 'react';
 import { Container } from 'rkitech-components';
-import type { HomeProps } from './homeTypes';
+import type { BallsProps } from './ballsTypes';
 
-const Home: React.FC<HomeProps> = () => {
+const Balls: React.FC<BallsProps> = () => {
     return (
         <Container 
             tailwindClasses=''
         >
-            Home
+            Balls
         </Container>
     );
 };
 
-export default Home;
+export default Balls;

@@ -1,10 +1,9 @@
 import React, { useEffect } from 'react';
 import { Container } from 'rkitech-components';
-import type { PageShellProps } from '../../../shared/types/pageTypes';
 import { useAppSelector } from '../../app/hooks';
-import Home from '../home/Home';
+import type { PageData } from '../../cli/src/shared/types/pageTypes';
 
-const PageShell: React.FC<PageShellProps> = ({
+const PageShell: React.FC<PageData> = ({
     pageName,
     pageColor,
     pageIntensity,
@@ -24,9 +23,8 @@ const PageShell: React.FC<PageShellProps> = ({
                 isEntering: activePage.activePageIn && activePage.activePageName === pageName
             }}
             tailwindClasses={`h-[calc(100vh-54px)] p-5 bg-${colorString}`}
-        >
-            {activePage.activePageName === 'Home' && <Home />}
-
+        >                    
+            
         </Container>
     );
 };

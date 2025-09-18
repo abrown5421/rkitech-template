@@ -1,11 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import type { ActivePageState, PageShellProps } from "../../features/pageShell/pageShellTypes";
+import type { ActivePageState } from "../../features/pageShell/pageShellTypes";
+import type { PageData } from "../../cli/src/shared/types/pageTypes";
 
 const initialState: ActivePageState = {
   activePageName: "Home",
   activePageIn: true,
   PageShellProps: {
+    pageID: '',
     pageName: "Home",
     pageRenderMethod: "static",
     pageActive: true,
@@ -22,7 +24,7 @@ const activePageSlice = createSlice({
   name: "activePage",
   initialState,
   reducers: {
-    setActivePage: (state, action: PayloadAction<PageShellProps>) => {
+    setActivePage: (state, action: PayloadAction<PageData>) => {
       state.activePageName = action.payload.pageName;
       state.PageShellProps = action.payload;
       state.activePageIn = true;
