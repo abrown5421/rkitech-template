@@ -9,13 +9,14 @@ export interface ActivePageState {
 }
 
 export interface PageShellProps {
-    pageName: string,
-    pageRenderMethod: RenderMethod,
-    pageActive: boolean,
-    pagePath: string,
-    pageColor: TailwindColor,
-    pageIntensity: TailwindIntensity,
-    pageEntranceAnimation: EntranceAnimation,
-    pageExitAnimation: ExitAnimation,
-    pageContent: string
-  }
+    guid: string;
+    pageName: string;
+    pageRenderMethod: RenderMethod;
+    pageActive: boolean;
+    pagePath: string;
+    pageColor: TailwindColor;
+    pageIntensity: TailwindIntensity;
+    pageEntranceAnimation: EntranceAnimation;
+    pageExitAnimation: ExitAnimation;
+    pageContent: string;
+}
