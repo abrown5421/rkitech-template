@@ -5,6 +5,7 @@ import Home from '../home/Home';
 import type { PageData } from '../../cli/src/shared/types/pageTypes';
 
 
+
 const PageShell: React.FC<PageData> = ({
     pageName,
     pageColor,
@@ -27,11 +28,9 @@ const PageShell: React.FC<PageData> = ({
             tailwindClasses={`h-[calc(100vh-54px)] p-5 bg-${colorString}`}
         >                
             {activePage.activePageName === 'Home' && <Home />}    
-            {/* add hard coded pages here */}
+            {/* add manually generated pages here */}
             
-            {/* cli pages should appear here */}
-
-        </Container>
+            {/* cli generated pages should appear here */}            </Container>
     );
 };
 
