@@ -4,6 +4,7 @@ import { useAppSelector } from '../../app/hooks';
 import Home from '../home/Home';
 import type { PageData } from '../../cli/src/shared/types/pageTypes';
 
+
 const PageShell: React.FC<PageData> = ({
     pageName,
     pageColor,
@@ -24,8 +25,12 @@ const PageShell: React.FC<PageData> = ({
                 isEntering: activePage.activePageIn && activePage.activePageName === pageName
             }}
             tailwindClasses={`h-[calc(100vh-54px)] p-5 bg-${colorString}`}
-        >        
-        {activePage.activePageName === 'Home' && <Home />}
+        >                
+            {activePage.activePageName === 'Home' && <Home />}    
+            {/* add hard coded pages here */}
+            
+            {/* cli pages should appear here */}
+
         </Container>
     );
 };

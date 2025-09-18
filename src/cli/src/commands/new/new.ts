@@ -70,11 +70,9 @@ async function createFeatureFolder(pageName: string) {
     const featureFolderPath = path.join(featuresPath, folderName);
     
     await fs.mkdir(featuresPath, { recursive: true });
-    
     await fs.mkdir(featureFolderPath, { recursive: true });
     
     const pageFileContent = blankTemplate(componentName, folderName);
-    
     const pageFilePath = path.join(featureFolderPath, `${componentName}.tsx`);
     await fs.writeFile(pageFilePath, pageFileContent, "utf-8");
     
@@ -100,39 +98,46 @@ async function createFeatureFolder(pageName: string) {
 async function updatePageShell(pageName: string, componentName: string, folderName: string) {
   try {
     const pageShellPath = path.resolve(process.cwd(), "src/features/pageShell/PageShell.tsx");
-
     const currentContent = await fs.readFile(pageShellPath, "utf-8");
     
     const importStatement = `import ${componentName} from '../${folderName}/${componentName}';`;
-    
-    const conditionalRender = `{activePage.activePageName === '${pageName}' && <${componentName} />}`;
+    const pageShellComponentIndex = currentContent.indexOf("const PageShell:");
     
     let updatedContent = currentContent;
     
-    const typeImportIndex = updatedContent.indexOf("import type { PageData }");
-    if (typeImportIndex !== -1) {
-      const beforeTypeImport = updatedContent.substring(0, typeImportIndex);
-      const afterTypeImport = updatedContent.substring(typeImportIndex);
-      updatedContent = beforeTypeImport + importStatement + '\n' + afterTypeImport;
-    } else {
-      const lastImportIndex = updatedContent.lastIndexOf("import ");
-      const endOfLastImport = updatedContent.indexOf(";", lastImportIndex) + 1;
-      updatedContent = 
-        updatedContent.substring(0, endOfLastImport) + 
-        '\n' + importStatement + 
-        updatedContent.substring(endOfLastImport);
-    }
+    const beforeComponent = currentContent.substring(0, pageShellComponentIndex);
+    const lastImportIndex = beforeComponent.lastIndexOf("import ");
+    const endOfLastImport = beforeComponent.indexOf(";", lastImportIndex) + 1;
     
-    const containerEndIndex = updatedContent.lastIndexOf("</Container>");
-    if (containerEndIndex !== -1) {
+    updatedContent = 
+      currentContent.substring(0, endOfLastImport) + 
+      '\n' + importStatement + 
+      currentContent.substring(endOfLastImport);
+    
+    const conditionalRender = `            {activePage.activePageName === '${pageName}' && <${componentName} />}`;
+    const cliCommentPattern = /{\s*\/\*\s*cli pages should appear here\s*\*\/\s*}/;
+    const cliCommentMatch = updatedContent.match(cliCommentPattern);
+    
+    if (cliCommentMatch) {
+      const cliCommentIndex = updatedContent.indexOf(cliCommentMatch[0]);
+      const afterComment = cliCommentIndex + cliCommentMatch[0].length;
+      
       updatedContent = 
-        updatedContent.substring(0, containerEndIndex) + 
-        conditionalRender + '\n        ' +
-        updatedContent.substring(containerEndIndex);
+        updatedContent.substring(0, afterComment) + 
+        '\n' + conditionalRender +
+        updatedContent.substring(afterComment);
+    } else {
+      console.warn("⚠️  CLI comment not found, adding at end of Container");
+      const containerEndIndex = updatedContent.lastIndexOf("</Container>");
+      if (containerEndIndex !== -1) {
+        updatedContent = 
+          updatedContent.substring(0, containerEndIndex) + 
+          conditionalRender + '\n            ' +
+          updatedContent.substring(containerEndIndex);
+      }
     }
     
     await fs.writeFile(pageShellPath, updatedContent, "utf-8");
-    
     console.log(`✅ Updated PageShell.tsx with import and conditional render for ${componentName}`);
     
   } catch (error) {
@@ -140,7 +145,6 @@ async function updatePageShell(pageName: string, componentName: string, folderNa
     throw error;
   }
 }
-  
 
 async function addPageToJson(pageData: PageData) {
   try {
@@ -164,7 +168,6 @@ async function addPageToJson(pageData: PageData) {
     pagesArray.push(pageData);
     
     await fs.writeFile(pagesJsonPath, JSON.stringify(pagesArray, null, 2), "utf-8");
-    
     console.log(`✅ Successfully added page "${pageData.pageName}" to pages.json`);
     
   } catch (error) {
@@ -177,15 +180,12 @@ export async function newCommand() {
   try {
     const answers = await promptPageInfo();
     const pageID = createGUID();
-
     const fullAnswers: PageData = { ...answers, pageID };
 
     console.log(fullAnswers);
     
     await addPageToJson(fullAnswers);
-    
     const { componentName, folderName } = await createFeatureFolder(fullAnswers.pageName);
-    
     await updatePageShell(fullAnswers.pageName, componentName, folderName);
     
     console.log(`🎉 Successfully created new page: ${fullAnswers.pageName}`);
