@@ -6,77 +6,14 @@ import { createGUID } from "../../shared/utils/createGUID.js";
 import { PageData } from "../../shared/types/pageTypes.js";
 import { blankTemplate } from "../../templates/blank.js";
 
-async function loadPagesFromJson(): Promise<PageData[]> {
-  try {
-    const pagesJsonPath = path.resolve(process.cwd(), "src/cli/src/shared/json/pages.json");
-    const fileContent = await fs.readFile(pagesJsonPath, "utf-8");
-    const pagesArray = JSON.parse(fileContent);
-    
-    if (!Array.isArray(pagesArray)) {
-      console.warn("pages.json does not contain an array, treating as empty");
-      return [];
-    }
-    
-    return pagesArray;
-  } catch (error) {
-    return [];
-  }
-}
-
-function validateUniquePageName(existingPages: PageData[]) {
-  return (input: string): boolean | string => {
-    if (!input.trim()) {
-      return "Page name is required";
-    }
-    
-    const isDuplicate = existingPages.some(page => 
-      page.pageName.toLowerCase() === input.toLowerCase()
-    );
-    
-    if (isDuplicate) {
-      return `Page name "${input}" already exists. Please choose a different name.`;
-    }
-    
-    return true;
-  };
-}
-
-function validateUniquePagePath(existingPages: PageData[]) {
-  return (input: string): boolean | string => {
-    if (!input.trim()) {
-      return "Page path is required";
-    }
-    
-    const normalizedPath = input.startsWith("/") ? input : "/" + input;
-    
-    const isDuplicate = existingPages.some(page => 
-      page.pagePath.toLowerCase() === normalizedPath.toLowerCase()
-    );
-    
-    if (isDuplicate) {
-      return `Page path "${normalizedPath}" already exists. Please choose a different path.`;
-    }
-    
-    return true;
-  };
-}
-
 async function promptPageInfo() {
-  const existingPages = await loadPagesFromJson();
-  
   return inquirer.prompt([
-    { 
-      type: "input", 
-      name: "pageName", 
-      message: "Page Name:",
-      validate: validateUniquePageName(existingPages)
-    },
+    { type: "input", name: "pageName", message: "Page Name:" },
     {
       type: "input",
       name: "pagePath",
       message: "Page Path (e.g. my-page):",
       filter: (input) => (input.startsWith("/") ? input : "/" + input),
-      validate: validateUniquePagePath(existingPages)
     },
     {
       type: "list",
