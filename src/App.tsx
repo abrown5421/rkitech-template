@@ -7,10 +7,10 @@ import Navbar from './features/navbar/Navbar';
 import Modal from './features/modal/Modal';
 import Alert from './features/alert/Alert';
 import Drawer from './features/drawer/Drawer';
-import pages from '../shared/json/pages.json';
 import { Route, Routes } from 'react-router-dom';
 import PageShell from './features/pageShell/PageShell';
-import type { RenderMethod } from '../shared/types/pageTypes';
+import type { RenderMethod } from './cli/src/shared/types/pageTypes';
+import pages from './cli/src/shared/json/pages.json';
 
 const App: React.FC = () => {
   const dispatch = useAppDispatch();
