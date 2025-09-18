@@ -7,7 +7,7 @@ import Navbar from './features/navbar/Navbar';
 import Modal from './features/modal/Modal';
 import Alert from './features/alert/Alert';
 import Drawer from './features/drawer/Drawer';
-import pages from '../shared/pages.json';
+import pages from '../shared/json/pages.json';
 import { Route, Routes } from 'react-router-dom';
 import PageShell from './features/pageShell/PageShell';
 import type { RenderMethod } from './features/pageShell/pageShellTypes';
@@ -44,11 +44,11 @@ const App: React.FC = () => {
               .filter((p) => p.pageActive)
               .map((p) => (
                 <Route
-                  key={p.guid}
+                  key={p.pageID}
                   path={p.pagePath}
                   element={
                     <PageShell
-                      guid={p.guid}
+                      guid={p.pageID}
                       pageName={p.pageName}
                       pageRenderMethod={p.pageRenderMethod as RenderMethod}
                       pageActive={p.pageActive}
