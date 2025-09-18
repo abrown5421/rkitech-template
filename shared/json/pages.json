@@ -5,7 +5,7 @@
         "pageRenderMethod": "static",
         "pageActive": true,
         "pageColor": "gray",
-        "pageIntensity": "50",
+        "pageIntensity": 50,
         "pageEntranceAnimation": "animate__fadeIn",
         "pageExitAnimation": "animate__fadeOut",
         "pageContent": "",
