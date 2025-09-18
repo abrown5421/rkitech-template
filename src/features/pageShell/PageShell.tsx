@@ -30,7 +30,10 @@ const PageShell: React.FC<PageData> = ({
             {activePage.activePageName === 'Home' && <Home />}    
             {/* add manually generated pages here */}
             
-            {/* cli generated pages should appear here */}            </Container>
+            {/* cli generated pages should appear here */}            
+        
+        
+        </Container>
     );
 };
 

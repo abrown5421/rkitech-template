@@ -3,7 +3,7 @@
     "pageName": "Home",
     "pagePath": "/",
     "pageRenderMethod": "static",
-    "pageActive": false,
+    "pageActive": true,
     "pageColor": "gray",
     "pageIntensity": 50,
     "pageEntranceAnimation": "animate__fadeInUpBig",
