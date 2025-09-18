@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Container } from 'rkitech-components';
-import type { PageShellProps } from './pageShellTypes';
+import type { PageShellProps } from '../../../shared/types/pageTypes';
 import { useAppSelector } from '../../app/hooks';
 import Home from '../home/Home';
 

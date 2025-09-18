@@ -10,7 +10,7 @@ import Drawer from './features/drawer/Drawer';
 import pages from '../shared/json/pages.json';
 import { Route, Routes } from 'react-router-dom';
 import PageShell from './features/pageShell/PageShell';
-import type { RenderMethod } from './features/pageShell/pageShellTypes';
+import type { RenderMethod } from '../shared/types/pageTypes';
 
 const App: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -48,7 +48,7 @@ const App: React.FC = () => {
                   path={p.pagePath}
                   element={
                     <PageShell
-                      guid={p.pageID}
+                      pageID={p.pageID}
                       pageName={p.pageName}
                       pageRenderMethod={p.pageRenderMethod as RenderMethod}
                       pageActive={p.pageActive}
