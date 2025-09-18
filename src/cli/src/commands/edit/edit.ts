@@ -210,7 +210,6 @@ async function updatePageShell(
 ): Promise<void> {
   try {
     const pageShellPath = path.resolve(process.cwd(), "src/features/pageShell/PageShell.tsx");
-    
     let currentContent = await fs.readFile(pageShellPath, "utf-8");
     
     if (oldPageName !== newPageName) {
@@ -218,29 +217,54 @@ async function updatePageShell(
       currentContent = currentContent.replace(oldImportPattern, '');
       
       const newImportStatement = `import ${newComponentName} from '../${newFolderName}/${newComponentName}';`;
-      const typeImportIndex = currentContent.indexOf("import type { PageData }");
-      if (typeImportIndex !== -1) {
-        const beforeTypeImport = currentContent.substring(0, typeImportIndex);
-        const afterTypeImport = currentContent.substring(typeImportIndex);
-        currentContent = beforeTypeImport + newImportStatement + '\n' + afterTypeImport;
-      }
+      const pageShellComponentIndex = currentContent.indexOf("const PageShell:");
+      const beforeComponent = currentContent.substring(0, pageShellComponentIndex);
+      const lastImportIndex = beforeComponent.lastIndexOf("import ");
+      const endOfLastImport = beforeComponent.indexOf(";", lastImportIndex) + 1;
       
-      const oldConditionalPatterns = [
-        new RegExp(`{activePage\\.activePageName === '${oldPageName}' && <${oldComponentName} />}\\n?`, 'g'),
-        new RegExp(`{activePage\\.activePageName === "${oldPageName}" && <${oldComponentName} />}\\n?`, 'g'),
-      ];
+      currentContent = 
+        currentContent.substring(0, endOfLastImport) + 
+        '\n' + newImportStatement + 
+        currentContent.substring(endOfLastImport);
       
-      oldConditionalPatterns.forEach(pattern => {
-        currentContent = currentContent.replace(pattern, '');
-      });
+      const lines = currentContent.split('\n');
+      const cliCommentIndex = lines.findIndex(line => 
+        line.includes('cli pages should appear here')
+      );
       
-      const newConditionalRender = `{activePage.activePageName === '${newPageName}' && <${newComponentName} />}`;
-      const containerEndIndex = currentContent.lastIndexOf("</Container>");
-      if (containerEndIndex !== -1) {
-        currentContent = 
-          currentContent.substring(0, containerEndIndex) + 
-          newConditionalRender + '\n        ' +
-          currentContent.substring(containerEndIndex);
+      if (cliCommentIndex !== -1) {
+        const oldConditionalPattern = new RegExp(`\\s*{activePage\\.activePageName === ['"]${oldPageName}['"] && <${oldComponentName} />}\\s*`);
+        
+        for (let i = cliCommentIndex + 1; i < lines.length; i++) {
+          if (oldConditionalPattern.test(lines[i])) {
+            lines.splice(i, 1);
+            break;
+          }
+        }
+        
+        const newConditionalRender = `            {activePage.activePageName === '${newPageName}' && <${newComponentName} />}`;
+        lines.splice(cliCommentIndex + 1, 0, newConditionalRender);
+        
+        currentContent = lines.join('\n');
+      } else {
+        console.warn("⚠️  CLI comment not found, using fallback method");
+        const oldConditionalPatterns = [
+          new RegExp(`{activePage\\.activePageName === '${oldPageName}' && <${oldComponentName} />}\\n?`, 'g'),
+          new RegExp(`{activePage\\.activePageName === "${oldPageName}" && <${oldComponentName} />}\\n?`, 'g'),
+        ];
+        
+        oldConditionalPatterns.forEach(pattern => {
+          currentContent = currentContent.replace(pattern, '');
+        });
+        
+        const newConditionalRender = `            {activePage.activePageName === '${newPageName}' && <${newComponentName} />}`;
+        const containerEndIndex = currentContent.lastIndexOf("</Container>");
+        if (containerEndIndex !== -1) {
+          currentContent = 
+            currentContent.substring(0, containerEndIndex) + 
+            newConditionalRender + '\n            ' +
+            currentContent.substring(containerEndIndex);
+        }
       }
       
       currentContent = currentContent.replace(/\n\n\n+/g, '\n\n');

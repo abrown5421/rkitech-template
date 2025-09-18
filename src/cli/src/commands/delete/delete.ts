@@ -61,7 +61,6 @@ async function removePageFromJson(pageToDelete: PageData): Promise<void> {
     const updatedPages = pages.filter(page => page.pageID !== pageToDelete.pageID);
     
     await fs.writeFile(pagesJsonPath, JSON.stringify(updatedPages, null, 2), "utf-8");
-    
     console.log(`✅ Removed "${pageToDelete.pageName}" from pages.json`);
   } catch (error) {
     console.error("❌ Error updating pages.json:", error);
@@ -94,27 +93,41 @@ async function removeFeatureFolder(pageName: string): Promise<{ componentName: s
 async function removeFromPageShell(pageName: string, componentName: string, folderName: string): Promise<void> {
   try {
     const pageShellPath = path.resolve(process.cwd(), "src/features/pageShell/PageShell.tsx");
-    
-    const currentContent = await fs.readFile(pageShellPath, "utf-8");
+    let currentContent = await fs.readFile(pageShellPath, "utf-8");
     
     const importPattern = new RegExp(`import ${componentName} from '../${folderName}/${componentName}';\\n?`, 'g');
-    let updatedContent = currentContent.replace(importPattern, '');
+    currentContent = currentContent.replace(importPattern, '');
     
-    const conditionalPatterns = [
-      new RegExp(`\\s*{activePage\\.activePageName === '${pageName}' && <${componentName} />}\\n?`, 'g'),
-      new RegExp(`\\s*{activePage\\.activePageName === "${pageName}" && <${componentName} />}\\n?`, 'g'),
-      new RegExp(`\\s*{activePage\\.activePageName === '${pageName}' && <${componentName}/>}\\n?`, 'g'),
-      new RegExp(`\\s*{activePage\\.activePageName === "${pageName}" && <${componentName}/>}\\n?`, 'g')
-    ];
+    const lines = currentContent.split('\n');
+    const cliCommentIndex = lines.findIndex(line => 
+      line.includes('cli pages should appear here')
+    );
     
-    conditionalPatterns.forEach(pattern => {
-      updatedContent = updatedContent.replace(pattern, '');
-    });
+    if (cliCommentIndex !== -1) {
+      const conditionalPattern = new RegExp(`\\s*{activePage\\.activePageName === ['"]${pageName}['"] && <${componentName} />}\\s*`);
+      
+      for (let i = cliCommentIndex + 1; i < lines.length; i++) {
+        if (conditionalPattern.test(lines[i])) {
+          lines.splice(i, 1);
+          break;
+        }
+      }
+      
+      currentContent = lines.join('\n');
+    } else {
+      const conditionalPatterns = [
+        new RegExp(`\\s*{activePage\\.activePageName === '${pageName}' && <${componentName} />}\\n?`, 'g'),
+        new RegExp(`\\s*{activePage\\.activePageName === "${pageName}" && <${componentName} />}\\n?`, 'g'),
+      ];
+      
+      conditionalPatterns.forEach(pattern => {
+        currentContent = currentContent.replace(pattern, '');
+      });
+    }
     
-    updatedContent = updatedContent.replace(/\n\n\n+/g, '\n\n');
+    currentContent = currentContent.replace(/\n\n\n+/g, '\n\n');
     
-    await fs.writeFile(pageShellPath, updatedContent, "utf-8");
-    
+    await fs.writeFile(pageShellPath, currentContent, "utf-8");
     console.log(`✅ Removed import and conditional render for ${componentName} from PageShell.tsx`);
   } catch (error) {
     console.error("❌ Error updating PageShell.tsx:", error);
@@ -128,7 +141,6 @@ export async function deleteCommand(): Promise<void> {
     console.log("Loading existing pages...\n");
     
     const pages = await loadPagesFromJson();
-    
     const pageToDelete = await promptPageSelection(pages);
     
     if (!pageToDelete) {
@@ -139,9 +151,7 @@ export async function deleteCommand(): Promise<void> {
     console.log(`\nDeleting page: ${pageToDelete.pageName}...`);
     
     await removePageFromJson(pageToDelete);
-    
     const { componentName, folderName } = await removeFeatureFolder(pageToDelete.pageName);
-    
     await removeFromPageShell(pageToDelete.pageName, componentName, folderName);
     
     console.log(`\n🎉 Successfully deleted page: ${pageToDelete.pageName}`);
