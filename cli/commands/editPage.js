@@ -4,7 +4,7 @@ import inquirer from 'inquirer';
 import { COLORS, ENTRANCE_ANIMATIONS, EXIT_ANIMATIONS, INTENSITIES } from '../constants/globalConstants.js';
 
 export async function editPage() {
-    const pagesJsonPath = path.join(process.cwd(), 'shared', 'pages.json');
+    const pagesJsonPath = path.join(process.cwd(), 'shared/json', 'pages.json');
 
     if (!fs.existsSync(pagesJsonPath)) {
         console.error('pages.json not found.');
@@ -18,22 +18,22 @@ export async function editPage() {
         return;
     }
 
-    const { pageName } = await inquirer.prompt([
+    const { pageGUID } = await inquirer.prompt([
         {
             type: 'list',
-            name: 'pageName',
+            name: 'pageGUID',
             message: 'Select a page to edit:',
-            choices: pages.map(p => p.pageName)
+            choices: pages.map(p => ({ name: p.pageName, value: p.guid }))
         }
     ]);
 
-    const page = pages.find(p => p.pageName === pageName);
+    const page = pages.find(p => p.guid === pageGUID);
 
     const { fieldToEdit } = await inquirer.prompt([
         {
             type: 'list',
             name: 'fieldToEdit',
-            message: `What would you like to edit for '${pageName}'?`,
+            message: `What would you like to edit for '${page.pageName}'?`,
             choices: [
                 'pageColor',
                 'pageIntensity',
@@ -84,8 +84,7 @@ export async function editPage() {
     }
 
     page[fieldToEdit] = newValue;
-
     fs.writeFileSync(pagesJsonPath, JSON.stringify(pages, null, 4));
 
-    console.log(`Updated '${pageName}' → ${fieldToEdit}: ${newValue}`);
+    console.log(`Updated '${page.pageName}' → ${fieldToEdit}: ${newValue}`);
 }
