@@ -42,28 +42,26 @@ const App: React.FC = () => {
           <Routes>
             {pages
               .filter((p) => p.pageActive)
-              .map((p) => {
-                let routePath = p.pagePath;
-                
-                return (
-                  <Route
-                    path={routePath}
-                    element={
-                      <PageShell
-                        pageName={p.pageName}
-                        pageRenderMethod={p.pageRenderMethod as RenderMethod} 
-                        pageActive={p.pageActive}
-                        pagePath={p.pagePath}
-                        pageContent={p.pageContent}
-                        pageColor={p.pageColor as unknown as TailwindColor}
-                        pageIntensity={p.pageIntensity as unknown as TailwindIntensity}
-                        pageEntranceAnimation={p.pageEntranceAnimation as unknown as EntranceAnimation}
-                        pageExitAnimation={p.pageExitAnimation as unknown as ExitAnimation}
-                      />
-                    }
-                  />
-                );
-              })}
+              .map((p) => (
+                <Route
+                  key={p.guid}
+                  path={p.pagePath}
+                  element={
+                    <PageShell
+                      guid={p.guid}
+                      pageName={p.pageName}
+                      pageRenderMethod={p.pageRenderMethod as RenderMethod}
+                      pageActive={p.pageActive}
+                      pagePath={p.pagePath}
+                      pageContent={p.pageContent}
+                      pageColor={p.pageColor as unknown as TailwindColor}
+                      pageIntensity={p.pageIntensity as unknown as TailwindIntensity}
+                      pageEntranceAnimation={p.pageEntranceAnimation as unknown as EntranceAnimation}
+                      pageExitAnimation={p.pageExitAnimation as unknown as ExitAnimation}
+                    />
+                  }
+                />
+              ))}
           </Routes>
           
           <Modal />
