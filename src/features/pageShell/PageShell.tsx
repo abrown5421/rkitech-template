@@ -24,7 +24,6 @@ const PageShell: React.FC<PageShellProps> = ({
             }}
             tailwindClasses={`h-[calc(100vh-54px)] p-5 bg-${colorString}`}
         >
-            
         </Container>
     );
 };
