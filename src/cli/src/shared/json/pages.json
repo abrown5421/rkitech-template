@@ -1,14 +1,14 @@
 [
   {
-    "pageName": "Balls",
-    "pagePath": "/balls",
+    "pageName": "Home",
+    "pagePath": "/",
     "pageRenderMethod": "static",
-    "pageActive": true,
-    "pageColor": "orange",
-    "pageIntensity": 100,
-    "pageEntranceAnimation": "animate__backInLeft",
-    "pageExitAnimation": "animate__bounceOutDown",
+    "pageActive": false,
+    "pageColor": "gray",
+    "pageIntensity": 50,
+    "pageEntranceAnimation": "animate__fadeInUpBig",
+    "pageExitAnimation": "animate__fadeOutDownBig",
     "pageContent": "",
-    "pageID": "759d89cc-6c63-4544-aaa0-eb59edf5e3f7"
+    "pageID": "534db1ae-8e49-45af-a505-2ef5c02c478b"
   }
 ]

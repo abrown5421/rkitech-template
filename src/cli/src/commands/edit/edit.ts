@@ -226,15 +226,15 @@ async function updatePageShell(
       }
       
       const oldConditionalPatterns = [
-        new RegExp(`\\s*{activePage\\.activePageName === '${oldPageName}' && <${oldComponentName} />}\\n?`, 'g'),
-        new RegExp(`\\s*{activePage\\.activePageName === "${oldPageName}" && <${oldComponentName} />}\\n?`, 'g'),
+        new RegExp(`{activePage\\.activePageName === '${oldPageName}' && <${oldComponentName} />}\\n?`, 'g'),
+        new RegExp(`{activePage\\.activePageName === "${oldPageName}" && <${oldComponentName} />}\\n?`, 'g'),
       ];
       
       oldConditionalPatterns.forEach(pattern => {
         currentContent = currentContent.replace(pattern, '');
       });
       
-      const newConditionalRender = `            {activePage.activePageName === '${newPageName}' && <${newComponentName} />}`;
+      const newConditionalRender = `{activePage.activePageName === '${newPageName}' && <${newComponentName} />}`;
       const containerEndIndex = currentContent.lastIndexOf("</Container>");
       if (containerEndIndex !== -1) {
         currentContent = 
