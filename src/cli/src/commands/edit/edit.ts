@@ -46,7 +46,47 @@ async function promptPageSelection(pages: PageData[]): Promise<PageData | null> 
   return answer.selectedPage;
 }
 
-async function promptPageEdits(currentPage: PageData): Promise<Partial<PageData>> {
+function validateUniquePageNameForEdit(existingPages: PageData[], currentPageId: string) {
+  return (input: string): boolean | string => {
+    if (!input.trim()) {
+      return "Page name is required";
+    }
+    
+    const isDuplicate = existingPages.some(page => 
+      page.pageID !== currentPageId && 
+      page.pageName.toLowerCase() === input.toLowerCase()
+    );
+    
+    if (isDuplicate) {
+      return `Page name "${input}" already exists. Please choose a different name.`;
+    }
+    
+    return true;
+  };
+}
+
+function validateUniquePagePathForEdit(existingPages: PageData[], currentPageId: string) {
+  return (input: string): boolean | string => {
+    if (!input.trim()) {
+      return "Page path is required";
+    }
+    
+    const normalizedPath = input.startsWith("/") ? input : "/" + input;
+    
+    const isDuplicate = existingPages.some(page => 
+      page.pageID !== currentPageId && 
+      page.pagePath.toLowerCase() === normalizedPath.toLowerCase()
+    );
+    
+    if (isDuplicate) {
+      return `Page path "${normalizedPath}" already exists. Please choose a different path.`;
+    }
+    
+    return true;
+  };
+}
+
+async function promptPageEdits(currentPage: PageData, existingPages: PageData[]): Promise<Partial<PageData>> {
   console.log(`\nEditing: ${currentPage.pageName}`);
   console.log("Press Enter to keep current values, or type new values to change them.\n");
 
@@ -55,7 +95,8 @@ async function promptPageEdits(currentPage: PageData): Promise<Partial<PageData>
       type: "input", 
       name: "pageName", 
       message: "Page Name:", 
-      default: currentPage.pageName 
+      default: currentPage.pageName,
+      validate: validateUniquePageNameForEdit(existingPages, currentPage.pageID)
     },
     {
       type: "input",
@@ -63,6 +104,7 @@ async function promptPageEdits(currentPage: PageData): Promise<Partial<PageData>
       message: "Page Path (e.g. my-page):",
       default: currentPage.pagePath,
       filter: (input) => (input.startsWith("/") ? input : "/" + input),
+      validate: validateUniquePagePathForEdit(existingPages, currentPage.pageID)
     },
     {
       type: "list",
@@ -149,6 +191,17 @@ async function handleFeatureFolderChanges(
     const newFeatureFolderPath = path.join(featuresPath, newFolderName);
 
     if (oldPageName !== newPageName) {
+      try {
+        await fs.access(newFeatureFolderPath);
+        if (newFeatureFolderPath !== oldFeatureFolderPath) {
+          throw new Error(`Feature folder "${newFolderName}" already exists. Cannot rename to avoid conflicts.`);
+        }
+      } catch (error) {
+        if ((error as any).code !== 'ENOENT') {
+          throw error;
+        }
+      }
+      
       try {
         await fs.access(oldFeatureFolderPath);
         
@@ -296,7 +349,7 @@ export async function editCommand(): Promise<void> {
       return;
     }
     
-    const updatedData = await promptPageEdits(pageToEdit);
+    const updatedData = await promptPageEdits(pageToEdit, pages);
     
     const updatedPage: PageData = {
       ...pageToEdit,
