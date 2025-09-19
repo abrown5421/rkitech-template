@@ -3,8 +3,6 @@ import { Container } from 'rkitech-components';
 import { useAppSelector } from '../../app/hooks';
 import Home from '../home/Home';
 import type { PageData } from '../../cli/src/shared/types/pageTypes';
-import Test from '../test/Test';
-import Test2 from '../test2/Test2';
 
 const PageShell: React.FC<PageData> = ({
   pageName,
@@ -31,9 +29,7 @@ const PageShell: React.FC<PageData> = ({
     >
       {/* add manually generated pages here */}
       {activePage.activePageName === 'Home' && <Home />}
-      {/* cli generated pages should appear here */}
-      {activePage.activePageName === 'Test' && <Test />}
-      {activePage.activePageName === 'Test2' && <Test2 />}
+      {/* cli generated pages should appear here */}{' '}
     </Container>
   );
 };

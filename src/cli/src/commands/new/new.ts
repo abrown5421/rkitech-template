@@ -6,6 +6,7 @@ import { createGUID } from "../../shared/utils/createGUID.js";
 import { PageData } from "../../shared/types/pageTypes.js";
 import { blankTemplate } from "../../templates/blank.js";
 import { formatFile } from "../../shared/utils/formatFile.js";
+import { TEMPLATES } from "../../shared/constants/templateConstants.js";
 
 async function loadExistingPages(): Promise<PageData[]> {
   try {
@@ -27,8 +28,8 @@ async function promptPageInfo() {
   const existingPages = await loadExistingPages();
   const existingNames = existingPages.map(page => page.pageName.toLowerCase());
   const existingPaths = existingPages.map(page => page.pagePath.toLowerCase());
-
-  return inquirer.prompt([
+  let templateAnswer = "Blank";
+  const pageInfoAnswers = await inquirer.prompt([
     { 
       type: "input", 
       name: "pageName", 
@@ -103,9 +104,25 @@ async function promptPageInfo() {
       default: "",
     },
   ]);
+  if (pageInfoAnswers.pageRenderMethod === "static") {
+    const templateChoice = await inquirer.prompt([
+      {
+        type: "list",
+        name: "template",
+        message: "Select a template for this page:",
+        choices: Object.keys(TEMPLATES),
+        default: "Blank",
+      }
+    ]);
+
+    templateAnswer = templateChoice.template;
+  }
+
+  return { pageData: pageInfoAnswers, template: templateAnswer };
 }
 
-async function createFeatureFolder(pageName: string) {
+
+async function createFeatureFolder(pageName: string, templateFunc: (componentName: string, folderName: string) => string) {
   try {
     const folderName = pageName.toLowerCase().replace(/\s+/g, '-');
     const componentName = pageName.charAt(0).toUpperCase() + pageName.slice(1).replace(/\s+/g, '');
@@ -116,7 +133,7 @@ async function createFeatureFolder(pageName: string) {
     await fs.mkdir(featuresPath, { recursive: true });
     await fs.mkdir(featureFolderPath, { recursive: true });
     
-    const pageFileContent = blankTemplate(componentName, folderName);
+    const pageFileContent = templateFunc(componentName, folderName);
     const pageFilePath = path.join(featureFolderPath, `${componentName}.tsx`);
     await fs.writeFile(pageFilePath, pageFileContent, "utf-8");
     
@@ -222,17 +239,17 @@ async function addPageToJson(pageData: PageData) {
 
 export async function newCommand() {
   try {
-    const answers = await promptPageInfo();
+    const { pageData, template } = await promptPageInfo();
     const pageID = createGUID();
-    const fullAnswers: PageData = { ...answers, pageID };
-
-    console.log(fullAnswers);
+    const fullPageData: PageData = { ...pageData, pageID };
     
-    await addPageToJson(fullAnswers);
-    const { componentName, folderName } = await createFeatureFolder(fullAnswers.pageName);
-    await updatePageShell(fullAnswers.pageName, componentName, folderName);
+    await addPageToJson(fullPageData);
     
-    console.log(`🎉 Successfully created new page: ${fullAnswers.pageName}`);
+    const templateFunc = TEMPLATES[template] || blankTemplate;
+    const { componentName, folderName } = await createFeatureFolder(fullPageData.pageName, templateFunc);
+    await updatePageShell(fullPageData.pageName, componentName, folderName);
+    
+    console.log(`🎉 Successfully created new page: ${fullPageData.pageName}`);
     
   } catch (error) {
     console.error("❌ Error creating new page:", error);
