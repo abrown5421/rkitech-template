@@ -1,9 +1,14 @@
 import React from 'react';
-import { Container, Image, Text } from 'rkitech-components';
+import { Button, Container, Image, Text } from 'rkitech-components';
 import logo from '../../../public/assets/logo.png';
+import pagesJson from '../../cli/src/shared/json/pages.json';
+import { useNavigationHook } from '../../hooks/useNavigationHook';
+import type { PageData } from '../../cli/src/shared/types/pageTypes';
 
 const Navbar: React.FC = () => {
-
+    const navigate = useNavigationHook();
+    const pages: PageData[] = pagesJson as PageData[];
+    
     return (
         <Container 
             animationObject={{
@@ -32,7 +37,15 @@ const Navbar: React.FC = () => {
                 }}
                 tailwindClasses='flex-col px-5'
             >
-                menu
+                <Container tailwindClasses='flex-row gap-2'>
+                    {pages
+                    .filter((p) => p.pageActive)
+                    .map((p) => (
+                        <Button onClick={() => navigate(p)()}>
+                            {p.pageName}
+                        </Button>
+                    ))}    
+                </Container>
             </Container>
         </Container>
     );

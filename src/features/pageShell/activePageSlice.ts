@@ -6,7 +6,7 @@ import type { PageData } from "../../cli/src/shared/types/pageTypes";
 const initialState: ActivePageState = {
   activePageName: "Home",
   activePageIn: true,
-  PageShellProps: {
+  pageShellProps: {
     pageID: '',
     pageName: "Home",
     pageRenderMethod: "static",
@@ -26,7 +26,7 @@ const activePageSlice = createSlice({
   reducers: {
     setActivePage: (state, action: PayloadAction<PageData>) => {
       state.activePageName = action.payload.pageName;
-      state.PageShellProps = action.payload;
+      state.pageShellProps = action.payload;
       state.activePageIn = true;
     },
     setActivePageIn: (state, action: PayloadAction<boolean>) => {
