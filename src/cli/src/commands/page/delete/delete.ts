@@ -1,8 +1,8 @@
 import inquirer from "inquirer";
 import fs from "fs/promises";
 import path from "path";
-import { PageData } from "../../shared/types/pageTypes.js";
-import { formatFile } from "../../shared/utils/formatFile.js";
+import { PageData } from "../../../shared/types/pageTypes.js";
+import { formatFile } from "../../../shared/utils/formatFile.js";
 
 async function loadPagesFromJson(): Promise<PageData[]> {
   try {
@@ -136,7 +136,7 @@ async function removeFromPageShell(pageName: string, componentName: string, fold
   }
 }
 
-export async function deleteCommand(): Promise<void> {
+export async function deletePageCommand(): Promise<void> {
   try {
     console.log("🗑️  Delete Page Command");
     console.log("Loading existing pages...\n");
