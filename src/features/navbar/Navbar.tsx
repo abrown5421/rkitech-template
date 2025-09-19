@@ -39,12 +39,13 @@ const Navbar: React.FC = () => {
             >
                 <Container tailwindClasses='flex-row gap-2'>
                     {pages
-                    .filter((p) => p.pageActive)
-                    .map((p) => (
-                        <Button onClick={() => navigate(p)()}>
-                            {p.pageName}
-                        </Button>
-                    ))}    
+                        .filter((p) => p.pageActive)
+                        .map((p) => (
+                            <Button onClick={() => navigate(p)()}>
+                                {p.pageName}
+                            </Button>
+                        )
+                    )}    
                 </Container>
             </Container>
         </Container>

@@ -9,24 +9,30 @@ import Alert from './features/alert/Alert';
 import Drawer from './features/drawer/Drawer';
 import { Route, Routes } from 'react-router-dom';
 import PageShell from './features/pageShell/PageShell';
-import type { RenderMethod } from './cli/src/shared/types/pageTypes';
+import type { PageData, RenderMethod } from './cli/src/shared/types/pageTypes';
 import pages from './cli/src/shared/json/pages.json';
+import { useLocation } from "react-router-dom";
+import { setActivePage } from './features/pageShell/activePageSlice';
 
 const App: React.FC = () => {
   const dispatch = useAppDispatch();
+  const location = useLocation();
   const isLoading = useAppSelector((state) => state.loading["userProfile"] ?? false);
 
   useEffect(() => {
-    const fetchUser = async () => {
-      dispatch(startLoading("userProfile"));
-      try {
-        await new Promise((res) => setTimeout(res, 2000)); 
-      } finally {
-        dispatch(stopLoading("userProfile"));
-      }
-    };
+    dispatch(startLoading("userProfile"));
+    try {
+      const page = pages.find((p) => p.pagePath === location.pathname) as PageData | undefined;
+      const pageNotFound = pages.find((p) => p.pagePath === 'page-not-found') as PageData | undefined;
 
-    fetchUser();
+      if (page) {
+        dispatch(setActivePage(page));
+      } else if (pageNotFound) {
+        dispatch(setActivePage(pageNotFound));
+      }
+    } finally {
+      dispatch(stopLoading("userProfile"));
+    }
   }, [dispatch]);
 
   return (
