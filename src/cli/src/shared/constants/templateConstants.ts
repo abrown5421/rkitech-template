@@ -1,3 +1,4 @@
+import { authTemplate } from "../../templates/Auth.js";
 import { blankTemplate } from "../../templates/blank.js";
 import { sidebarLeftTemplate } from "../../templates/sidebarLeft.js";
 import { sidebarRightTemplate } from "../../templates/sidebarRight.js";
@@ -12,4 +13,5 @@ export const TEMPLATES: Record<string, (componentName: string, folderName: strin
   "Two Column": twoColumnTemplate,
   "Three Column": threeColumnTemplate,
   "Two By Two Grid": twoByTwoGridTemplate,
+  "Auth": authTemplate,
 };

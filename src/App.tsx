@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Container, type EntranceAnimation, type ExitAnimation, type TailwindColor, type TailwindIntensity } from 'rkitech-components';
 import { useAppDispatch, useAppSelector } from './app/hooks';
 import { startLoading, stopLoading } from './features/loader/loadingSlice';
-import Loader from './features/loader/Loader';
+import GlobalLoader from './features/loader/GlobalLoader';
 import Navbar from './features/navbar/Navbar';
 import Modal from './features/modal/Modal';
 import Alert from './features/alert/Alert';
@@ -31,7 +31,9 @@ const App: React.FC = () => {
         dispatch(setActivePage(pageNotFound));
       }
     } finally {
-      dispatch(stopLoading("userProfile"));
+      setTimeout(() => {
+        dispatch(stopLoading("userProfile"));
+      }, 2000)
     }
   }, [dispatch]);
 
@@ -39,7 +41,7 @@ const App: React.FC = () => {
     <Container tailwindClasses="flex-col w-screen h-screen z-30 relative bg-gray-900">
       {isLoading ? (
         <Container tailwindClasses="h-full w-full justify-center items-center">
-          <Loader target="userProfile" type="Bars" variant={2} />
+          <GlobalLoader target="userProfile" type="Bars" variant={2} color='amber' intensity={500} size={15}/>
         </Container>
       ) : (
         <Container tailwindClasses="h-full w-full flex-col">

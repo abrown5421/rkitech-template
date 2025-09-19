@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 import { Command } from "commander";
-import { newCommand } from "./commands/new/new.js";
-import { editCommand } from "./commands/edit/edit.js";
-import { deleteCommand } from "./commands/delete/delete.js";
+import { newPageCommand } from "./commands/page/new/new.js";
+import { editPageCommand } from "./commands/page/edit/edit.js";
+import { deletePageCommand } from "./commands/page/delete/delete.js";
 
 const program = new Command();
 
@@ -12,24 +12,24 @@ program
   .version("0.1.0");
 
 program
-  .command("new")
+  .command("new-page")
   .description("Run this command to create a new page in your project")
   .action(async () => { 
-    await newCommand();       
+    await newPageCommand();       
   });
 
 program
-  .command("edit")
+  .command("edit-page")
   .description("Run this command to edit an existing page in your project")
   .action(async () => { 
-    await editCommand();       
+    await editPageCommand();       
   });
   
 program
-  .command("delete")
+  .command("delete-page")
   .description("Run this command to delete an existing page in your project")
   .action(async () => { 
-    await deleteCommand();       
+    await deletePageCommand();       
   });
 
 program.parse();

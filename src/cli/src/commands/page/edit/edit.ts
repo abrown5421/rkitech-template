@@ -1,10 +1,10 @@
 import inquirer from "inquirer";
 import fs from "fs/promises";
 import path from "path";
-import { COLORS, ENTRANCE_ANIMATIONS, EXIT_ANIMATIONS, INTENSITIES } from "../../shared/constants/pageConstants.js";
-import { PageData } from "../../shared/types/pageTypes.js";
-import { blankTemplate } from "../../templates/blank.js";
-import { formatFile } from "../../shared/utils/formatFile.js";
+import { COLORS, ENTRANCE_ANIMATIONS, EXIT_ANIMATIONS, INTENSITIES } from "../../../shared/constants/pageConstants.js";
+import { PageData } from "../../../shared/types/pageTypes.js";
+import { blankTemplate } from "../../../templates/blank.js";
+import { formatFile } from "../../../shared/utils/formatFile.js";
 
 async function loadPagesFromJson(): Promise<PageData[]> {
   try {
@@ -309,7 +309,7 @@ async function updatePageShell(
   }
 }
 
-export async function editCommand(): Promise<void> {
+export async function editPageCommand(): Promise<void> {
   try {
     console.log("✏️  Edit Page Command");
     console.log("Loading existing pages...\n");

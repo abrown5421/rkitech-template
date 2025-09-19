@@ -4,6 +4,7 @@ import { useAppSelector } from '../../app/hooks';
 import Home from '../home/Home';
 import type { PageData } from '../../cli/src/shared/types/pageTypes';
 import PageNotFound from '../pagenotfound/PageNotFound';
+import Auth from '../auth/Auth';
 
 const PageShell: React.FC<PageData> = ({
   pageName,
@@ -32,6 +33,7 @@ const PageShell: React.FC<PageData> = ({
       {activePage.activePageName === 'Home' && <Home />}
       {/* cli generated pages should appear here */}
       {activePage.activePageName === 'PageNotFound' && <PageNotFound />}{' '}
+      {activePage.activePageName === 'Auth' && <Auth />}
     </Container>
   );
 };

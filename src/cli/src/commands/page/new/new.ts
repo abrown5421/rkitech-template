@@ -1,12 +1,12 @@
 import inquirer from "inquirer";
 import fs from "fs/promises";
 import path from "path";
-import { COLORS, ENTRANCE_ANIMATIONS, EXIT_ANIMATIONS, INTENSITIES } from "../../shared/constants/pageConstants.js";
-import { createGUID } from "../../shared/utils/createGUID.js";
-import { PageData } from "../../shared/types/pageTypes.js";
-import { blankTemplate } from "../../templates/blank.js";
-import { formatFile } from "../../shared/utils/formatFile.js";
-import { TEMPLATES } from "../../shared/constants/templateConstants.js";
+import { COLORS, ENTRANCE_ANIMATIONS, EXIT_ANIMATIONS, INTENSITIES } from "../../../shared/constants/pageConstants.js";
+import { createGUID } from "../../../shared/utils/createGUID.js";
+import { PageData } from "../../../shared/types/pageTypes.js";
+import { blankTemplate } from "../../../templates/blank.js";
+import { formatFile } from "../../../shared/utils/formatFile.js";
+import { TEMPLATES } from "../../../shared/constants/templateConstants.js";
 
 async function loadExistingPages(): Promise<PageData[]> {
   try {
@@ -237,7 +237,7 @@ async function addPageToJson(pageData: PageData) {
   }
 }
 
-export async function newCommand() {
+export async function newPageCommand() {
   try {
     const { pageData, template } = await promptPageInfo();
     const pageID = createGUID();
