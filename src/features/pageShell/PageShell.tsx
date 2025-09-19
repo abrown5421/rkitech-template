@@ -3,6 +3,7 @@ import { Container } from 'rkitech-components';
 import { useAppSelector } from '../../app/hooks';
 import Home from '../home/Home';
 import type { PageData } from '../../cli/src/shared/types/pageTypes';
+import PageNotFound from '../pagenotfound/PageNotFound';
 
 const PageShell: React.FC<PageData> = ({
   pageName,
@@ -21,15 +22,16 @@ const PageShell: React.FC<PageData> = ({
   return (
     <Container
       animationObject={{
-        entranceAnimation: pageEntranceAnimation ?? 'animate__fadeInUpBig',
-        exitAnimation: pageExitAnimation ?? 'animate__fadeOutDownBig',
+        entranceAnimation: pageEntranceAnimation ?? 'animate__fadeIn',
+        exitAnimation: pageExitAnimation ?? 'animate__fadeOut',
         isEntering: activePage.activePageIn && activePage.activePageName === pageName,
       }}
       tailwindClasses={`h-[calc(100vh-54px)] p-5 bg-${colorString}`}
     >
       {/* add manually generated pages here */}
       {activePage.activePageName === 'Home' && <Home />}
-      {/* cli generated pages should appear here */}{' '}
+      {/* cli generated pages should appear here */}
+      {activePage.activePageName === 'PageNotFound' && <PageNotFound />}{' '}
     </Container>
   );
 };

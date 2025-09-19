@@ -14,8 +14,8 @@ const initialState: ActivePageState = {
     pagePath: "/",
     pageColor: "blue",
     pageIntensity: 500,
-    pageEntranceAnimation: "animate__fadeInUpBig",
-    pageExitAnimation: "animate__fadeOutDownBig",
+    pageEntranceAnimation: "animate__fadeIn",
+    pageExitAnimation: "animate__fadeOut",
     pageContent: ""
   }
 };
