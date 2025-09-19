@@ -4,6 +4,7 @@ import path from "path";
 import { COLORS, ENTRANCE_ANIMATIONS, EXIT_ANIMATIONS, INTENSITIES } from "../../shared/constants/pageConstants.js";
 import { PageData } from "../../shared/types/pageTypes.js";
 import { blankTemplate } from "../../templates/blank.js";
+import { formatFile } from "../../shared/utils/formatFile.js";
 
 async function loadPagesFromJson(): Promise<PageData[]> {
   try {
@@ -50,12 +51,27 @@ async function promptPageEdits(currentPage: PageData): Promise<Partial<PageData>
   console.log(`\nEditing: ${currentPage.pageName}`);
   console.log("Press Enter to keep current values, or type new values to change them.\n");
 
+  const allPages = await loadPagesFromJson();
+  const otherPages = allPages.filter(page => page.pageID !== currentPage.pageID);
+  const existingNames = otherPages.map(page => page.pageName.toLowerCase());
+  const existingPaths = otherPages.map(page => page.pagePath.toLowerCase());
+
   return inquirer.prompt([
     { 
       type: "input", 
       name: "pageName", 
       message: "Page Name:", 
-      default: currentPage.pageName 
+      default: currentPage.pageName,
+      validate: (input: string) => {
+        if (!input || input.trim().length === 0) {
+          return "Page name is required. Please enter a valid page name.";
+        }
+        if (input.toLowerCase() !== currentPage.pageName.toLowerCase() && 
+            existingNames.includes(input.toLowerCase())) {
+          return `Page name "${input}" already exists. Please choose a different name.`;
+        }
+        return true;
+      }
     },
     {
       type: "input",
@@ -63,6 +79,17 @@ async function promptPageEdits(currentPage: PageData): Promise<Partial<PageData>
       message: "Page Path (e.g. my-page):",
       default: currentPage.pagePath,
       filter: (input) => (input.startsWith("/") ? input : "/" + input),
+      validate: (input: string) => {
+        if (!input || input.trim().length === 0) {
+          return "Page path is required. Please enter a valid path.";
+        }
+        const processedPath = (input.startsWith("/") ? input : "/" + input).toLowerCase();
+        if (processedPath !== currentPage.pagePath.toLowerCase() && 
+            existingPaths.includes(processedPath)) {
+          return `Page path "${processedPath}" already exists. Please choose a different path.`;
+        }
+        return true;
+      }
     },
     {
       type: "list",
@@ -343,5 +370,8 @@ export async function editCommand(): Promise<void> {
   } catch (error) {
     console.error("❌ Error during edit operation:", error);
     process.exit(1);
+  } finally {
+    const pageShellPath = path.resolve(process.cwd(), "src/features/pageShell/PageShell.tsx");
+    await formatFile(pageShellPath);
   }
 }

@@ -5,15 +5,59 @@ import { COLORS, ENTRANCE_ANIMATIONS, EXIT_ANIMATIONS, INTENSITIES } from "../..
 import { createGUID } from "../../shared/utils/createGUID.js";
 import { PageData } from "../../shared/types/pageTypes.js";
 import { blankTemplate } from "../../templates/blank.js";
+import { formatFile } from "../../shared/utils/formatFile.js";
+
+async function loadExistingPages(): Promise<PageData[]> {
+  try {
+    const pagesJsonPath = path.resolve(process.cwd(), "src/cli/src/shared/json/pages.json");
+    const fileContent = await fs.readFile(pagesJsonPath, "utf-8");
+    const pagesArray = JSON.parse(fileContent);
+    
+    if (!Array.isArray(pagesArray)) {
+      return [];
+    }
+    
+    return pagesArray;
+  } catch (error) {
+    return [];
+  }
+}
 
 async function promptPageInfo() {
+  const existingPages = await loadExistingPages();
+  const existingNames = existingPages.map(page => page.pageName.toLowerCase());
+  const existingPaths = existingPages.map(page => page.pagePath.toLowerCase());
+
   return inquirer.prompt([
-    { type: "input", name: "pageName", message: "Page Name:" },
+    { 
+      type: "input", 
+      name: "pageName", 
+      message: "Page Name:",
+      validate: (input: string) => {
+        if (!input || input.trim().length === 0) {
+          return "Page name is required. Please enter a valid page name.";
+        }
+        if (existingNames.includes(input.toLowerCase())) {
+          return `Page name "${input}" already exists. Please choose a different name.`;
+        }
+        return true;
+      }
+    },
     {
       type: "input",
       name: "pagePath",
       message: "Page Path (e.g. my-page):",
       filter: (input) => (input.startsWith("/") ? input : "/" + input),
+      validate: (input: string) => {
+        if (!input || input.trim().length === 0) {
+          return "Page path is required. Please enter a valid path.";
+        }
+        const processedPath = (input.startsWith("/") ? input : "/" + input).toLowerCase();
+        if (existingPaths.includes(processedPath)) {
+          return `Page path "${processedPath}" already exists. Please choose a different path.`;
+        }
+        return true;
+      }
     },
     {
       type: "list",
@@ -193,5 +237,8 @@ export async function newCommand() {
   } catch (error) {
     console.error("❌ Error creating new page:", error);
     process.exit(1);
+  } finally {
+    const pageShellPath = path.resolve(process.cwd(), "src/features/pageShell/PageShell.tsx");
+    await formatFile(pageShellPath);
   }
 }

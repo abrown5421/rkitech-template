@@ -2,6 +2,7 @@ import inquirer from "inquirer";
 import fs from "fs/promises";
 import path from "path";
 import { PageData } from "../../shared/types/pageTypes.js";
+import { formatFile } from "../../shared/utils/formatFile.js";
 
 async function loadPagesFromJson(): Promise<PageData[]> {
   try {
@@ -160,5 +161,8 @@ export async function deleteCommand(): Promise<void> {
   } catch (error) {
     console.error("❌ Error during delete operation:", error);
     process.exit(1);
+  } finally {
+    const pageShellPath = path.resolve(process.cwd(), "src/features/pageShell/PageShell.tsx");
+    await formatFile(pageShellPath);
   }
 }

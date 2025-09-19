@@ -10,5 +10,29 @@
     "pageExitAnimation": "animate__fadeOutDownBig",
     "pageContent": "",
     "pageID": "534db1ae-8e49-45af-a505-2ef5c02c478b"
+  },
+  {
+    "pageName": "Test",
+    "pagePath": "/test",
+    "pageRenderMethod": "static",
+    "pageActive": false,
+    "pageColor": "red",
+    "pageIntensity": 50,
+    "pageEntranceAnimation": "animate__backInDown",
+    "pageExitAnimation": "animate__backOutDown",
+    "pageContent": "",
+    "pageID": "18093618-907a-477d-b653-b620eed32cd2"
+  },
+  {
+    "pageName": "Test2",
+    "pagePath": "/test2",
+    "pageRenderMethod": "static",
+    "pageActive": false,
+    "pageColor": "red",
+    "pageIntensity": 50,
+    "pageEntranceAnimation": "animate__backInDown",
+    "pageExitAnimation": "animate__backOutDown",
+    "pageContent": "",
+    "pageID": "1d197567-4ce3-4cef-bc10-1732b12315b4"
   }
 ]
