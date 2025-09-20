@@ -3,6 +3,9 @@ import { Command } from "commander";
 import { newPageCommand } from "./commands/page/new/new.js";
 import { editPageCommand } from "./commands/page/edit/edit.js";
 import { deletePageCommand } from "./commands/page/delete/delete.js";
+import { addNavbarCommand } from "./commands/navbar/add/add.js";
+import { editNavbarCommand } from "./commands/navbar/edit/edit.js";
+import { deleteNavbarCommand } from "./commands/navbar/delete/delete.js";
 
 const program = new Command();
 
@@ -30,6 +33,27 @@ program
   .description("Run this command to delete an existing page in your project")
   .action(async () => { 
     await deletePageCommand();       
+  });
+
+program
+  .command("add-nav")
+  .description("Run this command to add items to the navbar")
+  .action(async () => { 
+    await addNavbarCommand();       
+  });
+
+program
+  .command("edit-nav")
+  .description("Run this command to edit existing items in the navbar")
+  .action(async () => { 
+    await editNavbarCommand();       
+  });
+  
+program
+  .command("delete-nav")
+  .description("Run this command to delete an existing item in the navbar")
+  .action(async () => { 
+    await deleteNavbarCommand();       
   });
 
 program.parse();
