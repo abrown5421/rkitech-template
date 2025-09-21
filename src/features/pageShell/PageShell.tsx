@@ -33,7 +33,7 @@ const PageShell: React.FC<PageData> = ({
       {activePage.activePageName === 'Home' && <Home />}
       {/* cli generated pages should appear here */}
       {activePage.activePageName === 'PageNotFound' && <PageNotFound />}{' '}
-      {activePage.activePageName === 'Auth' && <Auth />}
+      {activePage.activePageName === 'Auth' && <Auth />}{' '}
     </Container>
   );
 };
