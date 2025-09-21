@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 import { Command } from "commander";
+import inquirer from "inquirer";
+
 import { newPageCommand } from "./commands/page/new/new.js";
 import { editPageCommand } from "./commands/page/edit/edit.js";
 import { deletePageCommand } from "./commands/page/delete/delete.js";
@@ -12,48 +14,57 @@ const program = new Command();
 program
   .name("rkitech-cli")
   .description("Your CLI for Rkitech")
-  .version("0.1.0");
+  .version("0.2.0");
 
-program
-  .command("new-page")
-  .description("Run this command to create a new page in your project")
-  .action(async () => { 
-    await newPageCommand();       
-  });
+program.action(async () => {
+  // Step 1: Ask which category the user wants to work with
+  const { category } = await inquirer.prompt([
+    {
+      type: "list",
+      name: "category",
+      message: "What do you want to manage?",
+      choices: [
+        { name: "Pages", value: "pages" },
+        { name: "Navbar", value: "navbar" },
+        new inquirer.Separator(),
+        { name: "Exit", value: "exit" }
+      ]
+    }
+  ]);
 
-program
-  .command("edit-page")
-  .description("Run this command to edit an existing page in your project")
-  .action(async () => { 
-    await editPageCommand();       
-  });
-  
-program
-  .command("delete-page")
-  .description("Run this command to delete an existing page in your project")
-  .action(async () => { 
-    await deletePageCommand();       
-  });
+  if (category === "exit") return;
 
-program
-  .command("add-nav")
-  .description("Run this command to add items to the navbar")
-  .action(async () => { 
-    await addNavbarCommand();       
-  });
+  const { action } = await inquirer.prompt([
+    {
+      type: "list",
+      name: "action",
+      message: `What do you want to do with ${category}?`,
+      choices:
+        category === "pages"
+          ? [
+              { name: "New Page", value: "new" },
+              { name: "Edit Page", value: "edit" },
+              { name: "Delete Page", value: "delete" }
+            ]
+          : [
+              { name: "Add Navbar Item", value: "add" },
+              { name: "Edit Navbar Item", value: "edit" },
+              { name: "Delete Navbar Item", value: "delete" }
+            ]
+    }
+  ]);
 
-program
-  .command("edit-nav")
-  .description("Run this command to edit existing items in the navbar")
-  .action(async () => { 
-    await editNavbarCommand();       
-  });
-  
-program
-  .command("delete-nav")
-  .description("Run this command to delete an existing item in the navbar")
-  .action(async () => { 
-    await deleteNavbarCommand();       
-  });
+  if (category === "pages") {
+    if (action === "new") await newPageCommand();
+    if (action === "edit") await editPageCommand();
+    if (action === "delete") await deletePageCommand();
+  }
+
+  if (category === "navbar") {
+    if (action === "add") await addNavbarCommand();
+    if (action === "edit") await editNavbarCommand();
+    if (action === "delete") await deleteNavbarCommand();
+  }
+});
 
 program.parse();

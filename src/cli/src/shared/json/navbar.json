@@ -11,31 +11,5 @@
     "itemActiveIntensity": 500,
     "itemEntranceAnimation": "animate__fadeIn",
     "itemExitAnimation": "animate__fadeOut"
-  },
-  {
-    "itemName": "TestPage",
-    "itemType": "page",
-    "itemID": "789b8aee-b558-48d9-aa00-970df3e417f7",
-    "itemColor": "gray",
-    "itemIntensity": 900,
-    "itemHoverColor": "amber",
-    "itemHoverIntensity": 500,
-    "itemActiveColor": "amber",
-    "itemActiveIntensity": 500,
-    "itemEntranceAnimation": "animate__fadeIn",
-    "itemExitAnimation": "animate__fadeOut"
-  },
-  {
-    "itemName": "About",
-    "itemType": "page",
-    "itemID": "88929648-ecf0-4563-93d6-557271556803",
-    "itemColor": "gray",
-    "itemIntensity": 900,
-    "itemHoverColor": "amber",
-    "itemHoverIntensity": 500,
-    "itemActiveColor": "amber",
-    "itemActiveIntensity": 500,
-    "itemEntranceAnimation": "animate__fadeIn",
-    "itemExitAnimation": "animate__fadeOut"
   }
 ]
