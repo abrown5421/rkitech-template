@@ -5,8 +5,11 @@ import type { DrawerProps, DrawerAction, DrawerLink } from "./drawerTypes";
 const initialState: DrawerProps = {
     open: false,
     title: undefined,
-    color: undefined,
-    intensity: undefined,
+    color: {
+        bg: {
+            base: { color: "gray", intensity: 100 }
+        }
+    },
     entrance: undefined,
     exit: undefined,
     action: [],
@@ -22,7 +25,6 @@ const drawerSlice = createSlice({
             state.open = true;
             state.title = action.payload.title;
             state.color = action.payload.color;
-            state.intensity = action.payload.intensity;
             state.entrance = action.payload.entrance;
             state.exit = action.payload.exit;
             state.action = action.payload.action || [];
@@ -32,8 +34,11 @@ const drawerSlice = createSlice({
         closeDrawer: (state) => {
             state.open = false;
             state.title = undefined;
-            state.color = undefined;
-            state.intensity = undefined;
+            state.color = {
+                bg: {
+                    base: { color: "gray", intensity: 100 }
+                }
+            };
             state.entrance = undefined;
             state.exit = undefined;
             state.action = [];
@@ -42,6 +47,9 @@ const drawerSlice = createSlice({
         },
         setDrawerTitle: (state, action: PayloadAction<string | undefined>) => {
             state.title = action.payload;
+        },
+        setDrawerColor: (state, action: PayloadAction<DrawerProps["color"]>) => {
+            state.color = action.payload;
         },
         setDrawerActions: (state, action: PayloadAction<DrawerAction[]>) => {
             state.action = action.payload;
@@ -59,6 +67,7 @@ export const {
     openDrawer,
     closeDrawer,
     setDrawerTitle,
+    setDrawerColor,
     setDrawerActions,
     setDrawerLinks,
     setDrawerOrientation,
