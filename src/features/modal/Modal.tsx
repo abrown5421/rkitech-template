@@ -12,6 +12,9 @@ const Modal: React.FC = () => {
 
     if (!modal.open && !isClosing && !isOverlayClosing) return null;
 
+    const getColorString = (colorSuffix: { color: string; intensity: number }) => 
+        `${colorSuffix.color}-${colorSuffix.intensity}`;
+
     const handleClose = async () => {
         setIsClosing(true);
         try {
@@ -52,18 +55,18 @@ const Modal: React.FC = () => {
                 <div className="mt-6 h-px bg-gray-300 w-full" />
                 <Container tailwindClasses="mt-4 flex justify-end gap-2">
                     {modal.action.map((act, idx) => {
-                        const colorString = `${act.actionColor}-${act.actionIntensity}`;
-                        const textColor = act.actionTextColor
-                            ? `${act.actionTextColor}-${act.actionTextIntensity || act.actionIntensity}`
-                            : 'gray-50';
+                        const bgColor = act.color.bg?.base ? getColorString(act.color.bg.base) : "blue-500";
+                        const textColor = act.color.text?.base ? getColorString(act.color.text.base) : "gray-50";
+                        const borderColor = act.color.border?.base ? getColorString(act.color.border.base) : bgColor;
+                        const hoverTextColor = act.color.text?.hover ? getColorString(act.color.text.hover) : bgColor;
 
                         return (
                             <Button
                                 key={idx}
                                 tailwindClasses={`
                                     py-1 px-5 rounded-xl border-2 cursor-pointer text-${textColor}
-                                    bg-${colorString} border-${colorString} 
-                                    hover:bg-transparent hover:text-${colorString}
+                                    bg-${bgColor} border-${borderColor} 
+                                    hover:bg-transparent hover:text-${hoverTextColor}
                                 `}
                                 onClick={async () => {
                                     await act.actionFunction();
