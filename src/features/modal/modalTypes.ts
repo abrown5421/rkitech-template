@@ -1,4 +1,4 @@
-import type { EntranceAnimation, ExitAnimation, TailwindColorOptions } from "rkitech-components";
+import type { EntranceAnimation, ExitAnimation, TailwindColorObject } from "rkitech-components";
 
 export interface ModalProps {
     open: boolean;
@@ -12,6 +12,6 @@ export interface ModalProps {
 
 export interface ModalAction {
     actionName: string;
-    color: TailwindColorOptions;
+    color: TailwindColorObject;
     actionFunction: (() => void) | (() => Promise<void>) | (() => any) | (() => Promise<any>);
 }
