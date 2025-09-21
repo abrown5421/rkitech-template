@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import type { EntranceAnimation, ExitAnimation, TailwindColor, TailwindIntensity } from "rkitech-components";
+import type { EntranceAnimation, ExitAnimation, TailwindColorOptions } from "rkitech-components";
 
 export type DrawerOrientation =
     | "top"
@@ -10,8 +10,7 @@ export type DrawerOrientation =
 export interface DrawerProps {
     open: boolean;
     title?: string;
-    color?: TailwindColor;
-    intensity?: TailwindIntensity;
+    color?: TailwindColorOptions;
     entrance?: EntranceAnimation;
     exit?: ExitAnimation;
     action?: DrawerAction[];
@@ -21,17 +20,13 @@ export interface DrawerProps {
 
 export interface DrawerAction {
     actionName: string;
-    actionColor: TailwindColor;
-    actionIntensity: TailwindIntensity;
-    actionTextColor?: TailwindColor;
-    actionTextIntensity?: TailwindIntensity;
+    color: TailwindColorOptions;
     actionFunction: (() => void) | (() => Promise<void>) | (() => any) | (() => Promise<any>);
 }
 
 export interface DrawerLink {
     linkName: string;
     linkIcon?: ReactNode;
-    linkTextColor?: TailwindColor;
-    linkTextIntensity?: TailwindIntensity;
+    color?: TailwindColorOptions;
     linkFunction: (() => void) | (() => Promise<void>) | (() => any) | (() => Promise<any>);
 }
