@@ -1,4 +1,4 @@
-import type { EntranceAnimation, ExitAnimation, TailwindColor, TailwindIntensity } from "rkitech-components";
+import type { EntranceAnimation, ExitAnimation, TailwindColorOptions } from "rkitech-components";
 
 export type AlertOrientation =
     | "top-left"
@@ -12,10 +12,7 @@ export interface AlertProps {
     open: boolean;
     body: string;
     closeable: boolean;
-    color: TailwindColor;
-    intensity: TailwindIntensity;
-    textColor?: TailwindColor;
-    textIntensity?: TailwindIntensity;
+    color: TailwindColorOptions;
     entrance?: EntranceAnimation;
     exit?: ExitAnimation;
     orientation?: AlertOrientation; 

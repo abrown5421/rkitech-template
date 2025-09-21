@@ -1,16 +1,23 @@
-
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import type { AlertProps, AlertOrientation } from "./alertTypes";
+import type { TailwindColorOptions } from "rkitech-components";
 
 const initialState: AlertProps = {
     open: false,
     body: "",
     closeable: true,
-    color: "emerald",
-    intensity: 500,
-    textColor: "gray",
-    textIntensity: 50,
+    color: {
+        bg: {
+            base: { color: "emerald", intensity: 500 }
+        },
+        text: {
+            base: { color: "gray", intensity: 50 }
+        },
+        border: {
+            base: { color: "emerald", intensity: 500 }
+        }
+    },
     entrance: "animate__slideInRight",
     exit: "animate__slideOutRight",
     orientation: "top-right", 
@@ -25,9 +32,6 @@ const alertSlice = createSlice({
             state.body = action.payload.body;
             state.closeable = action.payload.closeable;
             state.color = action.payload.color;
-            state.intensity = action.payload.intensity;
-            state.textColor = action.payload.textColor;
-            state.textIntensity = action.payload.textIntensity;
             state.entrance = action.payload.entrance;
             state.exit = action.payload.exit;
             state.orientation = action.payload.orientation;
@@ -36,10 +40,14 @@ const alertSlice = createSlice({
             state.open = false;
             state.body = "";
             state.closeable = true;
-            state.color = "blue";
-            state.intensity = 500;
-            state.textColor = undefined;
-            state.textIntensity = undefined;
+            state.color = {
+                bg: {
+                    base: { color: "blue", intensity: 500 }
+                },
+                border: {
+                    base: { color: "blue", intensity: 500 }
+                }
+            };
             state.entrance = undefined;
             state.exit = undefined;
             state.orientation = "bottom-right"; 
@@ -49,17 +57,9 @@ const alertSlice = createSlice({
         },
         setAlertColor: (
             state,
-            action: PayloadAction<{ color: AlertProps["color"]; intensity: AlertProps["intensity"] }>
+            action: PayloadAction<TailwindColorOptions>
         ) => {
-            state.color = action.payload.color;
-            state.intensity = action.payload.intensity;
-        },
-        setAlertTextColor: (
-            state,
-            action: PayloadAction<{ textColor: AlertProps["textColor"]; textIntensity: AlertProps["textIntensity"] }>
-        ) => {
-            state.textColor = action.payload.textColor;
-            state.textIntensity = action.payload.textIntensity;
+            state.color = action.payload;
         },
         setAlertOrientation: (state, action: PayloadAction<AlertOrientation>) => {
             state.orientation = action.payload;
@@ -72,7 +72,6 @@ export const {
     closeAlert,
     setAlertBody,
     setAlertColor,
-    setAlertTextColor,
     setAlertOrientation, 
 } = alertSlice.actions;
 
