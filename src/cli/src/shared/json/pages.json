@@ -22,17 +22,5 @@
     "pageExitAnimation": "animate__fadeOut",
     "pageContent": "",
     "pageID": "58f820e6-e10b-4dbe-a11d-5f2055b75c0c"
-  },
-  {
-    "pageName": "Auth",
-    "pagePath": "/auth",
-    "pageRenderMethod": "static",
-    "pageActive": true,
-    "pageColor": "gray",
-    "pageIntensity": 900,
-    "pageEntranceAnimation": "animate__fadeIn",
-    "pageExitAnimation": "animate__fadeOut",
-    "pageContent": "",
-    "pageID": "12e99d8d-f6e7-443a-8d28-074c6e55b450"
   }
 ]
