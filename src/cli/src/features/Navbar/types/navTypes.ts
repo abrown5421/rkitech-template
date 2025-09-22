@@ -26,5 +26,5 @@ export interface Navbar {
     navbarBgIntensity: TailwindIntensity,
     navbarLeftSectionAnimations: SectionAnimation,
     navbarRightSectionAnimations: SectionAnimation,
-    navbarItems: NavItem[]
+    navbarMenuItems: NavItem[]
 }
