@@ -20,16 +20,5 @@
     "pageEntranceAnimation": "animate__fadeIn",
     "pageExitAnimation": "animate__fadeOut",
     "pageID": "58f820e6-e10b-4dbe-a11d-5f2055b75c0c"
-  },
-  {
-    "pageName": "Balls",
-    "pagePath": "/balls",
-    "pageRenderMethod": "static",
-    "pageActive": true,
-    "pageColor": "gray",
-    "pageIntensity": 50,
-    "pageEntranceAnimation": "animate__fadeIn",
-    "pageExitAnimation": "animate__fadeOut",
-    "pageID": "13abd953-c58e-43b2-9b25-2634075752d3"
   }
 ]

@@ -168,8 +168,6 @@ export async function newPage() {
         'utf-8'
       );
 
-      console.log(`✅ Generated feature in ${featuresDir}`);
-
       let pageShellContent = await fs.readFile(pageShellPath, 'utf-8');
 
       const importStatement = `import ${pageName} from '../${folderName}/${pageName}';`;
@@ -189,7 +187,6 @@ export async function newPage() {
 
       await fs.writeFile(pageShellPath, pageShellContent, 'utf-8');
 
-      console.log(`✅ PageShell updated with ${pageName}`);
     } catch (error) {
       console.error('❌ Error generating template files:', error);
     } finally {

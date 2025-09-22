@@ -71,7 +71,7 @@ export async function deletePage() {
       parser: 'json',
     });
     await fs.writeFile(pagesJsonPath, formattedPages, 'utf-8');
-    console.log(`✅ Page "${pageName}" removed from pages.json`);
+    
   } catch (error) {
     console.error('❌ Error writing to pages.json:', error);
     return;
@@ -84,7 +84,7 @@ export async function deletePage() {
       await fs.access(featuresDir);
       
       await fs.rm(featuresDir, { recursive: true, force: true });
-      console.log(`✅ Feature directory ${featuresDir} deleted`);
+      
     } catch (error) {
       console.log(`ℹ️  Feature directory ${featuresDir} not found (this is normal for dynamic pages)`);
     }
@@ -107,7 +107,6 @@ export async function deletePage() {
       pageShellContent = pageShellContent.replace(renderPattern, '');
 
       await fs.writeFile(pageShellPath, pageShellContent, 'utf-8');
-      console.log(`✅ Removed ${pageName} from PageShell`);
 
       formatFile(pageShellPath);
 
@@ -116,5 +115,4 @@ export async function deletePage() {
     }
   }
 
-  console.log(`✅ Page "${pageName}" successfully deleted!`);
 }
