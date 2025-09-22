@@ -157,7 +157,6 @@ export async function editPage() {
       parser: 'json',
     });
     await fs.writeFile(pagesJsonPath, formattedPages, 'utf-8');
-    console.log(`✅ Page "${updatedPageData.pageName}" updated in pages.json`);
   } catch (error) {
     console.error('❌ Error writing to pages.json:', error);
     return;
@@ -296,9 +295,6 @@ export async function editPage() {
 
       await fs.writeFile(pageShellPath, pageShellContent, 'utf-8');
 
-      console.log(`✅ Generated feature in ${newFeaturesDir}`);
-      console.log(`✅ PageShell updated with ${newPageName}`);
-
       formatFile(pageShellPath);
 
     } catch (error) {
@@ -306,5 +302,4 @@ export async function editPage() {
     }
   }
 
-  console.log(`✅ Page "${newPageName}" successfully updated!`);
 }
