@@ -14,8 +14,7 @@ export async function formatFile(filePath: string) {
     });
 
     await fs.writeFile(filePath, formatted, { encoding: "utf-8" });
-
-    console.log(`✅ Formatted ${filePath}`);
+    
   } catch (err) {
     console.error(`❌ Error formatting ${filePath}:`, err);
   }

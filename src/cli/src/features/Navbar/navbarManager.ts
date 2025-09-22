@@ -1,4 +1,8 @@
 import inquirer from "inquirer";
+import { newMenuItem } from "./commands/newMenuItem.js";
+import { editMenuItem } from "./commands/editsMenuItem.js";
+import { deleteMenuItem } from "./commands/deleteMenuItem.js";
+import { editNavbar } from "./commands/editNavbar.js";
 
 export async function navbarManager() {
   const { navbarAction } = await inquirer.prompt([
@@ -7,23 +11,45 @@ export async function navbarManager() {
       name: "navbarAction",
       message: "Navbar Menu - choose an action",
       choices: [
-        "Add Navbar Item",
-        "Edit Navbar Item",
-        "Delete Navbar Item",
+        "Manage Navbar",
+        "Manage Navbar Menu",
         "Back to Main Menu"
       ]
     }
   ]);
 
   switch (navbarAction) {
-    case "Add Navbar Item":
-      console.log("Adding navbar item...");
+    case "Manage Navbar":
+      await editNavbar();
       break;
-    case "Edit Navbar Item":
-      console.log("Editing navbar item...");
-      break;
-    case "Delete Navbar Item":
-      console.log("Deleting navbar item...");
+    case "Manage Navbar Menu":
+      const { navbarMenuAction } = await inquirer.prompt([
+        {
+          type: "list",
+          name: "navbarMenuAction", 
+          message: "Navbar Menu - choose an action",
+          choices: [
+            "Add Menu Item",
+            "Edit Menu Item",
+            "Delete Menu Item",
+            "Back to Main Menu"
+          ]
+        }
+      ]);
+
+      switch (navbarMenuAction) {
+        case "Add Menu Item":
+          await newMenuItem();
+          break;
+        case "Edit Menu Item":
+          await editMenuItem();
+          break;
+        case "Delete Menu Item":
+          await deleteMenuItem();
+          break;
+        case "Back to Main Menu":
+          break;
+      }
       break;
     case "Back to Main Menu":
       return;

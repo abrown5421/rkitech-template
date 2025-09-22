@@ -1,15 +1,24 @@
-[
-  {
-    "itemName": "Home",
-    "itemType": "page",
-    "itemID": "534db1ae-8e49-45af-a505-2ef5c02c478b",
-    "itemColor": "gray",
-    "itemIntensity": 900,
-    "itemHoverColor": "amber",
-    "itemHoverIntensity": 500,
-    "itemActiveColor": "amber",
-    "itemActiveIntensity": 500,
-    "itemEntranceAnimation": "animate__fadeIn",
-    "itemExitAnimation": "animate__fadeOut"
-  }
-]
+{
+  "navbarTitle": "Rkitech",
+  "navbarBgColor": "gray",
+  "navbarBgIntensity": 50,
+  "navbarLeftSectionAnimations": {
+    "entranceAnimation": "animate__slideInLeft",
+    "exitAnimation": "animate__slideOutLeft"
+  },
+  "navbarMenuItems": [
+    {
+      "itemName": "Home",
+      "itemType": "page",
+      "itemID": "534db1ae-8e49-45af-a505-2ef5c02c478b",
+      "itemColor": "gray",
+      "itemIntensity": 900,
+      "itemHoverColor": "amber",
+      "itemHoverIntensity": 500,
+      "itemActiveColor": "amber",
+      "itemActiveIntensity": 500,
+      "itemEntranceAnimation": "animate__fadeIn",
+      "itemExitAnimation": "animate__fadeOut"
+    }
+  ]
+}
