@@ -1,10 +1,10 @@
 import React from 'react';
 import { Button, Container, Image, Text } from 'rkitech-components';
 import type { PageNotFoundProps } from './pagenotfoundTypes';
-import pagesJson from '../../cli/src/shared/json/pages.json';
 import { useNavigationHook } from '../../hooks/useNavigationHook';
-import type { PageData } from '../../cli/src/shared/types/pageTypes';
 import imageSrc from '../../../public/assets/404.png';
+import type { PageData } from '../../cli/src/features/Pages/types/pageTypes';
+import pagesJson from '../../cli/src/features/Pages/json/pages.json';
 
 const PageNotFound: React.FC<PageNotFoundProps> = () => {
     const navigate = useNavigationHook();

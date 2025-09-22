@@ -12,5 +12,4 @@ export interface PageData {
   pageEntranceAnimation: EntranceAnimation;
   pageExitAnimation: ExitAnimation;
   pageID: string;
-  pageContent: string
 }
