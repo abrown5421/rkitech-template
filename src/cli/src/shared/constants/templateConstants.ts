@@ -1,5 +1,6 @@
 import { authTemplate } from "../../templates/Auth.js";
 import { blankTemplate } from "../../templates/blank.js";
+import { privacyPolicyTemplate } from "../../templates/privacyPolicy.js";
 import { sidebarLeftTemplate } from "../../templates/sidebarLeft.js";
 import { sidebarRightTemplate } from "../../templates/sidebarRight.js";
 import { threeColumnTemplate } from "../../templates/threeColumn.js";
@@ -14,4 +15,5 @@ export const TEMPLATES: Record<string, (componentName: string, folderName: strin
   "Three Column": threeColumnTemplate,
   "Two By Two Grid": twoByTwoGridTemplate,
   "Auth": authTemplate,
+  "Privacy Policy": privacyPolicyTemplate,
 };

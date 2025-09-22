@@ -6,7 +6,7 @@ import type { ${componentName}Props } from './${folderName}Types';
 const ${componentName}: React.FC<${componentName}Props> = () => {
     return (
         <Container 
-            tailwindClasses=''
+            tailwindClasses='w-full'
         >
             ${componentName}
         </Container>
