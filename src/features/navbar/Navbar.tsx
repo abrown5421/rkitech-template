@@ -1,12 +1,12 @@
 import React from 'react';
 import { Button, Container, Image, Text } from 'rkitech-components';
 import logo from '../../../public/assets/logo.png';
-import pagesJson from '../../cli/src/shared/json/pages.json';
-import navbarJson from '../../cli/src/shared/json/navbar.json';
 import { useNavigationHook } from '../../hooks/useNavigationHook';
-import type { PageData } from '../../cli/src/shared/types/pageTypes';
-import type { NavItem } from '../../cli/src/shared/types/navItemTypes';
 import { useAppSelector } from '../../app/hooks';
+import type { NavItem } from '../../cli/src/features/Navbar/types/navTypes';
+import type { PageData } from '../../cli/src/features/Pages/types/pageTypes';
+import navbarJson from '../../cli/src/features/Navbar/json/navbar.json';
+import pagesJson from '../../cli/src/features/Pages/json/pages.json';
 
 const Navbar: React.FC = () => {
   const navigate = useNavigationHook();

@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
+import Balls from '../balls/Balls';
 import { Container } from 'rkitech-components';
 import { useAppSelector } from '../../app/hooks';
 import Home from '../home/Home';
-import type { PageData } from '../../cli/src/shared/types/pageTypes';
 import PageNotFound from '../pagenotfound/PageNotFound';
+import type { PageData } from '../../cli/src/features/Pages/types/pageTypes';
 
 const PageShell: React.FC<PageData> = ({
   pageName,
@@ -32,6 +33,7 @@ const PageShell: React.FC<PageData> = ({
       {activePage.activePageName === 'Home' && <Home />}
       {/* cli generated pages should appear here */}
       {activePage.activePageName === 'PageNotFound' && <PageNotFound />}{' '}
+      {activePage.activePageName === 'Balls' && <Balls />}{' '}
     </Container>
   );
 };

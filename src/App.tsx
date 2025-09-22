@@ -9,10 +9,10 @@ import Alert from './features/alert/Alert';
 import Drawer from './features/drawer/Drawer';
 import { Route, Routes } from 'react-router-dom';
 import PageShell from './features/pageShell/PageShell';
-import type { PageData, RenderMethod } from './cli/src/shared/types/pageTypes';
-import pages from './cli/src/shared/json/pages.json';
 import { useLocation } from "react-router-dom";
 import { setActivePage } from './features/pageShell/activePageSlice';
+import type { PageData, RenderMethod } from './cli/src/features/Pages/types/pageTypes';
+import pages from './cli/src/features/Pages/json/pages.json';
 
 const App: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -61,7 +61,6 @@ const App: React.FC = () => {
                       pageRenderMethod={p.pageRenderMethod as RenderMethod}
                       pageActive={p.pageActive}
                       pagePath={p.pagePath}
-                      pageContent={p.pageContent}
                       pageColor={p.pageColor as unknown as TailwindColor}
                       pageIntensity={p.pageIntensity as unknown as TailwindIntensity}
                       pageEntranceAnimation={p.pageEntranceAnimation as unknown as EntranceAnimation}
