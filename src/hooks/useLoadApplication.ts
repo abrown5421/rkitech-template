@@ -2,11 +2,13 @@ import { useEffect } from "react";
 import { useAppDispatch } from "../app/hooks";
 import { startLoading, stopLoading } from "../features/loader/loadingSlice";
 import type { Navbar } from "../cli/src/features/Navbar/types/navTypes";
-import { setNavbar, setPages } from "../app/globalSlice/applicationSlice";
+import { setNavbar, setPages, setFooter } from "../app/globalSlice/applicationSlice";
 import type { PageData } from "../cli/src/features/Pages/types/pageTypes";
+import type { Footer } from "../cli/src/features/Footer/types/footerTypes";
 
 const NAVBAR_JSON = "../src/cli/src/features/Navbar/json/navbar.json";
 const PAGES_JSON = "../src/cli/src/features/Pages/json/pages.json";
+const FOOTER_JSON = "../src/cli/src/features/Footer/json/footer.json";
 
 export const useLoadApplication = () => {
   const dispatch = useAppDispatch();
@@ -23,6 +25,10 @@ export const useLoadApplication = () => {
         const pagesRes = await fetch(PAGES_JSON);
         const pagesData: PageData[] = await pagesRes.json();
         dispatch(setPages(pagesData));
+
+        const footerRes = await fetch(FOOTER_JSON);
+        const footerData: Footer = await footerRes.json();
+        dispatch(setFooter(footerData));
       } catch (err) {
         console.error("Error loading application data:", err);
       } finally {
