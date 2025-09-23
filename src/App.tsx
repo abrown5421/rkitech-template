@@ -24,19 +24,18 @@ const App: React.FC = () => {
   );
 
   useEffect(() => {
-    try {
-      const page = pages.find((p) => p.pagePath === location.pathname) as PageData | undefined;
-      const pageNotFound = pages.find((p) => p.pagePath === 'page-not-found') as PageData | undefined;
-      if (page) {
-        dispatch(setActivePage(page));
-      } else if (pageNotFound) {
-        dispatch(setActivePage(pageNotFound));
-      }
-    } catch {
-      
+    if (!pages || pages.length === 0) return; 
+
+    const page = pages.find((p) => p.pagePath === location.pathname) as PageData | undefined;
+
+    const pageNotFound = pages.find((p) => p.pageName === 'PageNotFound') as PageData | undefined;
+
+    if (page?.pageActive) {
+      dispatch(setActivePage(page));
+    } else if (pageNotFound) {
+      dispatch(setActivePage(pageNotFound));
     }
-  }, [dispatch]);
-  
+  }, [dispatch, pages, location.pathname]);
 
   return (
     <Container tailwindClasses="flex-col w-screen h-screen z-30 relative bg-gray-900">
@@ -56,7 +55,15 @@ const App: React.FC = () => {
                   path={p.pagePath}
                   element={<PageShell {...p} />}
                 />
-              ))}
+            ))}
+            <Route
+              path="*"
+              element={
+                pages.find(p => p.pageName === 'PageNotFound') && (
+                  <PageShell {...pages.find(p => p.pageName === 'PageNotFound')!} />
+                )
+              }
+            />
           </Routes>
           <Modal />
           <Alert />
