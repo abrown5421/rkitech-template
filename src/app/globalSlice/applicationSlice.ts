@@ -9,7 +9,12 @@ const initialState: ApplicationProps = {
   navbar: {
     navbarTitle: "",
     navbarBgColor: "gray",
+<<<<<<< Updated upstream
     navbarBgIntensity: 50, 
+=======
+    navbarBgIntensity: 50,
+    navbarSticky: true,
+>>>>>>> Stashed changes
     navbarLeftSectionAnimations: {
       entranceAnimation: "none",
       exitAnimation: "none",

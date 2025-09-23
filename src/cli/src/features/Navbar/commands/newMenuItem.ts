@@ -6,7 +6,8 @@ import { PageData } from '../../Pages/types/pageTypes.js';
 import { COLORS, INTENSITIES } from '../../../shared/constants/tailwindConstants.js';
 import { ENTRANCE_ANIMATIONS, EXIT_ANIMATIONS } from '../../../shared/constants/animationConstants.js';
 import { createGUID } from '../../../shared/utils/createGUID.js';
-import { Navbar, NavItem } from '../types/navTypes.js';
+import { Navbar } from '../types/navTypes.js';
+import { NavItem } from '../../../shared/types/navItemTypes.js';
 
 export async function newMenuItem() {
   const navbarJsonPath = path.resolve(
