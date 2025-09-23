@@ -27,7 +27,7 @@ const PageShell: React.FC<PageData> = ({
         exitAnimation: pageExitAnimation ?? 'animate__fadeOut',
         isEntering: activePage.activePageIn && activePage.activePageName === pageName,
       }}
-      tailwindClasses={`h-[calc(100vh-54px)] p-5 bg-${colorString}`}
+      tailwindClasses={`h-[calc(100vh-54px)] bg-${colorString} overflow-scroll`}
     >
       {/* add manually generated pages here */}
       {activePage.activePageName === 'Home' && <Home />}
