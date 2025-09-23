@@ -20,5 +20,16 @@
     "pageEntranceAnimation": "animate__fadeIn",
     "pageExitAnimation": "animate__fadeOut",
     "pageID": "58f820e6-e10b-4dbe-a11d-5f2055b75c0c"
+  },
+  {
+    "pageName": "PrivacyPolicy",
+    "pagePath": "/privacy-policy",
+    "pageRenderMethod": "static",
+    "pageActive": true,
+    "pageColor": "gray",
+    "pageIntensity": 50,
+    "pageEntranceAnimation": "animate__fadeIn",
+    "pageExitAnimation": "animate__fadeOut",
+    "pageID": "77bd3acd-547b-4980-8a70-e524c3f22625"
   }
 ]

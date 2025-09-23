@@ -12,7 +12,7 @@ const PageNotFound: React.FC<PageNotFoundProps> = () => {
 
     return (
         <Container 
-            tailwindClasses='flex-row w-full h-full p-5 justify-center items-center'
+            tailwindClasses='flex-row w-full h-full pt-5 px-5 mb-5 justify-center items-center'
         >
             <Container tailwindClasses='flex-col justify-center items-center w-full md:w-1/3'>
                 
