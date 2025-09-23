@@ -19,6 +19,19 @@
       "itemActiveIntensity": 500,
       "itemEntranceAnimation": "animate__fadeIn",
       "itemExitAnimation": "animate__fadeOut"
+    },
+    {
+      "itemName": "Privacy Policy",
+      "itemType": "page",
+      "itemID": "77bd3acd-547b-4980-8a70-e524c3f22625",
+      "itemColor": "gray",
+      "itemIntensity": 900,
+      "itemHoverColor": "amber",
+      "itemHoverIntensity": 500,
+      "itemActiveColor": "amber",
+      "itemActiveIntensity": 500,
+      "itemEntranceAnimation": "animate__fadeIn",
+      "itemExitAnimation": "animate__fadeOut"
     }
   ]
 }
