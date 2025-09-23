@@ -11,6 +11,7 @@ const initialState: ApplicationProps = {
     navbarTitle: "",
     navbarBgColor: "gray",
     navbarBgIntensity: 50,
+    navbarSticky: true,
     navbarLeftSectionAnimations: {
       entranceAnimation: "none",
       exitAnimation: "none",

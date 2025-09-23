@@ -1,4 +1,4 @@
-import { input, select } from '@inquirer/prompts';
+import { confirm, input, select } from '@inquirer/prompts';
 import fs from 'fs/promises';
 import path from 'path';
 import prettier from 'prettier';
@@ -29,6 +29,11 @@ export async function editNavbar() {
     console.error('❌ Error reading or parsing navbar.json:', error);
     return;
   }
+
+  const navbarSticky = await confirm({
+    message: 'Make the navbar sticky?',
+    default: navbar.navbarSticky,
+  });
 
   const newNavbarTitle = await input({
     message: 'Enter the navbar title:',
@@ -80,6 +85,7 @@ export async function editNavbar() {
 
   const updatedNavbar: Navbar = {
     ...navbar,
+    navbarSticky: navbarSticky,
     navbarTitle: newNavbarTitle,
     navbarBgColor: newNavbarBgColor,
     navbarBgIntensity: newNavbarBgIntensity,

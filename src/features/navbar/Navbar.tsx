@@ -10,7 +10,7 @@ const Navbar: React.FC = () => {
   const activePage = useAppSelector((state) => state.activePage);
   const application = useAppSelector((state) => state.application);
   const colorString = application.navbar.navbarBgColor + '-' + application.navbar.navbarBgIntensity
-
+  const stickyNav = application.navbar.navbarSticky ? 'sticky top-0' : ''
   return (
     <Container
       animationObject={{
@@ -18,7 +18,7 @@ const Navbar: React.FC = () => {
         exitAnimation: 'animate__fadeOut',
         isEntering: true
       }}
-      tailwindClasses={`w-full h-[54px] bg-${colorString} justify-between items-center relative z-20 shadow-[0_2px_4px_rgba(0,0,0,0.15)]`}
+      tailwindClasses={`${stickyNav} w-full h-[54px] bg-${colorString} justify-between items-center relative z-20 shadow-[0_2px_4px_rgba(0,0,0,0.15)]`}
     >
       <Container
         animationObject={{

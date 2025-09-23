@@ -6,6 +6,7 @@
     "entranceAnimation": "animate__slideInLeft",
     "exitAnimation": "animate__slideOutLeft"
   },
+  "navbarSticky": true,
   "navbarMenuItems": [
     {
       "itemName": "Home",
