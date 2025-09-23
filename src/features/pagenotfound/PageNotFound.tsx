@@ -3,13 +3,12 @@ import { Button, Container, Image, Text } from 'rkitech-components';
 import type { PageNotFoundProps } from './pagenotfoundTypes';
 import { useNavigationHook } from '../../hooks/useNavigationHook';
 import imageSrc from '../../../public/assets/404.png';
-import type { PageData } from '../../cli/src/features/Pages/types/pageTypes';
-import pagesJson from '../../cli/src/features/Pages/json/pages.json';
+import { useAppSelector } from '../../app/hooks';
 
 const PageNotFound: React.FC<PageNotFoundProps> = () => {
     const navigate = useNavigationHook();
-    const pages: PageData[] = pagesJson as PageData[];
-    const homePage = pages.find((p) => p.pagePath === '/');
+    const application = useAppSelector((state) => state.application);
+    const homePage = application.pages.find((p) => p.pagePath === '/');
 
     return (
         <Container 

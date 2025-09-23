@@ -3,17 +3,13 @@ import { Button, Container, Image, Text, type EntranceAnimation, type ExitAnimat
 import logo from '../../../public/assets/logo.png';
 import { useNavigationHook } from '../../hooks/useNavigationHook';
 import { useAppSelector } from '../../app/hooks';
-import type { NavItem } from '../../cli/src/features/Navbar/types/navTypes';
 import type { PageData } from '../../cli/src/features/Pages/types/pageTypes';
-import navbarJson from '../../cli/src/features/Navbar/json/navbar.json';
-import pagesJson from '../../cli/src/features/Pages/json/pages.json';
 
 const Navbar: React.FC = () => {
   const navigate = useNavigationHook();
   const activePage = useAppSelector((state) => state.activePage);
-  const navItems: NavItem[] = navbarJson.navbarMenuItems as NavItem[];
-  const pages: PageData[] = pagesJson as PageData[];
-  const colorString = navbarJson.navbarBgColor + '-' + navbarJson.navbarBgIntensity
+  const application = useAppSelector((state) => state.application);
+  const colorString = application.navbar.navbarBgColor + '-' + application.navbar.navbarBgIntensity
 
   return (
     <Container
@@ -26,26 +22,26 @@ const Navbar: React.FC = () => {
     >
       <Container
         animationObject={{
-          entranceAnimation: navbarJson.navbarLeftSectionAnimations.entranceAnimation as EntranceAnimation,
-          exitAnimation: navbarJson.navbarLeftSectionAnimations.exitAnimation as ExitAnimation,
+          entranceAnimation: application.navbar.navbarLeftSectionAnimations.entranceAnimation as EntranceAnimation,
+          exitAnimation: application.navbar.navbarLeftSectionAnimations.exitAnimation as ExitAnimation,
           isEntering: true
         }}
         tailwindClasses='flex-row px-5 items-center'
       >
         <Image src={logo} tailwindClasses='h-[50px]' />
-        <Text tailwindClasses='text-xl font-mono text-gray-900' text={navbarJson.navbarTitle} />
+        <Text tailwindClasses='text-xl font-mono text-gray-900' text={application.navbar.navbarTitle} />
       </Container>
 
       <Container
         tailwindClasses='flex-col px-5'
       >
         <Container tailwindClasses='flex-row gap-4'>
-          {navItems.map((i) => {
+          {application.navbar.navbarMenuItems.map((i) => {
             let onClickHandler: () => void;
             let isActive = false;
 
             if (i.itemType === 'page') {
-              const page = pages.find((p) => p.pageID === i.itemID) as PageData;
+              const page = application.pages.find((p) => p.pageID === i.itemID) as PageData;
               if (!page) return null; 
               isActive = activePage.activePageName === page.pageName;
               onClickHandler = navigate(page);

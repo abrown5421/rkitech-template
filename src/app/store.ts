@@ -4,6 +4,7 @@ import modalReducer from "../features/modal/modalSlice";
 import alertReducer from "../features/alert/alertSlice";
 import activePageReducer from "../features/pageShell/activePageSlice";
 import drawerReducer from '../features/drawer/drawerSlice';
+import applicationReducer from './globalSlice/applicationSlice';
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
     alert: alertReducer,
     drawer: drawerReducer,
     activePage: activePageReducer,
+    application: applicationReducer,
   },
 });
 

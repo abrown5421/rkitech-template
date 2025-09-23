@@ -15,16 +15,13 @@ export interface NavItem {
     itemExitAnimation: ExitAnimation
 }
 
-export type SectionAnimation = {
-    entranceAnimation: EntranceAnimation | 'none',
-    exitAnimation: ExitAnimation | 'none'
-}
-
 export interface Navbar {
     navbarTitle: string,
     navbarBgColor: TailwindColor,
     navbarBgIntensity: TailwindIntensity,
-    navbarLeftSectionAnimations: SectionAnimation,
-    navbarRightSectionAnimations: SectionAnimation,
+    navbarLeftSectionAnimations: {
+        entranceAnimation: EntranceAnimation | 'none',
+        exitAnimation: ExitAnimation | 'none'
+    },
     navbarMenuItems: NavItem[]
 }
