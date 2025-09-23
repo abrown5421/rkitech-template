@@ -7,6 +7,7 @@ const ${componentName}: React.FC<${componentName}Props> = () => {
     return (
         <Container 
             tailwindClasses='w-full h-full min-h-[calc(100vh-50px)] p-5'
+
         >
             ${componentName}
         </Container>

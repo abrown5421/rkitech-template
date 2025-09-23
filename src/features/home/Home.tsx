@@ -6,6 +6,7 @@ const Home: React.FC<HomeProps> = () => {
     return (
         <Container 
             tailwindClasses='w-full min-h-[calc(100vh-50px)] p-5'
+
         >
             Home
         </Container>
