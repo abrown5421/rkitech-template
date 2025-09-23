@@ -5,7 +5,7 @@ import type { HomeProps } from './homeTypes';
 const Home: React.FC<HomeProps> = () => {
     return (
         <Container 
-            tailwindClasses='w-full'
+            tailwindClasses='w-full h-full p-5'
         >
             Home
         </Container>
