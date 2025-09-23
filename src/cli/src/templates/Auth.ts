@@ -123,7 +123,7 @@ const ${componentName}: React.FC<${componentName}Props> = () => {
     };
 
     return (
-        <Container tailwindClasses='flex-row w-full h-full justify-center items-center'>
+        <Container tailwindClasses='flex-row w-full min-h-[calc(100vh-74px)] justify-center items-center'>
             <Container tailwindClasses='flex-col justify-center items-center w-full md:w-1/3 bg-gray-50 rounded-xl p-4'>
                 <Text 
                     text={isSignup ? 'Sign Up' : 'Login'} 
