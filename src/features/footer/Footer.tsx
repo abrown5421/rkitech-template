@@ -36,7 +36,7 @@ const Footer: React.FC = () => {
         <Container tailwindClasses={`flex-row w-full md:min-h-[150px] bg-${colorString} p-4 relative z-20 shadow-[0_-2px_4px_rgba(0,0,0,0.15)]`}>
             <div ref={footerRef} />
             <Container tailwindClasses='flex-col flex-8 justify-between'>
-                <Container tailwindClasses='flex-col md:flex-row flex-1 md:items-center gap-4'>  
+                <Container tailwindClasses='flex-col md:flex-row md:flex-wrap flex-1 md:items-center gap-4'>  
                     {application.footer.footerPrimaryMenuItems.map((i, index) => {
                         let onClickHandler: () => void;
                         let isActive = false;
