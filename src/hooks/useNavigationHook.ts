@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../app/hooks";
 import { setActivePage, setActivePageIn } from "../features/pageShell/activePageSlice";
-import type { PageData } from "../cli/src/shared/types/pageTypes";
+import type { PageData } from "../cli/src/features/Pages/types/pageTypes";
 
 export const useNavigationHook = () => {
   const dispatch = useAppDispatch();

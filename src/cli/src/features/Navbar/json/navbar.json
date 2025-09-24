@@ -1,0 +1,51 @@
+{
+  "navbarTitle": "Rkitech",
+  "navbarBgColor": "gray",
+  "navbarBgIntensity": 50,
+  "navbarLeftSectionAnimations": {
+    "entranceAnimation": "animate__slideInLeft",
+    "exitAnimation": "animate__slideOutLeft"
+  },
+  "navbarSticky": true,
+  "navbarMenuItems": [
+    {
+      "itemName": "Home",
+      "itemType": "page",
+      "itemID": "534db1ae-8e49-45af-a505-2ef5c02c478b",
+      "itemColor": "gray",
+      "itemIntensity": 900,
+      "itemHoverColor": "amber",
+      "itemHoverIntensity": 500,
+      "itemActiveColor": "amber",
+      "itemActiveIntensity": 500,
+      "itemEntranceAnimation": "animate__fadeIn",
+      "itemExitAnimation": "animate__fadeOut"
+    },
+    {
+      "itemName": "About",
+      "itemType": "page",
+      "itemID": "ba8d760c-e785-4fcf-a1e9-44bd14c8e516",
+      "itemColor": "gray",
+      "itemIntensity": 900,
+      "itemHoverColor": "amber",
+      "itemHoverIntensity": 500,
+      "itemActiveColor": "amber",
+      "itemActiveIntensity": 500,
+      "itemEntranceAnimation": "animate__fadeIn",
+      "itemExitAnimation": "animate__fadeOut"
+    },
+    {
+      "itemName": "Blog",
+      "itemType": "page",
+      "itemID": "9319ef19-4709-4f37-b0a0-c6f2b4448498",
+      "itemColor": "gray",
+      "itemIntensity": 900,
+      "itemHoverColor": "amber",
+      "itemHoverIntensity": 500,
+      "itemActiveColor": "amber",
+      "itemActiveIntensity": 500,
+      "itemEntranceAnimation": "animate__fadeIn",
+      "itemExitAnimation": "animate__fadeOut"
+    }
+  ]
+}

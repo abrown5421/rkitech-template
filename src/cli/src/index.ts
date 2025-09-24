@@ -1,59 +1,52 @@
 #!/usr/bin/env node
 import { Command } from "commander";
-import { newPageCommand } from "./commands/page/new/new.js";
-import { editPageCommand } from "./commands/page/edit/edit.js";
-import { deletePageCommand } from "./commands/page/delete/delete.js";
-import { addNavbarCommand } from "./commands/navbar/add/add.js";
-import { editNavbarCommand } from "./commands/navbar/edit/edit.js";
-import { deleteNavbarCommand } from "./commands/navbar/delete/delete.js";
+import figlet from "figlet";
+import inquirer from "inquirer";
+import { pageManager } from "./features/Pages/pageManager.js";
+import { navbarManager } from "./features/Navbar/navbarManager.js";
+import { footerManager } from "./features/Footer/footerManager.js";
 
 const program = new Command();
 
 program
   .name("rkitech-cli")
   .description("Your CLI for Rkitech")
-  .version("0.1.0");
+  .version("0.2.0");
 
-program
-  .command("new-page")
-  .description("Run this command to create a new page in your project")
-  .action(async () => { 
-    await newPageCommand();       
-  });
+async function mainMenu() {
+  while (true) {
+    console.clear();
+    console.log(figlet.textSync("RKITECH", { font: "Big" }));
+    console.log("Welcome to RKITECH CLI!\n");
 
-program
-  .command("edit-page")
-  .description("Run this command to edit an existing page in your project")
-  .action(async () => { 
-    await editPageCommand();       
-  });
-  
-program
-  .command("delete-page")
-  .description("Run this command to delete an existing page in your project")
-  .action(async () => { 
-    await deletePageCommand();       
-  });
+    const { mainChoice } = await inquirer.prompt([
+      {
+        type: "list",
+        name: "mainChoice",
+        message: "What would you like to do?",
+        choices: ["Manage Pages", "Manage Navbar", "Manage Footer", "Exit"]
+      }
+    ]);
 
-program
-  .command("add-nav")
-  .description("Run this command to add items to the navbar")
-  .action(async () => { 
-    await addNavbarCommand();       
-  });
+    switch (mainChoice) {
+      case "Manage Pages":
+        await pageManager();
+        break;
+      case "Manage Navbar":
+        await navbarManager();
+        break;
+      case "Manage Footer":
+        await footerManager();
+        break;
+      case "Exit":
+        console.log("Goodbye!");
+        process.exit(0);
+    }
+  }
+}
 
-program
-  .command("edit-nav")
-  .description("Run this command to edit existing items in the navbar")
-  .action(async () => { 
-    await editNavbarCommand();       
-  });
-  
-program
-  .command("delete-nav")
-  .description("Run this command to delete an existing item in the navbar")
-  .action(async () => { 
-    await deleteNavbarCommand();       
-  });
+program.action(async () => {
+  await mainMenu();
+});
 
 program.parse();

@@ -1,4 +1,4 @@
-import type { PageData } from "../../cli/src/shared/types/pageTypes";
+import type { PageData } from "../../cli/src/features/Pages/types/pageTypes";
 
 export interface ActivePageState {
     activePageName: string;
