@@ -1,5 +1,5 @@
 import { TailwindColor, TailwindIntensity } from "rkitech-components";
-import { NavItem } from "../../../shared/types/navItemTypes"
+import { NavItem } from "../../../shared/types/navItemTypes.js";
 
 export type FooterCopyright = {
   show: boolean;

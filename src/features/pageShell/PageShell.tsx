@@ -39,8 +39,7 @@ const PageShell: React.FC<PageData> = ({
       {activePage.activePageName === 'PageNotFound' && <PageNotFound />}{' '}
       {activePage.activePageName === 'PrivacyPolicy' && <PrivacyPolicy />}{' '}
       {activePage.activePageName === 'Blog' && <Blog />}{' '}
-      {activePage.activePageName === 'About' && <About />} 
-      
+      {activePage.activePageName === 'About' && <About />}
       <Footer />
     </Container>
   );

@@ -1,5 +1,5 @@
 import { EntranceAnimation, ExitAnimation, TailwindColor, TailwindIntensity } from "rkitech-components"
-import { NavItem } from "../../../shared/types/navItemTypes"
+import { NavItem } from "../../../shared/types/navItemTypes.js"
 
 export interface Navbar {
     navbarTitle: string,

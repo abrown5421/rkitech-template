@@ -9,9 +9,10 @@ const Footer: React.FC = () => {
     const activePage = useAppSelector((state) => state.activePage);
     const application = useAppSelector((state) => state.application);
     const currentYear = new Date().getFullYear();
+    const colorString = application.footer.footerBgColor + '-' + application.footer.footerBgIntensity
 
     return (
-        <Container tailwindClasses='flex-row w-full min-h-[150px] bg-gray-50 p-4 relative z-20 shadow-[0_-2px_4px_rgba(0,0,0,0.15)]'>
+        <Container tailwindClasses={`flex-row w-full min-h-[150px] bg-${colorString} p-4 relative z-20 shadow-[0_-2px_4px_rgba(0,0,0,0.15)]`}>
             <Container tailwindClasses='flex-col flex-8 justify-between'>
                 <Container tailwindClasses='flex-row flex-1 items-center gap-4'>  
                     {application.footer.footerPrimaryMenuItems.map((i) => {
@@ -52,7 +53,9 @@ const Footer: React.FC = () => {
                     {application.footer.footerCopyright.show && (
                         <div className='text-gray-500'>&copy; {currentYear} {application.footer.footerCopyright.text}</div>
                     )}
-                    <div className='mx-2 text-gray-500'>|</div>
+                    {application.footer.footerCopyright.show && (
+                        <div className='mx-2 text-gray-500'>|</div>
+                    )}
                     {application.footer.footerAuxilaryMenuItems.map((i, index) => {
                         let onClickHandler: () => void;
                         let isActive = false;

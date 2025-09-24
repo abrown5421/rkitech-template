@@ -4,6 +4,7 @@ import figlet from "figlet";
 import inquirer from "inquirer";
 import { pageManager } from "./features/Pages/pageManager.js";
 import { navbarManager } from "./features/Navbar/navbarManager.js";
+import { footerManager } from "./features/Footer/footerManager.js";
 
 const program = new Command();
 
@@ -23,7 +24,7 @@ async function mainMenu() {
         type: "list",
         name: "mainChoice",
         message: "What would you like to do?",
-        choices: ["Manage Pages", "Manage Navbar", "Exit"]
+        choices: ["Manage Pages", "Manage Navbar", "Manage Footer", "Exit"]
       }
     ]);
 
@@ -33,6 +34,9 @@ async function mainMenu() {
         break;
       case "Manage Navbar":
         await navbarManager();
+        break;
+      case "Manage Footer":
+        await footerManager();
         break;
       case "Exit":
         console.log("Goodbye!");
