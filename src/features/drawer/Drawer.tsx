@@ -15,7 +15,7 @@ const Drawer: React.FC = () => {
         bottom: "bottom-0 right-0 left-0 h-1/4",
         left: "left-0 top-0 bottom-0 w-1/5",
     };
-
+ 
     const tailwindPosition = positionClasses[drawer.orientation ?? "right"];
 
     if (!drawer.open && !isClosing) return null;
