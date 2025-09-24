@@ -20,10 +20,7 @@ const Drawer: React.FC = () => {
 
     if (!drawer.open && !isClosing) return null;
 
-    const getColorString = (colorSuffix: { color: string; intensity: number }) => 
-        `${colorSuffix.color}-${colorSuffix.intensity}`;
-
-    const drawerBgColor = drawer.color?.bg?.base ? getColorString(drawer.color.bg.base) : "gray-100";
+    const colorString = `${drawer.color}-${drawer.intensity}`;
 
     const handleClose = () => {
         setIsClosing(true);
@@ -49,7 +46,7 @@ const Drawer: React.FC = () => {
                     exitAnimation: drawer.exit || 'animate__slideOutRight',
                     isEntering: drawer.open && !isClosing,
                 }}
-                tailwindClasses={`z-40 bg-${drawerBgColor} absolute ${tailwindPosition}`}
+                tailwindClasses={`z-40 bg-${colorString} absolute ${tailwindPosition}`}
                 onClick={(e) => e.stopPropagation()}
             >
                 <Container tailwindClasses="flex-col h-full w-full relative">
@@ -68,8 +65,8 @@ const Drawer: React.FC = () => {
                         <Container tailwindClasses="p-4">
                             <List variant="unordered" orientation="vertical" gap={3}>
                                 {drawer.link.map((lnk, idx) => {
-                                    const textColor = lnk.color?.text?.base 
-                                        ? `text-${getColorString(lnk.color.text.base)}`
+                                    const textColor = lnk.linkTextColor
+                                        ? `text-${lnk.linkTextColor}-${lnk.linkTextIntensity}`
                                         : "text-gray-900";
 
                                     return (
@@ -92,18 +89,18 @@ const Drawer: React.FC = () => {
 
                     <Container tailwindClasses="absolute bottom-2 right-2 left-2">
                         {drawer.action?.map((act, idx) => {
-                            const bgColor = act.color.bg?.base ? getColorString(act.color.bg.base) : "blue-500";
-                            const textColor = act.color.text?.base ? getColorString(act.color.text.base) : "gray-50";
-                            const borderColor = act.color.border?.base ? getColorString(act.color.border.base) : bgColor;
-                            const hoverTextColor = act.color.text?.hover ? getColorString(act.color.text.hover) : bgColor;
+                            const colorString = `${act.actionColor}-${act.actionIntensity}`;
+                            const textColor = act.actionTextColor
+                                ? `${act.actionTextColor}-${act.actionTextIntensity || act.actionIntensity}`
+                                : "gray-50";
 
                             return (
                                 <Button
                                     key={idx}
                                     tailwindClasses={`
                                         flex-1 justify-center items-center py-1 px-5 rounded-xl border-2 cursor-pointer text-${textColor}
-                                        bg-${bgColor} border-${borderColor} 
-                                        hover:bg-transparent hover:text-${hoverTextColor}
+                                        bg-${colorString} border-${colorString} 
+                                        hover:bg-transparent hover:text-${colorString}
                                     `}
                                     onClick={async () => {
                                         await act.actionFunction();
