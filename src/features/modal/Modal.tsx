@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, Container, Text } from 'rkitech-components';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { closeModal } from './modalSlice';
+import { useGetTheme } from '../../hooks/useGetTheme';
 
 const Modal: React.FC = () => {
     const dispatch = useAppDispatch();
@@ -45,9 +46,9 @@ const Modal: React.FC = () => {
                     exitAnimation: modal.exit || 'animate__flipOutX',
                     isEntering: modal.open && !isClosing,
                 }}
-                tailwindClasses="flex-col bg-gray-50 rounded-2xl p-4 m-4 w-full md:w-1/2 lg:w-1/3 xl:w-1/4"
+                tailwindClasses={`flex-col bg-${useGetTheme('white')} rounded-2xl p-4 m-4 w-full md:w-1/2 lg:w-1/3 xl:w-1/4`}
             >
-                <Text text={modal.title} tailwindClasses="text-xl font-mono text-gray-900" />
+                <Text text={modal.title} tailwindClasses={`text-xl font-mono text-${useGetTheme('black')}`} />
                 <Text text={modal.body} tailwindClasses="mt-2" />
                 <div className="mt-6 h-px bg-gray-300 w-full" />
                 <Container tailwindClasses="mt-4 flex justify-end gap-2">
@@ -55,7 +56,7 @@ const Modal: React.FC = () => {
                         const colorString = `${act.actionColor}-${act.actionIntensity}`;
                         const textColor = act.actionTextColor
                             ? `${act.actionTextColor}-${act.actionTextIntensity || act.actionIntensity}`
-                            : 'gray-50';
+                            : useGetTheme('white');
 
                         return (
                             <Button
