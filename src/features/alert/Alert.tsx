@@ -44,16 +44,11 @@ const Alert: React.FC = () => {
 
     if (!alert.open && !isClosing) return null;
 
-    const getColorString = (colorSuffix: { color: string; intensity: number }) => 
-        `${colorSuffix.color}-${colorSuffix.intensity}`;
-
-    const bgColor = alert.color.bg?.base ? getColorString(alert.color.bg.base) : "emerald-500";
-    const borderColor = alert.color.border?.base ? getColorString(alert.color.border.base) : bgColor;
-    const textColor = alert.color.text?.base ? getColorString(alert.color.text.base) : "gray-800";
-
-    const backgroundClass = `bg-${bgColor}/20`;
-    const borderClass = `border-${borderColor}`;
-    const textColorClass = `text-${textColor}`;
+    const colorString = `${alert.color}-${alert.intensity}`;
+    const textColorClass =
+        alert.textColor && alert.textIntensity
+            ? `text-${alert.textColor}-${alert.textIntensity}`
+            : `text-${colorString}`;
 
     const handleClose = () => {
         if (autoCloseTimer.current) {
@@ -66,9 +61,6 @@ const Alert: React.FC = () => {
         }, 500);
     };
 
-    const iconColor = alert.color.bg?.base?.color || "emerald";
-    const iconIntensity = alert.color.bg?.base?.intensity || 500;
-
     return (
         <Container
             animationObject={{
@@ -76,12 +68,12 @@ const Alert: React.FC = () => {
                 exitAnimation: alert.exit || 'animate__slideOutRight',
                 isEntering: alert.open && !isClosing,
             }}
-            tailwindClasses={`flex-row justify-between gap-10 m-4 p-1 z-50 ${backgroundClass} rounded border-2 ${borderClass} absolute ${tailwindPosition}`}
+            tailwindClasses={`flex-row justify-between gap-10 m-4 p-1 z-50 bg-${colorString}/20 rounded border-2 border-${colorString} absolute  ${tailwindPosition}`}
         >
             <Text text={alert.body} tailwindClasses={textColorClass} />
             {alert.closeable && (
                 <Button onClick={handleClose}>
-                    <Icon iconName="X" color={iconColor} intensity={iconIntensity} />
+                    <Icon iconName="X" color={alert.color} intensity={alert.intensity} />
                 </Button>
             )}
         </Container>
