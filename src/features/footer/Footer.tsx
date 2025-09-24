@@ -1,9 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Button, Container, Image, Text } from 'rkitech-components';
+import { Button, Container } from 'rkitech-components';
 import { useNavigationHook } from '../../hooks/useNavigationHook';
 import { useAppSelector } from '../../app/hooks';
 import type { PageData } from '../../cli/src/features/Pages/types/pageTypes';
-import logo from '../../../public/assets/logo.png';
 
 const Footer: React.FC = () => {
     const navigate = useNavigationHook();
