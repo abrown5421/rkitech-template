@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Button, Container } from 'rkitech-components';
+import { Button, Container, Image, Text } from 'rkitech-components';
 import { useNavigationHook } from '../../hooks/useNavigationHook';
 import { useAppSelector } from '../../app/hooks';
 import type { PageData } from '../../cli/src/features/Pages/types/pageTypes';
+import logo from '../../../public/assets/logo.png';
 
 const Footer: React.FC = () => {
     const navigate = useNavigationHook();
@@ -32,10 +33,10 @@ const Footer: React.FC = () => {
     }, []);
 
     return (
-        <Container tailwindClasses={`flex-row w-full min-h-[150px] bg-${colorString} p-4 relative z-20 shadow-[0_-2px_4px_rgba(0,0,0,0.15)]`}>
+        <Container tailwindClasses={`flex-row w-full md:min-h-[150px] bg-${colorString} p-4 relative z-20 shadow-[0_-2px_4px_rgba(0,0,0,0.15)]`}>
             <div ref={footerRef} />
             <Container tailwindClasses='flex-col flex-8 justify-between'>
-                <Container tailwindClasses='flex-row flex-1 items-center gap-4'>  
+                <Container tailwindClasses='flex-col md:flex-row flex-1 md:items-center gap-4'>  
                     {application.footer.footerPrimaryMenuItems.map((i, index) => {
                         let onClickHandler: () => void;
                         let isActive = false;
@@ -76,7 +77,8 @@ const Footer: React.FC = () => {
                         );
                     })}
                 </Container>
-                <Container tailwindClasses='flex-row flex-1 items-center text-sm'>
+                <Container tailwindClasses='flex md:hidden my-8 flex-col flex-4 justify-center'>right side</Container>
+                <Container tailwindClasses='flex-row flex-wrap flex-1 items-center text-sm'>
                     {application.footer.footerCopyright.show && (
                         <div className='text-gray-500'>&copy; {currentYear} {application.footer.footerCopyright.text}</div>
                     )}
@@ -128,7 +130,7 @@ const Footer: React.FC = () => {
                     })}
                 </Container>
             </Container>
-            <Container tailwindClasses='flex-col flex-4 justify-center items-end'>right side</Container>
+            <Container tailwindClasses='hidden md:flex flex-col flex-4 justify-center items-end'>right side</Container>
         </Container>
     );
 };
