@@ -2,7 +2,7 @@ import { select, confirm } from '@inquirer/prompts';
 import fs from 'fs/promises';
 import path from 'path';
 import prettier from 'prettier';
-import { Navbar } from '../types/navTypes';
+import { Navbar } from '../types/navTypes.js';
 
 export async function deleteMenuItem() {
   const navbarJsonPath = path.resolve(
