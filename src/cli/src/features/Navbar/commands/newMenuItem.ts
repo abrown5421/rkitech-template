@@ -1,4 +1,4 @@
-import { input, select } from '@inquirer/prompts';
+import { input, select, confirm } from '@inquirer/prompts';
 import fs from 'fs/promises';
 import path from 'path';
 import prettier from 'prettier';
@@ -7,12 +7,18 @@ import { COLORS, INTENSITIES } from '../../../shared/constants/tailwindConstants
 import { ENTRANCE_ANIMATIONS, EXIT_ANIMATIONS } from '../../../shared/constants/animationConstants.js';
 import { createGUID } from '../../../shared/utils/createGUID.js';
 import { Navbar } from '../types/navTypes.js';
+import { Footer } from '../../Footer/types/footerTypes.js';
 import { NavItem } from '../../../shared/types/navItemTypes.js';
 
 export async function newMenuItem() {
   const navbarJsonPath = path.resolve(
     process.cwd(),
     'src/cli/src/features/Navbar/json/navbar.json'
+  );
+
+  const footerJsonPath = path.resolve(
+    process.cwd(),
+    'src/cli/src/features/Footer/json/footer.json'
   );
 
   const pagesJsonPath = path.resolve(
@@ -37,6 +43,17 @@ export async function newMenuItem() {
     return;
   }
 
+  let footer: Footer | null = null;
+  let footerExists = false;
+  try {
+    await fs.access(footerJsonPath);
+    const footerRaw = await fs.readFile(footerJsonPath, 'utf-8');
+    footer = JSON.parse(footerRaw);
+    footerExists = true;
+  } catch (error) {
+    console.warn('⚠️ Footer.json not found - skipping footer synchronization');
+  }
+
   let pages: PageData[] = [];
   try {
     await fs.access(pagesJsonPath);
@@ -47,12 +64,14 @@ export async function newMenuItem() {
     return;
   }
 
+  console.log('\n🔧 Adding new menu item to Navbar\n');
+
   const itemName = await input({
     message: 'Enter the menu item name:',
     validate: (input: string) => {
       if (!input) return 'Menu item name is required';
       if (navbar.navbarMenuItems.some((item) => item.itemName === input)) {
-        return 'Menu item name already exists';
+        return 'Menu item name already exists in navbar';
       }
       return true;
     },
@@ -155,6 +174,21 @@ export async function newMenuItem() {
     })),
   });
 
+  let syncWithFooter = false;
+  if (footerExists && footer) {
+    syncWithFooter = await confirm({
+      message: 'Also add this menu item to the footer primary menu?',
+      default: true,
+    });
+
+    if (syncWithFooter) {
+      if (footer.footerPrimaryMenuItems.some((item) => item.itemName === itemName)) {
+        console.log('❌ Menu item name already exists in footer primary menu. Adding to navbar only.');
+        syncWithFooter = false;
+      }
+    }
+  }
+
   const newMenuItem: NavItem = {
     itemName,
     itemType: itemType as 'page' | 'link',
@@ -172,13 +206,25 @@ export async function newMenuItem() {
 
   navbar.navbarMenuItems.push(newMenuItem);
 
+  if (syncWithFooter && footer) {
+    footer.footerPrimaryMenuItems.push({ ...newMenuItem });
+  }
+
   try {
     const formattedNavbar = await prettier.format(JSON.stringify(navbar), {
       parser: 'json',
     });
     await fs.writeFile(navbarJsonPath, formattedNavbar, 'utf-8');
     console.log(`✅ Menu item "${newMenuItem.itemName}" added to navbar`);
+
+    if (syncWithFooter && footer) {
+      const formattedFooter = await prettier.format(JSON.stringify(footer), {
+        parser: 'json',
+      });
+      await fs.writeFile(footerJsonPath, formattedFooter, 'utf-8');
+      console.log(`✅ Menu item "${newMenuItem.itemName}" also added to footer primary menu`);
+    }
   } catch (error) {
-    console.error('❌ Error writing to navbar.json:', error);
+    console.error('❌ Error writing files:', error);
   }
 }
