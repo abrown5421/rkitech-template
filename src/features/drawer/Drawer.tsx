@@ -2,7 +2,6 @@ import React from 'react';
 import { Button, Container, Icon, List, ListItem, Text } from 'rkitech-components';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { closeDrawer } from './drawerSlice';
-import { useGetTheme } from '../../hooks/useGetTheme';
 
 const Drawer: React.FC = () => {
     const dispatch = useAppDispatch();
@@ -55,7 +54,7 @@ const Drawer: React.FC = () => {
                     <Container tailwindClasses="flex-row p-2 justify-between">
                         <Text 
                             text={drawer.title || ''} 
-                            tailwindClasses="text-xl font-mono text-${useGetTheme('black')}" 
+                            tailwindClasses="text-xl font-mono text-gray-900" 
                         />
                         <Button tailwindClasses="absolute top-2 right-2 cursor-pointer" onClick={handleClose}>
                             <Icon iconName="X" />
@@ -66,10 +65,9 @@ const Drawer: React.FC = () => {
                         <Container tailwindClasses="p-4">
                             <List variant="unordered" orientation="vertical" gap={3}>
                                 {drawer.link.map((lnk, idx) => {
-
-                                    const textColor = lnk.color?.text?.base 
-                                        ? `text-${getColorString(lnk.color.text.base)}`
-                                        : `text-${useGetTheme('black')}`;
+                                    const textColor = lnk.linkTextColor
+                                        ? `text-${lnk.linkTextColor}-${lnk.linkTextIntensity}`
+                                        : "text-gray-900";
 
                                     return (
                                         <ListItem 
@@ -91,11 +89,10 @@ const Drawer: React.FC = () => {
 
                     <Container tailwindClasses="absolute bottom-2 right-2 left-2">
                         {drawer.action?.map((act, idx) => {
-
-                            const bgColor = act.color.bg?.base ? getColorString(act.color.bg.base) : useGetTheme('primary');
-                            const textColor = act.color.text?.base ? getColorString(act.color.text.base) : useGetTheme('white');
-                            const borderColor = act.color.border?.base ? getColorString(act.color.border.base) : bgColor;
-                            const hoverTextColor = act.color.text?.hover ? getColorString(act.color.text.hover) : bgColor;
+                            const colorString = `${act.actionColor}-${act.actionIntensity}`;
+                            const textColor = act.actionTextColor
+                                ? `${act.actionTextColor}-${act.actionTextIntensity || act.actionIntensity}`
+                                : "gray-50";
 
                             return (
                                 <Button
