@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Button, Container } from 'rkitech-components';
 import { useNavigationHook } from '../../hooks/useNavigationHook';
 import { useAppSelector } from '../../app/hooks';
@@ -10,12 +10,33 @@ const Footer: React.FC = () => {
     const application = useAppSelector((state) => state.application);
     const currentYear = new Date().getFullYear();
     const colorString = application.footer.footerBgColor + '-' + application.footer.footerBgIntensity
+    const footerRef = useRef<HTMLDivElement>(null);
+    const [footerVisible, setFooterVisible] = useState(false);
+
+    useEffect(() => {
+        if (!footerRef.current) return;
+
+        const observer = new IntersectionObserver(
+        ([entry]) => {
+            if (entry.isIntersecting) {
+            setFooterVisible(true);
+            observer.disconnect();
+            }
+        },
+        { threshold: 0.1 }
+        );
+
+        observer.observe(footerRef.current);
+
+        return () => observer.disconnect();
+    }, []);
 
     return (
         <Container tailwindClasses={`flex-row w-full min-h-[150px] bg-${colorString} p-4 relative z-20 shadow-[0_-2px_4px_rgba(0,0,0,0.15)]`}>
+            <div ref={footerRef} />
             <Container tailwindClasses='flex-col flex-8 justify-between'>
                 <Container tailwindClasses='flex-row flex-1 items-center gap-4'>  
-                    {application.footer.footerPrimaryMenuItems.map((i) => {
+                    {application.footer.footerPrimaryMenuItems.map((i, index) => {
                         let onClickHandler: () => void;
                         let isActive = false;
 
@@ -43,6 +64,12 @@ const Footer: React.FC = () => {
                                 key={i.itemID}
                                 tailwindClasses={`${colorString} cursor-pointer ${hoverString}`}
                                 onClick={onClickHandler}
+                                animationObject={{
+                                    entranceAnimation: i.itemEntranceAnimation,
+                                    exitAnimation: i.itemExitAnimation,
+                                    isEntering: footerVisible,
+                                    delay: index * 0.25
+                                }}
                             >
                                 {i.itemName}
                             </Button>
@@ -84,6 +111,12 @@ const Footer: React.FC = () => {
                                 <Button
                                     tailwindClasses={`${colorString} cursor-pointer ${hoverString}`}
                                     onClick={onClickHandler}
+                                    animationObject={{
+                                        entranceAnimation: i.itemEntranceAnimation,
+                                        exitAnimation: i.itemExitAnimation,
+                                        isEntering: footerVisible,
+                                        delay: index * 0.25
+                                    }}
                                 >
                                     {i.itemName}
                                 </Button>
