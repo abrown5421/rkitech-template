@@ -1,4 +1,4 @@
-import { EntranceAnimation, ExitAnimation, TailwindColor, TailwindIntensity } from "rkitech-components";
+import { EntranceAnimation, ExitAnimation, TailwindColor, TailwindIntensity, ThemeOptions } from "rkitech-components";
 
 export type RenderMethod = 'static' | 'dynamic'
 
@@ -7,8 +7,8 @@ export interface PageData {
   pagePath: string;
   pageRenderMethod: RenderMethod;
   pageActive: boolean;
-  pageColor: TailwindColor;
-  pageIntensity: TailwindIntensity;
+  pageColor: TailwindColor | ThemeOptions;
+  pageIntensity: TailwindIntensity | false;
   pageEntranceAnimation: EntranceAnimation;
   pageExitAnimation: ExitAnimation;
   pageID: string;

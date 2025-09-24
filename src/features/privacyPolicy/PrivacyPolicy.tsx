@@ -1,6 +1,7 @@
 import React from "react";
 import { Container, Text, List, ListItem } from "rkitech-components";
 import type { PrivacyPolicyProps } from "./privacyPolicyTypes";
+import { useGetTheme } from "../../hooks/useGetTheme";
 
 const PrivacyPolicy: React.FC<PrivacyPolicyProps> = () => {
   return (
@@ -8,7 +9,7 @@ const PrivacyPolicy: React.FC<PrivacyPolicyProps> = () => {
 
       <Text
         text="Privacy Policy"
-        tailwindClasses="text-xl font-mono text-gray-900"
+        tailwindClasses={`text-xl font-mono text-${useGetTheme('black')}`}
       />
       <Text
         text="Effective Date: [Insert Date]"

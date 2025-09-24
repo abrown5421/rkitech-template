@@ -2,13 +2,13 @@ import React, { useEffect } from 'react';
 import PrivacyPolicy from '../privacyPolicy/PrivacyPolicy';
 import Blog from '../blog/Blog';
 import About from '../about/About';
-
 import { Container } from 'rkitech-components';
 import { useAppSelector } from '../../app/hooks';
 import Home from '../home/Home';
 import PageNotFound from '../pagenotfound/PageNotFound';
 import type { PageData } from '../../cli/src/features/Pages/types/pageTypes';
 import Footer from '../footer/Footer';
+import { getThemeColorKey } from '../../utils/getThemeColorKey';
 
 const PageShell: React.FC<PageData> = ({
   pageName,
@@ -18,7 +18,13 @@ const PageShell: React.FC<PageData> = ({
   pageExitAnimation,
 }) => {
   const activePage = useAppSelector((state) => state.activePage);
-  const colorString = pageColor + '-' + pageIntensity;
+  const application = useAppSelector((state) => state.application);
+
+  const colorString = !pageIntensity
+    ? getThemeColorKey(pageColor)
+      ? `${application.theme[pageColor].color}-${application.theme[pageColor].intensity}`
+      : 'amber-500'
+    : `${pageColor}-${pageIntensity}`;
 
   useEffect(() => {
     console.log(activePage);

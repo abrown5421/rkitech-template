@@ -12,6 +12,7 @@ import { useLocation } from "react-router-dom";
 import { setActivePage } from './features/pageShell/activePageSlice';
 import type { PageData } from './cli/src/features/Pages/types/pageTypes';
 import { useLoadApplication } from './hooks/useLoadApplication';
+import { useGetTheme } from './hooks/useGetTheme';
 
 const App: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -38,7 +39,7 @@ const App: React.FC = () => {
   }, [dispatch, pages, location.pathname]);
 
   return (
-    <Container tailwindClasses="flex-col w-screen h-screen z-30 relative bg-gray-900">
+    <Container tailwindClasses={`flex-col w-screen h-screen z-30 relative bg-${useGetTheme('black')}`}>
       {isLoading ? (
         <Container tailwindClasses="h-full w-full justify-center items-center">
           <GlobalLoader target="application" type="Bars" variant={2} color='amber' intensity={500} size={15}/>

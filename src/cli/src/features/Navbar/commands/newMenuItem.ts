@@ -3,43 +3,25 @@ import fs from 'fs/promises';
 import path from 'path';
 import prettier from 'prettier';
 import { PageData } from '../../Pages/types/pageTypes.js';
-import { COLORS, INTENSITIES } from '../../../shared/constants/tailwindConstants.js';
 import { ENTRANCE_ANIMATIONS, EXIT_ANIMATIONS } from '../../../shared/constants/animationConstants.js';
 import { createGUID } from '../../../shared/utils/createGUID.js';
+import { selectColorAndIntensity } from '../../../shared/utils/menuItemHelpers.js';
 import { Navbar } from '../types/navTypes.js';
 import { Footer } from '../../Footer/types/footerTypes.js';
 import { NavItem } from '../../../shared/types/navItemTypes.js';
 
 export async function newMenuItem() {
-  const navbarJsonPath = path.resolve(
-    process.cwd(),
-    'src/cli/src/features/Navbar/json/navbar.json'
-  );
-
-  const footerJsonPath = path.resolve(
-    process.cwd(),
-    'src/cli/src/features/Footer/json/footer.json'
-  );
-
-  const pagesJsonPath = path.resolve(
-    process.cwd(),
-    'src/cli/src/features/Pages/json/pages.json'
-  );
-
-  try {
-    await fs.access(navbarJsonPath);
-  } catch (error) {
-    console.error(`❌ Could not find navbar.json at: ${navbarJsonPath}`);
-    console.log('Please ensure the navbar.json file exists in the correct location.');
-    return;
-  }
+  const navbarJsonPath = path.resolve(process.cwd(), 'src/cli/src/features/Navbar/json/navbar.json');
+  const footerJsonPath = path.resolve(process.cwd(), 'src/cli/src/features/Footer/json/footer.json');
+  const pagesJsonPath = path.resolve(process.cwd(), 'src/cli/src/features/Pages/json/pages.json');
 
   let navbar: Navbar;
   try {
+    await fs.access(navbarJsonPath);
     const navbarRaw = await fs.readFile(navbarJsonPath, 'utf-8');
     navbar = JSON.parse(navbarRaw);
   } catch (error) {
-    console.error('❌ Error reading or parsing navbar.json:', error);
+    console.error(`❌ Could not find or read navbar.json at: ${navbarJsonPath}`);
     return;
   }
 
@@ -90,7 +72,6 @@ export async function newMenuItem() {
 
   if (itemType === 'page') {
     const activePages = pages.filter((page) => page.pageActive);
-    
     if (activePages.length === 0) {
       console.log('❌ No active pages found. Please create and activate a page first.');
       return;
@@ -119,61 +100,20 @@ export async function newMenuItem() {
     itemID = createGUID();
   }
 
-  const itemColor = await select({
-    message: 'Select item color:',
-    choices: COLORS.map((color) => ({ name: color, value: color })),
-  });
-
-  const itemIntensity = await select({
-    message: 'Select item intensity:',
-    choices: INTENSITIES.map((intensity) => ({
-      name: intensity.toString(),
-      value: intensity,
-    })),
-  });
-
-  const itemHoverColor = await select({
-    message: 'Select item hover color:',
-    choices: COLORS.map((color) => ({ name: color, value: color })),
-  });
-
-  const itemHoverIntensity = await select({
-    message: 'Select item hover intensity:',
-    choices: INTENSITIES.map((intensity) => ({
-      name: intensity.toString(),
-      value: intensity,
-    })),
-  });
-
-  const itemActiveColor = await select({
-    message: 'Select item active color:',
-    choices: COLORS.map((color) => ({ name: color, value: color })),
-  });
-
-  const itemActiveIntensity = await select({
-    message: 'Select item active intensity:',
-    choices: INTENSITIES.map((intensity) => ({
-      name: intensity.toString(),
-      value: intensity,
-    })),
-  });
+  const { color: itemColor, intensity: itemIntensity } = await selectColorAndIntensity('item');
+  const { color: itemHoverColor, intensity: itemHoverIntensity } = await selectColorAndIntensity('item hover');
+  const { color: itemActiveColor, intensity: itemActiveIntensity } = await selectColorAndIntensity('item active');
 
   const itemEntranceAnimation = await select({
     message: 'Select entrance animation:',
-    choices: ENTRANCE_ANIMATIONS.map((animation) => ({
-      name: animation,
-      value: animation,
-    })),
+    choices: ENTRANCE_ANIMATIONS.map((animation) => ({ name: animation, value: animation })),
   });
 
   const itemExitAnimation = await select({
     message: 'Select exit animation:',
-    choices: EXIT_ANIMATIONS.map((animation) => ({
-      name: animation,
-      value: animation,
-    })),
+    choices: EXIT_ANIMATIONS.map((animation) => ({ name: animation, value: animation })),
   });
-
+  
   let syncWithFooter = false;
   if (footerExists && footer) {
     syncWithFooter = await confirm({
@@ -181,11 +121,9 @@ export async function newMenuItem() {
       default: true,
     });
 
-    if (syncWithFooter) {
-      if (footer.footerPrimaryMenuItems.some((item) => item.itemName === itemName)) {
-        console.log('❌ Menu item name already exists in footer primary menu. Adding to navbar only.');
-        syncWithFooter = false;
-      }
+    if (syncWithFooter && footer.footerPrimaryMenuItems.some((item) => item.itemName === itemName)) {
+      console.log('❌ Menu item name already exists in footer primary menu. Adding to navbar only.');
+      syncWithFooter = false;
     }
   }
 
@@ -205,22 +143,17 @@ export async function newMenuItem() {
   };
 
   navbar.navbarMenuItems.push(newMenuItem);
-
   if (syncWithFooter && footer) {
     footer.footerPrimaryMenuItems.push({ ...newMenuItem });
   }
 
   try {
-    const formattedNavbar = await prettier.format(JSON.stringify(navbar), {
-      parser: 'json',
-    });
+    const formattedNavbar = await prettier.format(JSON.stringify(navbar), { parser: 'json' });
     await fs.writeFile(navbarJsonPath, formattedNavbar, 'utf-8');
     console.log(`✅ Menu item "${newMenuItem.itemName}" added to navbar`);
 
     if (syncWithFooter && footer) {
-      const formattedFooter = await prettier.format(JSON.stringify(footer), {
-        parser: 'json',
-      });
+      const formattedFooter = await prettier.format(JSON.stringify(footer), { parser: 'json' });
       await fs.writeFile(footerJsonPath, formattedFooter, 'utf-8');
       console.log(`✅ Menu item "${newMenuItem.itemName}" also added to footer primary menu`);
     }

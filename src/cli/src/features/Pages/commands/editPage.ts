@@ -3,10 +3,11 @@ import fs from 'fs/promises';
 import path from 'path';
 import prettier from 'prettier';
 import { PageData } from '../types/pageTypes.js';
-import { COLORS, INTENSITIES } from '../../../shared/constants/tailwindConstants.js';
+import { COLORS, INTENSITIES, THEME_COLORS } from '../../../shared/constants/tailwindConstants.js';
 import { ENTRANCE_ANIMATIONS, EXIT_ANIMATIONS } from '../../../shared/constants/animationConstants.js';
 import { TEMPLATES } from '../../../shared/constants/templateConstants.js';
 import { formatFile } from '../../../shared/utils/formatFile.js';
+import { TailwindColor, TailwindIntensity, ThemeOptions } from 'rkitech-components';
 
 function toCamelCase(str: string): string {
   return str.charAt(0).toLowerCase() + str.slice(1);
@@ -27,6 +28,8 @@ export async function editPage() {
   }
 
   let pages: PageData[];
+  let pageColor: TailwindColor | ThemeOptions;
+  let pageIntensity: TailwindIntensity | false;
   try {
     const pagesRaw = await fs.readFile(pagesJsonPath, 'utf-8');
     pages = JSON.parse(pagesRaw);
@@ -105,20 +108,35 @@ export async function editPage() {
     default: selectedPage.pageActive,
   });
 
-  const newPageColor = await select({
-    message: 'Select a page color:',
-    choices: COLORS.map((color) => ({ name: color, value: color })),
-    default: selectedPage.pageColor,
+  const colorType = await select({
+    message: 'Select color type:',
+    choices: [
+      { name: 'Tailwind Color', value: 'tailwind' },
+      { name: 'Theme Color', value: 'theme' }
+    ],
   });
 
-  const newPageIntensity = await select({
-    message: 'Select a page intensity:',
-    choices: INTENSITIES.map((intensity) => ({
-      name: intensity.toString(),
-      value: intensity,
-    })),
-    default: selectedPage.pageIntensity,
-  });
+  if (colorType === 'tailwind') {
+    pageColor = await select({
+      message: 'Select a Tailwind color:',
+      choices: COLORS.map((color) => ({ name: color, value: color })),
+    });
+
+    pageIntensity = await select({
+      message: 'Select a page intensity:',
+      choices: INTENSITIES.map((intensity) => ({
+        name: intensity.toString(),
+        value: intensity,
+      })),
+    });
+  } else {
+    pageColor = await select({
+      message: 'Select a theme color:',
+      choices: THEME_COLORS.map((color) => ({ name: color, value: color })),
+    });
+    
+    pageIntensity = false; 
+  }
 
   const newPageEntranceAnimation = await select({
     message: 'Select entrance animation:',
@@ -143,8 +161,8 @@ export async function editPage() {
     pagePath: `/${newPagePath}`,
     pageRenderMethod: newPageRenderMethod as 'static' | 'dynamic',
     pageActive: newPageActive,
-    pageColor: newPageColor,
-    pageIntensity: newPageIntensity,
+    pageColor: pageColor,
+    pageIntensity: pageIntensity,
     pageEntranceAnimation: newPageEntranceAnimation,
     pageExitAnimation: newPageExitAnimation,
   };

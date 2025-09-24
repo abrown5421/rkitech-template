@@ -3,40 +3,26 @@ import fs from 'fs/promises';
 import path from 'path';
 import prettier from 'prettier';
 import { PageData } from '../../Pages/types/pageTypes.js';
-import { COLORS, INTENSITIES } from '../../../shared/constants/tailwindConstants.js';
 import { ENTRANCE_ANIMATIONS, EXIT_ANIMATIONS } from '../../../shared/constants/animationConstants.js';
 import { createGUID } from '../../../shared/utils/createGUID.js';
+import { selectColorAndIntensity } from '../../../shared/utils/menuItemHelpers.js';
 import { Footer } from '../types/footerTypes.js';
 import { NavItem } from '../../../shared/types/navItemTypes.js';
 
 export async function editMenuItem(source: "main" | "aux") {
-  const footerJsonPath = path.resolve(
-    process.cwd(),
-    'src/cli/src/features/Footer/json/footer.json'
-  );
-
-  const pagesJsonPath = path.resolve(
-    process.cwd(),
-    'src/cli/src/features/Pages/json/pages.json'
-  );
+  const footerJsonPath = path.resolve(process.cwd(), 'src/cli/src/features/Footer/json/footer.json');
+  const pagesJsonPath = path.resolve(process.cwd(), 'src/cli/src/features/Pages/json/pages.json');
 
   const menuTypeName = source === "main" ? "Primary" : "Auxiliary";
   const menuArrayKey = source === "main" ? "footerPrimaryMenuItems" : "footerAuxilaryMenuItems";
 
-  try {
-    await fs.access(footerJsonPath);
-  } catch (error) {
-    console.error(`❌ Could not find footer.json at: ${footerJsonPath}`);
-    console.log('Please ensure the footer.json file exists in the correct location.');
-    return;
-  }
-
   let footer: Footer;
   try {
+    await fs.access(footerJsonPath);
     const footerRaw = await fs.readFile(footerJsonPath, 'utf-8');
     footer = JSON.parse(footerRaw);
   } catch (error) {
-    console.error('❌ Error reading or parsing footer.json:', error);
+    console.error(`❌ Could not find or read footer.json at: ${footerJsonPath}`);
     return;
   }
 
@@ -98,27 +84,23 @@ export async function editMenuItem(source: "main" | "aux") {
 
   if (newItemType === 'page') {
     const activePages = pages.filter((page) => page.pageActive);
-    
     if (activePages.length === 0) {
       console.log('❌ No active pages found. Please create and activate a page first.');
       return;
     }
 
     const currentPageDefault = selectedItem.itemType === 'page' ? selectedItem.itemID : undefined;
-
     newItemID = await select({
       message: 'Select a page to link to:',
       choices: activePages.map((page) => ({
         name: `${page.pageName} (${page.pagePath})`,
         value: page.pageID,
       })),
-      default: currentPageDefault,
+      ...(currentPageDefault && { default: currentPageDefault }),
     });
-    
     newItemLink = undefined;
   } else {
     const currentLinkDefault = selectedItem.itemType === 'link' ? selectedItem.itemLink : '';
-    
     newItemLink = await input({
       message: 'Enter the external link URL:',
       default: currentLinkDefault,
@@ -138,66 +120,33 @@ export async function editMenuItem(source: "main" | "aux") {
     }
   }
 
-  const newItemColor = await select({
-    message: 'Select item color:',
-    choices: COLORS.map((color) => ({ name: color, value: color })),
-    default: selectedItem.itemColor,
-  });
-
-  const newItemIntensity = await select({
-    message: 'Select item intensity:',
-    choices: INTENSITIES.map((intensity) => ({
-      name: intensity.toString(),
-      value: intensity,
-    })),
-    default: selectedItem.itemIntensity,
-  });
-
-  const newItemHoverColor = await select({
-    message: 'Select item hover color:',
-    choices: COLORS.map((color) => ({ name: color, value: color })),
-    default: selectedItem.itemHoverColor,
-  });
-
-  const newItemHoverIntensity = await select({
-    message: 'Select item hover intensity:',
-    choices: INTENSITIES.map((intensity) => ({
-      name: intensity.toString(),
-      value: intensity,
-    })),
-    default: selectedItem.itemHoverIntensity,
-  });
-
-  const newItemActiveColor = await select({
-    message: 'Select item active color:',
-    choices: COLORS.map((color) => ({ name: color, value: color })),
-    default: selectedItem.itemActiveColor,
-  });
-
-  const newItemActiveIntensity = await select({
-    message: 'Select item active intensity:',
-    choices: INTENSITIES.map((intensity) => ({
-      name: intensity.toString(),
-      value: intensity,
-    })),
-    default: selectedItem.itemActiveIntensity,
-  });
+  const { color: newItemColor, intensity: newItemIntensity } = await selectColorAndIntensity(
+    'item', 
+    selectedItem.itemColor, 
+    selectedItem.itemIntensity
+  );
+  
+  const { color: newItemHoverColor, intensity: newItemHoverIntensity } = await selectColorAndIntensity(
+    'item hover', 
+    selectedItem.itemHoverColor, 
+    selectedItem.itemHoverIntensity
+  );
+  
+  const { color: newItemActiveColor, intensity: newItemActiveIntensity } = await selectColorAndIntensity(
+    'item active', 
+    selectedItem.itemActiveColor, 
+    selectedItem.itemActiveIntensity
+  );
 
   const newItemEntranceAnimation = await select({
     message: 'Select entrance animation:',
-    choices: ENTRANCE_ANIMATIONS.map((animation) => ({
-      name: animation,
-      value: animation,
-    })),
+    choices: ENTRANCE_ANIMATIONS.map((animation) => ({ name: animation, value: animation })),
     default: selectedItem.itemEntranceAnimation,
   });
 
   const newItemExitAnimation = await select({
     message: 'Select exit animation:',
-    choices: EXIT_ANIMATIONS.map((animation) => ({
-      name: animation,
-      value: animation,
-    })),
+    choices: EXIT_ANIMATIONS.map((animation) => ({ name: animation, value: animation })),
     default: selectedItem.itemExitAnimation,
   });
 
@@ -220,9 +169,7 @@ export async function editMenuItem(source: "main" | "aux") {
   footer[menuArrayKey][itemIndex] = updatedMenuItem;
 
   try {
-    const formattedFooter = await prettier.format(JSON.stringify(footer), {
-      parser: 'json',
-    });
+    const formattedFooter = await prettier.format(JSON.stringify(footer), { parser: 'json' });
     await fs.writeFile(footerJsonPath, formattedFooter, 'utf-8');
     console.log(`✅ Menu item "${updatedMenuItem.itemName}" updated successfully in ${menuTypeName.toLowerCase()} footer menu`);
   } catch (error) {
