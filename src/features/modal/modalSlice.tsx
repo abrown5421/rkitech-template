@@ -1,3 +1,4 @@
+
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import type { ModalAction, ModalProps } from "./modalTypes";

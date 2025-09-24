@@ -1,19 +1,19 @@
 import React from 'react';
 import { Button, Container, Image, Text } from 'rkitech-components';
 import type { PageNotFoundProps } from './pagenotfoundTypes';
-import pagesJson from '../../cli/src/shared/json/pages.json';
 import { useNavigationHook } from '../../hooks/useNavigationHook';
-import type { PageData } from '../../cli/src/shared/types/pageTypes';
 import imageSrc from '../../../public/assets/404.png';
+import { useAppSelector } from '../../app/hooks';
 
 const PageNotFound: React.FC<PageNotFoundProps> = () => {
     const navigate = useNavigationHook();
-    const pages: PageData[] = pagesJson as PageData[];
-    const homePage = pages.find((p) => p.pagePath === '/');
+    const application = useAppSelector((state) => state.application);
+    const homePage = application.pages.find((p) => p.pagePath === '/');
 
     return (
         <Container 
-            tailwindClasses='flex-row w-full h-full justify-center items-center'
+            tailwindClasses='flex-row w-full min-h-[calc(100vh-50px)] p-5 justify-center items-center'
+
         >
             <Container tailwindClasses='flex-col justify-center items-center w-full md:w-1/3'>
                 

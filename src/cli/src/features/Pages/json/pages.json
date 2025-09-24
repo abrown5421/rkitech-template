@@ -1,0 +1,57 @@
+[
+  {
+    "pageName": "Home",
+    "pagePath": "/",
+    "pageRenderMethod": "static",
+    "pageActive": true,
+    "pageColor": "gray",
+    "pageIntensity": 50,
+    "pageEntranceAnimation": "animate__fadeIn",
+    "pageExitAnimation": "animate__fadeOut",
+    "pageID": "534db1ae-8e49-45af-a505-2ef5c02c478b"
+  },
+  {
+    "pageName": "PageNotFound",
+    "pagePath": "/page-not-found",
+    "pageRenderMethod": "static",
+    "pageActive": true,
+    "pageColor": "gray",
+    "pageIntensity": 50,
+    "pageEntranceAnimation": "animate__fadeIn",
+    "pageExitAnimation": "animate__fadeOut",
+    "pageID": "58f820e6-e10b-4dbe-a11d-5f2055b75c0c"
+  },
+  {
+    "pageName": "About",
+    "pagePath": "/about",
+    "pageRenderMethod": "static",
+    "pageActive": true,
+    "pageColor": "gray",
+    "pageIntensity": 50,
+    "pageEntranceAnimation": "animate__fadeIn",
+    "pageExitAnimation": "animate__fadeOut",
+    "pageID": "ba8d760c-e785-4fcf-a1e9-44bd14c8e516"
+  },
+  {
+    "pageName": "Blog",
+    "pagePath": "/blog",
+    "pageRenderMethod": "static",
+    "pageActive": true,
+    "pageColor": "gray",
+    "pageIntensity": 50,
+    "pageEntranceAnimation": "animate__fadeIn",
+    "pageExitAnimation": "animate__fadeOut",
+    "pageID": "9319ef19-4709-4f37-b0a0-c6f2b4448498"
+  },
+  {
+    "pageName": "PrivacyPolicy",
+    "pagePath": "/privacy-policy",
+    "pageRenderMethod": "static",
+    "pageActive": true,
+    "pageColor": "gray",
+    "pageIntensity": 50,
+    "pageEntranceAnimation": "animate__fadeIn",
+    "pageExitAnimation": "animate__fadeOut",
+    "pageID": "1a5f02ae-a602-4408-8e0b-8b361867078c"
+  }
+]
