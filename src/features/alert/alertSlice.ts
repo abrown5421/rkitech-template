@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import type { AlertProps } from "./alertTypes";
+import type { AlertProps, AlertOrientation } from "./alertTypes";
 
 const initialState: AlertProps = {
     open: false,
@@ -12,6 +12,7 @@ const initialState: AlertProps = {
     textIntensity: 50,
     entrance: "animate__slideInRight",
     exit: "animate__slideOutRight",
+    orientation: "top-right", 
 };
 
 const alertSlice = createSlice({
@@ -28,6 +29,7 @@ const alertSlice = createSlice({
             state.textIntensity = action.payload.textIntensity;
             state.entrance = action.payload.entrance;
             state.exit = action.payload.exit;
+            state.orientation = action.payload.orientation;
         },
         closeAlert: (state) => {
             state.open = false;
@@ -39,6 +41,7 @@ const alertSlice = createSlice({
             state.textIntensity = undefined;
             state.entrance = undefined;
             state.exit = undefined;
+            state.orientation = "bottom-right"; 
         },
         setAlertBody: (state, action: PayloadAction<string>) => {
             state.body = action.payload;
@@ -57,6 +60,9 @@ const alertSlice = createSlice({
             state.textColor = action.payload.textColor;
             state.textIntensity = action.payload.textIntensity;
         },
+        setAlertOrientation: (state, action: PayloadAction<AlertOrientation>) => {
+            state.orientation = action.payload;
+        },
     },
 });
 
@@ -66,6 +72,7 @@ export const {
     setAlertBody,
     setAlertColor,
     setAlertTextColor,
+    setAlertOrientation, 
 } = alertSlice.actions;
 
 export default alertSlice.reducer;
