@@ -36,7 +36,7 @@ const Navbar: React.FC = () => {
         tailwindClasses='flex-col px-5'
       >
         <Container tailwindClasses='flex-row gap-4'>
-          {application.navbar.navbarMenuItems.map((i) => {
+          {application.navbar.navbarMenuItems.map((i, index) => {
             let onClickHandler: () => void;
             let isActive = false;
 
@@ -64,6 +64,12 @@ const Navbar: React.FC = () => {
                 key={i.itemID}
                 tailwindClasses={`${colorString} cursor-pointer ${hoverString}`}
                 onClick={onClickHandler}
+                animationObject={{
+                    entranceAnimation: i.itemEntranceAnimation as EntranceAnimation,
+                    exitAnimation: i.itemExitAnimation as ExitAnimation,
+                    isEntering: true,
+                    delay: index * 0.25
+                }}
               >
                 {i.itemName}
               </Button>
