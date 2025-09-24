@@ -3,37 +3,23 @@ import fs from 'fs/promises';
 import path from 'path';
 import prettier from 'prettier';
 import { PageData } from '../../Pages/types/pageTypes.js';
-import { COLORS, INTENSITIES } from '../../../shared/constants/tailwindConstants.js';
 import { ENTRANCE_ANIMATIONS, EXIT_ANIMATIONS } from '../../../shared/constants/animationConstants.js';
 import { createGUID } from '../../../shared/utils/createGUID.js';
+import { selectColorAndIntensity } from '../../../shared/utils/menuItemHelpers.js';
 import { Navbar } from '../types/navTypes.js';
 import { NavItem } from '../../../shared/types/navItemTypes.js';
 
 export async function editMenuItem() {
-  const navbarJsonPath = path.resolve(
-    process.cwd(),
-    'src/cli/src/features/Navbar/json/navbar.json'
-  );
-
-  const pagesJsonPath = path.resolve(
-    process.cwd(),
-    'src/cli/src/features/Pages/json/pages.json'
-  );
-
-  try {
-    await fs.access(navbarJsonPath);
-  } catch (error) {
-    console.error(`❌ Could not find navbar.json at: ${navbarJsonPath}`);
-    console.log('Please ensure the navbar.json file exists in the correct location.');
-    return;
-  }
+  const navbarJsonPath = path.resolve(process.cwd(), 'src/cli/src/features/Navbar/json/navbar.json');
+  const pagesJsonPath = path.resolve(process.cwd(), 'src/cli/src/features/Pages/json/pages.json');
 
   let navbar: Navbar;
   try {
+    await fs.access(navbarJsonPath);
     const navbarRaw = await fs.readFile(navbarJsonPath, 'utf-8');
     navbar = JSON.parse(navbarRaw);
   } catch (error) {
-    console.error('❌ Error reading or parsing navbar.json:', error);
+    console.error(`❌ Could not find or read navbar.json at: ${navbarJsonPath}`);
     return;
   }
 
@@ -51,6 +37,8 @@ export async function editMenuItem() {
     console.error('❌ Error reading pages.json:', error);
     return;
   }
+
+  console.log('\n✏️  Editing navbar menu item\n');
 
   const itemToEdit = await select({
     message: 'Select a menu item to edit:',
@@ -93,27 +81,23 @@ export async function editMenuItem() {
 
   if (newItemType === 'page') {
     const activePages = pages.filter((page) => page.pageActive);
-    
     if (activePages.length === 0) {
       console.log('❌ No active pages found. Please create and activate a page first.');
       return;
     }
 
     const currentPageDefault = selectedItem.itemType === 'page' ? selectedItem.itemID : undefined;
-
     newItemID = await select({
       message: 'Select a page to link to:',
       choices: activePages.map((page) => ({
         name: `${page.pageName} (${page.pagePath})`,
         value: page.pageID,
       })),
-      default: currentPageDefault,
+      ...(currentPageDefault && { default: currentPageDefault }),
     });
-    
     newItemLink = undefined;
   } else {
     const currentLinkDefault = selectedItem.itemType === 'link' ? selectedItem.itemLink : '';
-    
     newItemLink = await input({
       message: 'Enter the external link URL:',
       default: currentLinkDefault,
@@ -133,66 +117,33 @@ export async function editMenuItem() {
     }
   }
 
-  const newItemColor = await select({
-    message: 'Select item color:',
-    choices: COLORS.map((color) => ({ name: color, value: color })),
-    default: selectedItem.itemColor,
-  });
-
-  const newItemIntensity = await select({
-    message: 'Select item intensity:',
-    choices: INTENSITIES.map((intensity) => ({
-      name: intensity.toString(),
-      value: intensity,
-    })),
-    default: selectedItem.itemIntensity,
-  });
-
-  const newItemHoverColor = await select({
-    message: 'Select item hover color:',
-    choices: COLORS.map((color) => ({ name: color, value: color })),
-    default: selectedItem.itemHoverColor,
-  });
-
-  const newItemHoverIntensity = await select({
-    message: 'Select item hover intensity:',
-    choices: INTENSITIES.map((intensity) => ({
-      name: intensity.toString(),
-      value: intensity,
-    })),
-    default: selectedItem.itemHoverIntensity,
-  });
-
-  const newItemActiveColor = await select({
-    message: 'Select item active color:',
-    choices: COLORS.map((color) => ({ name: color, value: color })),
-    default: selectedItem.itemActiveColor,
-  });
-
-  const newItemActiveIntensity = await select({
-    message: 'Select item active intensity:',
-    choices: INTENSITIES.map((intensity) => ({
-      name: intensity.toString(),
-      value: intensity,
-    })),
-    default: selectedItem.itemActiveIntensity,
-  });
+  const { color: newItemColor, intensity: newItemIntensity } = await selectColorAndIntensity(
+    'item', 
+    selectedItem.itemColor, 
+    selectedItem.itemIntensity
+  );
+  
+  const { color: newItemHoverColor, intensity: newItemHoverIntensity } = await selectColorAndIntensity(
+    'item hover', 
+    selectedItem.itemHoverColor, 
+    selectedItem.itemHoverIntensity
+  );
+  
+  const { color: newItemActiveColor, intensity: newItemActiveIntensity } = await selectColorAndIntensity(
+    'item active', 
+    selectedItem.itemActiveColor, 
+    selectedItem.itemActiveIntensity
+  );
 
   const newItemEntranceAnimation = await select({
     message: 'Select entrance animation:',
-    choices: ENTRANCE_ANIMATIONS.map((animation) => ({
-      name: animation,
-      value: animation,
-    })),
+    choices: ENTRANCE_ANIMATIONS.map((animation) => ({ name: animation, value: animation })),
     default: selectedItem.itemEntranceAnimation,
   });
 
   const newItemExitAnimation = await select({
     message: 'Select exit animation:',
-    choices: EXIT_ANIMATIONS.map((animation) => ({
-      name: animation,
-      value: animation,
-    })),
+    choices: EXIT_ANIMATIONS.map((animation) => ({ name: animation, value: animation })),
     default: selectedItem.itemExitAnimation,
   });
 
@@ -215,9 +166,7 @@ export async function editMenuItem() {
   navbar.navbarMenuItems[itemIndex] = updatedMenuItem;
 
   try {
-    const formattedNavbar = await prettier.format(JSON.stringify(navbar), {
-      parser: 'json',
-    });
+    const formattedNavbar = await prettier.format(JSON.stringify(navbar), { parser: 'json' });
     await fs.writeFile(navbarJsonPath, formattedNavbar, 'utf-8');
     console.log(`✅ Menu item "${updatedMenuItem.itemName}" updated successfully`);
   } catch (error) {

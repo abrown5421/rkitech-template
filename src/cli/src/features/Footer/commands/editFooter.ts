@@ -2,8 +2,9 @@ import { confirm, input, select } from '@inquirer/prompts';
 import fs from 'fs/promises';
 import path from 'path';
 import prettier from 'prettier';
-import { COLORS, INTENSITIES } from '../../../shared/constants/tailwindConstants.js';
+import { COLORS, INTENSITIES, THEME_COLORS } from '../../../shared/constants/tailwindConstants.js';
 import type { Footer } from '../types/footerTypes.js';
+import { TailwindColor, TailwindIntensity, ThemeOptions } from 'rkitech-components';
 
 export async function editFooter() {
   const footerJsonPath = path.resolve(
@@ -20,6 +21,9 @@ export async function editFooter() {
   }
 
   let footer: Footer;
+  let newFooterBgColor: TailwindColor | ThemeOptions;
+  let newFooterBgIntensity: TailwindIntensity | false;
+  
   try {
     const footerRaw = await fs.readFile(footerJsonPath, 'utf-8');
     footer = JSON.parse(footerRaw);
@@ -28,20 +32,37 @@ export async function editFooter() {
     return;
   }
 
-  const newFooterBgColor = await select({
-    message: 'Select footer background color:',
-    choices: COLORS.map((color) => ({ name: color, value: color })),
-    default: footer.footerBgColor,
+  const footerBgColorType = await select({
+    message: 'Select color type:',
+    choices: [
+      { name: 'Tailwind Color', value: 'tailwind' },
+      { name: 'Theme Color', value: 'theme' }
+    ],
   });
 
-  const newFooterBgIntensity = await select({
-    message: 'Select footer background intensity:',
-    choices: INTENSITIES.map((intensity) => ({
-      name: intensity.toString(),
-      value: intensity,
-    })),
-    default: footer.footerBgIntensity,
-  });
+  if (footerBgColorType === 'tailwind') {
+    newFooterBgColor = await select({
+      message: 'Select footer background color:',
+      choices: COLORS.map((color) => ({ name: color, value: color })),
+      default: footer.footerBgColor,
+    });
+
+    newFooterBgIntensity = await select({
+      message: 'Select footer background intensity:',
+      choices: INTENSITIES.map((intensity) => ({
+        name: intensity.toString(),
+        value: intensity,
+      })),
+      default: footer.footerBgIntensity,
+    });
+  } else {
+    newFooterBgColor = await select({
+      message: 'Select a theme color:',
+      choices: THEME_COLORS.map((color) => ({ name: color, value: color })),
+    });
+    
+    newFooterBgIntensity = false;
+  }
 
   const showCopyright = await confirm({
     message: 'Show copyright text?',

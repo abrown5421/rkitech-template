@@ -3,46 +3,28 @@ import fs from 'fs/promises';
 import path from 'path';
 import prettier from 'prettier';
 import { PageData } from '../../Pages/types/pageTypes.js';
-import { COLORS, INTENSITIES } from '../../../shared/constants/tailwindConstants.js';
 import { ENTRANCE_ANIMATIONS, EXIT_ANIMATIONS } from '../../../shared/constants/animationConstants.js';
 import { createGUID } from '../../../shared/utils/createGUID.js';
+import { selectColorAndIntensity } from '../../../shared/utils/menuItemHelpers.js';
 import { Footer } from '../types/footerTypes.js';
 import { Navbar } from '../../Navbar/types/navTypes.js';
 import { NavItem } from '../../../shared/types/navItemTypes.js';
 
 export async function newMenuItem(source: "main" | "aux") {
-  const footerJsonPath = path.resolve(
-    process.cwd(),
-    'src/cli/src/features/Footer/json/footer.json'
-  );
-
-  const navbarJsonPath = path.resolve(
-    process.cwd(),
-    'src/cli/src/features/Navbar/json/navbar.json'
-  );
-
-  const pagesJsonPath = path.resolve(
-    process.cwd(),
-    'src/cli/src/features/Pages/json/pages.json'
-  );
+  const footerJsonPath = path.resolve(process.cwd(), 'src/cli/src/features/Footer/json/footer.json');
+  const navbarJsonPath = path.resolve(process.cwd(), 'src/cli/src/features/Navbar/json/navbar.json');
+  const pagesJsonPath = path.resolve(process.cwd(), 'src/cli/src/features/Pages/json/pages.json');
 
   const menuTypeName = source === "main" ? "Primary" : "Auxiliary";
   const menuArrayKey = source === "main" ? "footerPrimaryMenuItems" : "footerAuxilaryMenuItems";
 
-  try {
-    await fs.access(footerJsonPath);
-  } catch (error) {
-    console.error(`❌ Could not find footer.json at: ${footerJsonPath}`);
-    console.log('Please ensure the footer.json file exists in the correct location.');
-    return;
-  }
-
   let footer: Footer;
   try {
+    await fs.access(footerJsonPath);
     const footerRaw = await fs.readFile(footerJsonPath, 'utf-8');
     footer = JSON.parse(footerRaw);
   } catch (error) {
-    console.error('❌ Error reading or parsing footer.json:', error);
+    console.error(`❌ Could not find or read footer.json at: ${footerJsonPath}`);
     return;
   }
 
@@ -95,7 +77,6 @@ export async function newMenuItem(source: "main" | "aux") {
 
   if (itemType === 'page') {
     const activePages = pages.filter((page) => page.pageActive);
-    
     if (activePages.length === 0) {
       console.log('❌ No active pages found. Please create and activate a page first.');
       return;
@@ -124,59 +105,18 @@ export async function newMenuItem(source: "main" | "aux") {
     itemID = createGUID();
   }
 
-  const itemColor = await select({
-    message: 'Select item color:',
-    choices: COLORS.map((color) => ({ name: color, value: color })),
-  });
-
-  const itemIntensity = await select({
-    message: 'Select item intensity:',
-    choices: INTENSITIES.map((intensity) => ({
-      name: intensity.toString(),
-      value: intensity,
-    })),
-  });
-
-  const itemHoverColor = await select({
-    message: 'Select item hover color:',
-    choices: COLORS.map((color) => ({ name: color, value: color })),
-  });
-
-  const itemHoverIntensity = await select({
-    message: 'Select item hover intensity:',
-    choices: INTENSITIES.map((intensity) => ({
-      name: intensity.toString(),
-      value: intensity,
-    })),
-  });
-
-  const itemActiveColor = await select({
-    message: 'Select item active color:',
-    choices: COLORS.map((color) => ({ name: color, value: color })),
-  });
-
-  const itemActiveIntensity = await select({
-    message: 'Select item active intensity:',
-    choices: INTENSITIES.map((intensity) => ({
-      name: intensity.toString(),
-      value: intensity,
-    })),
-  });
+  const { color: itemColor, intensity: itemIntensity } = await selectColorAndIntensity('item');
+  const { color: itemHoverColor, intensity: itemHoverIntensity } = await selectColorAndIntensity('item hover');
+  const { color: itemActiveColor, intensity: itemActiveIntensity } = await selectColorAndIntensity('item active');
 
   const itemEntranceAnimation = await select({
     message: 'Select entrance animation:',
-    choices: ENTRANCE_ANIMATIONS.map((animation) => ({
-      name: animation,
-      value: animation,
-    })),
+    choices: ENTRANCE_ANIMATIONS.map((animation) => ({ name: animation, value: animation })),
   });
 
   const itemExitAnimation = await select({
     message: 'Select exit animation:',
-    choices: EXIT_ANIMATIONS.map((animation) => ({
-      name: animation,
-      value: animation,
-    })),
+    choices: EXIT_ANIMATIONS.map((animation) => ({ name: animation, value: animation })),
   });
 
   let syncWithNavbar = false;
@@ -186,11 +126,9 @@ export async function newMenuItem(source: "main" | "aux") {
       default: true,
     });
 
-    if (syncWithNavbar) {
-      if (navbar.navbarMenuItems.some((item) => item.itemName === itemName)) {
-        console.log('❌ Menu item name already exists in navbar. Adding to footer only.');
-        syncWithNavbar = false;
-      }
+    if (syncWithNavbar && navbar.navbarMenuItems.some((item) => item.itemName === itemName)) {
+      console.log('❌ Menu item name already exists in navbar. Adding to footer only.');
+      syncWithNavbar = false;
     }
   }
 
@@ -210,22 +148,17 @@ export async function newMenuItem(source: "main" | "aux") {
   };
 
   footer[menuArrayKey].push(newMenuItem);
-
   if (syncWithNavbar && navbar) {
     navbar.navbarMenuItems.push({ ...newMenuItem });
   }
 
   try {
-    const formattedFooter = await prettier.format(JSON.stringify(footer), {
-      parser: 'json',
-    });
+    const formattedFooter = await prettier.format(JSON.stringify(footer), { parser: 'json' });
     await fs.writeFile(footerJsonPath, formattedFooter, 'utf-8');
     console.log(`✅ Menu item "${newMenuItem.itemName}" added to ${menuTypeName.toLowerCase()} footer menu`);
 
     if (syncWithNavbar && navbar) {
-      const formattedNavbar = await prettier.format(JSON.stringify(navbar), {
-        parser: 'json',
-      });
+      const formattedNavbar = await prettier.format(JSON.stringify(navbar), { parser: 'json' });
       await fs.writeFile(navbarJsonPath, formattedNavbar, 'utf-8');
       console.log(`✅ Menu item "${newMenuItem.itemName}" also added to navbar`);
     }

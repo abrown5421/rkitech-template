@@ -1,4 +1,4 @@
-import { TailwindColor, TailwindIntensity } from "rkitech-components";
+import { TailwindColor, TailwindIntensity, ThemeOptions } from "rkitech-components";
 import { NavItem } from "../../../shared/types/navItemTypes.js";
 
 export type FooterCopyright = {
@@ -7,8 +7,8 @@ export type FooterCopyright = {
 };
 
 export interface Footer {
-  footerBgColor: TailwindColor;
-  footerBgIntensity: TailwindIntensity;
+  footerBgColor: TailwindColor | ThemeOptions;
+  footerBgIntensity: TailwindIntensity | false;
   footerCopyright: FooterCopyright;
   footerPrimaryMenuItems: NavItem[];
   footerAuxilaryMenuItems: NavItem[];

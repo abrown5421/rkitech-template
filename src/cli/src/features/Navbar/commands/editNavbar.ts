@@ -2,10 +2,10 @@ import { confirm, input, select } from '@inquirer/prompts';
 import fs from 'fs/promises';
 import path from 'path';
 import prettier from 'prettier';
-import { COLORS, INTENSITIES } from '../../../shared/constants/tailwindConstants.js';
+import { COLORS, INTENSITIES, THEME_COLORS } from '../../../shared/constants/tailwindConstants.js';
 import { ENTRANCE_ANIMATIONS, EXIT_ANIMATIONS } from '../../../shared/constants/animationConstants.js';
 import { Navbar } from '../types/navTypes.js';
-import { EntranceAnimation, ExitAnimation } from 'rkitech-components';
+import { EntranceAnimation, ExitAnimation, TailwindColor, TailwindIntensity, ThemeOptions } from 'rkitech-components';
 
 export async function editNavbar() {
   const navbarJsonPath = path.resolve(
@@ -22,6 +22,8 @@ export async function editNavbar() {
   }
 
   let navbar: Navbar;
+  let newNavbarBgColor: TailwindColor | ThemeOptions;
+  let newNavbarBgIntensity: TailwindIntensity | false;
   try {
     const navbarRaw = await fs.readFile(navbarJsonPath, 'utf-8');
     navbar = JSON.parse(navbarRaw);
@@ -44,20 +46,36 @@ export async function editNavbar() {
     },
   });
 
-  const newNavbarBgColor = await select({
-    message: 'Select navbar background color:',
-    choices: COLORS.map((color) => ({ name: color, value: color })),
-    default: navbar.navbarBgColor,
+  const navbarBgColorType = await select({
+    message: 'Select color type:',
+    choices: [
+      { name: 'Tailwind Color', value: 'tailwind' },
+      { name: 'Theme Color', value: 'theme' }
+    ],
   });
 
-  const newNavbarBgIntensity = await select({
-    message: 'Select navbar background intensity:',
-    choices: INTENSITIES.map((intensity) => ({
-      name: intensity.toString(),
-      value: intensity,
-    })),
-    default: navbar.navbarBgIntensity,
-  });
+  if (navbarBgColorType === 'tailwind') {
+      newNavbarBgColor = await select({
+        message: 'Select navbar background color:',
+        choices: COLORS.map((color) => ({ name: color, value: color })),
+        default: navbar.navbarBgColor,
+      });
+  
+      newNavbarBgIntensity = await select({
+        message: 'Select a page intensity:',
+        choices: INTENSITIES.map((intensity) => ({
+          name: intensity.toString(),
+          value: intensity,
+        })),
+      });
+    } else {
+      newNavbarBgColor = await select({
+        message: 'Select a theme color:',
+        choices: THEME_COLORS.map((color) => ({ name: color, value: color })),
+      });
+      
+      newNavbarBgIntensity = false; 
+    }
 
   const newLeftEntranceAnimation = await select({
     message: 'Select left section entrance animation:',

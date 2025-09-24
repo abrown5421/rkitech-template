@@ -4,6 +4,7 @@ import type { ApplicationProps } from "./applicationTypes";
 import type { Navbar } from "../../cli/src/features/Navbar/types/navTypes";
 import type { PageData } from "../../cli/src/features/Pages/types/pageTypes";
 import type { Footer } from "../../cli/src/features/Footer/types/footerTypes";
+import type { Theme } from "../../cli/src/features/Theme/types/themeTypes";
 
 const initialState: ApplicationProps = {
   pages: [],
@@ -28,6 +29,36 @@ const initialState: ApplicationProps = {
     footerPrimaryMenuItems: [],
     footerAuxilaryMenuItems: [],
   },
+  theme: {
+    primary: {
+      color: "amber", 
+      intensity: 500
+    },
+    secondary: {
+      color: "amber", 
+      intensity: 600
+    },
+    tertiary: {
+      color: "amber", 
+      intensity: 700
+    },
+    quaternary: {
+      color: "amber", 
+      intensity: 400
+    },
+    quinary: {
+      color: "amber", 
+      intensity: 300
+    },
+    black: {
+      color: "gray", 
+      intensity: 900
+    },
+    white: {
+      color: "gray", 
+      intensity: 50
+    }
+  }
 };
 
 const applicationSlice = createSlice({
@@ -43,8 +74,11 @@ const applicationSlice = createSlice({
     setFooter(state, action: PayloadAction<Footer>) {
       state.footer = action.payload;
     },
+    setTheme(state, action: PayloadAction<Theme>) {
+      state.theme = action.payload;
+    },
   },
 });
 
-export const { setNavbar, setPages, setFooter } = applicationSlice.actions;
+export const { setNavbar, setPages, setFooter, setTheme } = applicationSlice.actions;
 export default applicationSlice.reducer;
