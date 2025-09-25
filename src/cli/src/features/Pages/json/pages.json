@@ -31,16 +31,5 @@
     "pageEntranceAnimation": "animate__fadeIn",
     "pageExitAnimation": "animate__fadeOut",
     "pageID": "1a5f02ae-a602-4408-8e0b-8b361867078c"
-  },
-  {
-    "pageName": "Blog",
-    "pagePath": "/blog",
-    "pageRenderMethod": "static",
-    "pageActive": true,
-    "pageColor": "white",
-    "pageIntensity": false,
-    "pageEntranceAnimation": "animate__fadeIn",
-    "pageExitAnimation": "animate__fadeOut",
-    "pageID": "7047706d-8437-4ea5-b79b-108f66561dd2"
   }
 ]
