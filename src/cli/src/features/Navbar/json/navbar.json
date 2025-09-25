@@ -20,6 +20,19 @@
       "itemActiveIntensity": false,
       "itemEntranceAnimation": "animate__fadeIn",
       "itemExitAnimation": "animate__fadeOut"
+    },
+    {
+      "itemName": "Blog",
+      "itemType": "page",
+      "itemID": "b9fc830e-acf9-4aa8-8680-c8af0e52d80b",
+      "itemColor": "black",
+      "itemIntensity": false,
+      "itemHoverColor": "primary",
+      "itemHoverIntensity": false,
+      "itemActiveColor": "primary",
+      "itemActiveIntensity": false,
+      "itemEntranceAnimation": "animate__fadeIn",
+      "itemExitAnimation": "animate__fadeOut"
     }
   ]
 }
