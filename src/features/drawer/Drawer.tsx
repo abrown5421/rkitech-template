@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, Container, Icon, List, ListItem, Text } from 'rkitech-components';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { closeDrawer } from './drawerSlice';
+import { useGetTheme } from '../../hooks/useGetTheme';
 
 const Drawer: React.FC = () => {
     const dispatch = useAppDispatch();
@@ -54,7 +55,7 @@ const Drawer: React.FC = () => {
                     <Container tailwindClasses="flex-row p-2 justify-between">
                         <Text 
                             text={drawer.title || ''} 
-                            tailwindClasses="text-xl font-mono text-gray-900" 
+                            tailwindClasses={`text-xl font-mono text-${useGetTheme('black')}`}
                         />
                         <Button tailwindClasses="absolute top-2 right-2 cursor-pointer" onClick={handleClose}>
                             <Icon iconName="X" />
@@ -67,7 +68,7 @@ const Drawer: React.FC = () => {
                                 {drawer.link.map((lnk, idx) => {
                                     const textColor = lnk.linkTextColor
                                         ? `text-${lnk.linkTextColor}-${lnk.linkTextIntensity}`
-                                        : "text-gray-900";
+                                        : `text-${useGetTheme('black')}`;
 
                                     return (
                                         <ListItem 
@@ -92,7 +93,7 @@ const Drawer: React.FC = () => {
                             const colorString = `${act.actionColor}-${act.actionIntensity}`;
                             const textColor = act.actionTextColor
                                 ? `${act.actionTextColor}-${act.actionTextIntensity || act.actionIntensity}`
-                                : "gray-50";
+                                : `${useGetTheme('white')}`;
 
                             return (
                                 <Button
