@@ -1,0 +1,44 @@
+{
+  "blogActive": false,
+  "blogTitle": "Rkitech Blog",
+  "postsPerPage": 12,
+  "postsPerRow": 3,
+  "postSorter": true,
+  "postCategoryFilter": true,
+  "blogCategories": [
+    "Category 1",
+    "Category 2",
+    "Category 3",
+    "Category 4"
+  ],
+  "blogPosts": [
+    {
+      "postID": "7dfa9edd-83cf-424e-b86e-a3d85ca36e2e",
+      "postTitle": "TypeScript Over JavaScript",
+      "postAuthor": "Rkitech Blog",
+      "postCategory": "Category 1",
+      "postExcerpt": "Why TypeScript is a safer and more productive alternative to vanilla JavaScript.",
+      "postBody": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+      "postDate": "2025-09-25",
+      "postImage": {
+        "width": "100%",
+        "height": "250px",
+        "placeholder": {
+            "cellSize": 42,       
+            "variance": 0.8,         
+            "xColors": [
+                {"color": "amber", "intensity": 500}, 
+                {"color": "gray", "intensity": 50}, 
+                {"color": "gray", "intensity": 950}
+            ],
+            "yColors": [
+                {"color": "amber", "intensity": 500}, 
+                {"color": "gray", "intensity": 50}, 
+                {"color": "gray", "intensity": 950}
+            ]
+        },
+        "image": ""
+      }
+    }
+  ]
+}
