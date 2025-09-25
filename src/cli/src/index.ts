@@ -5,6 +5,7 @@ import inquirer from "inquirer";
 import { pageManager } from "./features/Pages/pageManager.js";
 import { navbarManager } from "./features/Navbar/navbarManager.js";
 import { footerManager } from "./features/Footer/footerManager.js";
+import { editTheme } from "./features/Theme/commands/editTheme.js";
 
 const program = new Command();
 
@@ -24,11 +25,14 @@ async function mainMenu() {
         type: "list",
         name: "mainChoice",
         message: "What would you like to do?",
-        choices: ["Manage Pages", "Manage Navbar", "Manage Footer", "Exit"]
+        choices: ["Manage Theme", "Manage Pages", "Manage Navbar", "Manage Footer", "Exit"]
       }
     ]);
 
     switch (mainChoice) {
+      case "Manage Theme":
+        await editTheme();
+        break;
       case "Manage Pages":
         await pageManager();
         break;
