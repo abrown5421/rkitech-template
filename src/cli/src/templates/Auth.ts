@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { startLoading, stopLoading } from '../loader/loadingSlice';
 import GlobalLoader from '../loader/GlobalLoader';
 import { setActivePageIn } from '../pageShell/activePageSlice';
+import { useGetTheme } from "../../hooks/useGetTheme";
 
 const ${componentName}: React.FC<${componentName}Props> = () => {
     const dispatch = useAppDispatch();
@@ -126,10 +127,10 @@ const ${componentName}: React.FC<${componentName}Props> = () => {
 
         <Container tailwindClasses='flex-row w-full min-h-[calc(100vh-50px)] p-5 justify-center items-center'>
 
-            <Container tailwindClasses='flex-col justify-center items-center w-full md:w-1/3 bg-gray-50 rounded-xl p-4'>
+            <Container tailwindClasses=${`\`flex-col justify-center items-center w-full md:w-1/3 rounded-xl p-4 bg-\${useGetTheme('black')}\``}>
                 <Text 
                     text={isSignup ? 'Sign Up' : 'Login'} 
-                    tailwindClasses='text-3xl font-mono text-gray-900 mb-4' 
+                    tailwindClasses=${`\`text-3xl font-mono mb-4 text-\${useGetTheme('black')}\``} 
                 />
 
                 {isSignup && (
@@ -146,7 +147,7 @@ const ${componentName}: React.FC<${componentName}Props> = () => {
 
                 <Button
                     onClick={handleSubmit}
-                    tailwindClasses='mb-4 bg-amber-500 text-white border-2 border-amber-500 py-1 px-4 rounded-xl cursor-pointer hover:text-amber-500 hover:bg-transparent'
+                    tailwindClasses=${`\`mb-4 text-white border-2 py-1 px-4 rounded-xl cursor-pointer hover:bg-transparent hover:text-\${useGetTheme('primary')} bg-\${useGetTheme('primary')} border-\${useGetTheme('primary')}\``}
                 >
                     {isLoading ? (
                         <GlobalLoader target="auth" type='Dots' variant={5} color='gray' intensity={50} size={6} />
@@ -155,7 +156,7 @@ const ${componentName}: React.FC<${componentName}Props> = () => {
                     )}
                 </Button>
 
-                <Button onClick={toggleMode} tailwindClasses='text-gray-900 text-sm underline'>
+                <Button onClick={toggleMode} tailwindClasses=${`\`text-sm underline text-\${useGetTheme('black')}\``}>
                     {isSignup ? "Already have an account? Login." : "Don't have an account? Sign Up"}
                 </Button>
             </Container>
