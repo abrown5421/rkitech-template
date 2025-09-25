@@ -5,19 +5,19 @@
     },
     "secondary": {
         "color": "amber",
-        "intensity": 600
+        "intensity": 700
     },
     "tertiary": {
-        "color": "lime",
-        "intensity": 700
+        "color": "amber",
+        "intensity": 900
     },
     "quaternary": {
         "color": "amber",
-        "intensity": 400
+        "intensity": 300
     },
     "quinary": {
         "color": "amber",
-        "intensity": 300
+        "intensity": 100
     },
     "black": {
         "color": "gray",
