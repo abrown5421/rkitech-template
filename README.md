@@ -1,69 +1,51 @@
-# React + TypeScript + Vite
+# Rkitech
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Rkitech is the official starter repo for building apps with the [Rkitech ecosystem](https://github.com/abrown5421).  
+It comes preconfigured with:
 
-Currently, two official plugins are available:
+- ⚛️ A scalable React + TypeScript setup  
+- 🗂️ Global state management with Redux  
+- 🎨 Theme engine with multiple color options  
+- 🧩 Reusable atomic + molecular level UI components  
+- 🔄 Page transition framework  
+- 📦 Prebuilt layout components (Navbar, Footer, Modal, Drawer, Alert)  
+- 📥 Verbose CLI for scaffolding pages from templates, modifying themes, managing navigation and more.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+This template is designed to help you spin up production-ready apps quickly and focus on your project’s unique value.
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Getting Started
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Instead of cloning directly, use [`degit`](https://github.com/Rich-Harris/degit) to copy this repo into a fresh folder **without git history**.
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+### 1. Install degit
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install -g degit
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 2. Degit repo
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+```bash
+degit abrown5421/rkitech-template my-app
+cd my-app
+```
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### 2. Install dependencies
+
+```bash
+npm install
+```
+
+### 3. Start the development server
+
+```bash
+npm run dev
+```
+
+### 4. Start the CLI
+
+```cmd
+rkitech-cli
 ```
