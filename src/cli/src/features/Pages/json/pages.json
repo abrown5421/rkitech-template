@@ -22,17 +22,6 @@
     "pageID": "58f820e6-e10b-4dbe-a11d-5f2055b75c0c"
   },
   {
-    "pageName": "About",
-    "pagePath": "/about",
-    "pageRenderMethod": "static",
-    "pageActive": true,
-    "pageColor": "white",
-    "pageIntensity": false,
-    "pageEntranceAnimation": "animate__fadeIn",
-    "pageExitAnimation": "animate__fadeOut",
-    "pageID": "ba8d760c-e785-4fcf-a1e9-44bd14c8e516"
-  },
-  {
     "pageName": "Blog",
     "pagePath": "/blog",
     "pageRenderMethod": "static",
