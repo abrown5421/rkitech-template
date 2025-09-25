@@ -147,7 +147,7 @@ const ${componentName}: React.FC<${componentName}Props> = () => {
 
                 <Button
                     onClick={handleSubmit}
-                    tailwindClasses=${`\`mb-4 text-white border-2 py-1 px-4 rounded-xl cursor-pointer hover:bg-transparent hover:text-\${useGetTheme('primary')} bg-\${useGetTheme('primary')} border-\${useGetTheme('primary')}\``}
+                    tailwindClasses=${`\`mb-4 text-\${useGetTheme('white')} border-2 py-1 px-4 rounded-xl cursor-pointer hover:bg-transparent hover:text-\${useGetTheme('primary')} bg-\${useGetTheme('primary')} border-\${useGetTheme('primary')}\``}
                 >
                     {isLoading ? (
                         <GlobalLoader target="auth" type='Dots' variant={5} color='gray' intensity={50} size={6} />
