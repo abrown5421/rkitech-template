@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import PrivacyPolicy from '../privacyPolicy/PrivacyPolicy';
 import Blog from '../blog/Blog';
-import About from '../about/About';
 import { Container } from 'rkitech-components';
 import { useAppSelector } from '../../app/hooks';
 import Home from '../home/Home';
@@ -44,9 +43,7 @@ const PageShell: React.FC<PageData> = ({
       {/* cli generated pages should appear here */}
       {activePage.activePageName === 'PageNotFound' && <PageNotFound />}{' '}
       {activePage.activePageName === 'PrivacyPolicy' && <PrivacyPolicy />}{' '}
-      {activePage.activePageName === 'Blog' && <Blog />}{' '}
-      {activePage.activePageName === 'About' && <About />}
-      <Footer />
+      {activePage.activePageName === 'Blog' && <Blog />} <Footer />
     </Container>
   );
 };

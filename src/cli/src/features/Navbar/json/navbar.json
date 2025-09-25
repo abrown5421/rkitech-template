@@ -22,19 +22,6 @@
       "itemExitAnimation": "animate__fadeOut"
     },
     {
-      "itemName": "About",
-      "itemType": "page",
-      "itemID": "ba8d760c-e785-4fcf-a1e9-44bd14c8e516",
-      "itemColor": "black",
-      "itemIntensity": false,
-      "itemHoverColor": "primary",
-      "itemHoverIntensity": false,
-      "itemActiveColor": "primary",
-      "itemActiveIntensity": false,
-      "itemEntranceAnimation": "animate__fadeIn",
-      "itemExitAnimation": "animate__fadeOut"
-    },
-    {
       "itemName": "Blog",
       "itemType": "page",
       "itemID": "9319ef19-4709-4f37-b0a0-c6f2b4448498",
