@@ -1,17 +1,20 @@
 import React, { useState, useMemo } from "react";
-import { Button, Container, Icon, Select, Text, Image} from "rkitech-components";
+import { Button, Container, Icon, Select, Text, PlaceholderImage} from "rkitech-components";
 import type { BlogProps } from "./blogTypes";
 import { useAppSelector } from "../../app/hooks";
 import { useGetTheme } from "../../hooks/useGetTheme";
 import type { BlogPost } from "../../cli/src/features/Blog/types/blogTypes";
+import { useNavigationHook } from "../../hooks/useNavigationHook";
+import { formatDate } from "../../utils/formatDate";
 
 
 const Blog: React.FC<BlogProps> = () => {
+  const navigate = useNavigationHook();
   const application = useAppSelector((state) => state.application);
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [sortOption, setSortOption] = useState<string>("newest");
   const [currentPage, setCurrentPage] = useState<number>(1);
-
+  
   const themeBlack = useGetTheme("black");
   const themeWhite = useGetTheme("white");
   const themePrimary = useGetTheme("primary");
@@ -97,19 +100,24 @@ const Blog: React.FC<BlogProps> = () => {
     return gridCols;
   };
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-  };
+  const handlePostClick = (postId: string) => {
+    const blogPostPage = application.pages.find((p) => p.pageName === 'BlogPost')
+    
+    if (!blogPostPage) return;
+
+    const pageWithPostId = {
+      ...blogPostPage,
+      pagePath: blogPostPage.pagePath.replace(":postID", postId)
+    };
+
+    navigate(pageWithPostId)()
+  }
 
   return (
     <Container tailwindClasses="flex-col w-full md:w-4/5 mx-auto h-full min-h-[calc(100vh-50px)] p-5">
       <Text 
         text={application.blog.blogTitle} 
-        tailwindClasses={`text-xl my-5 font-mono text-${themeBlack}`} 
+        tailwindClasses={`text-3xl my-5 font-mono text-${themeBlack}`} 
       />
       
       <Container tailwindClasses="flex-row flex-wrap items-center justify-between gap-4">
@@ -120,7 +128,7 @@ const Blog: React.FC<BlogProps> = () => {
                 tailwindClasses={`border-2 py-1 px-4 rounded-xl cursor-pointer transition-colors ${
                   selectedCategory === "all" 
                     ? `bg-${themePrimary} text-${themeWhite} border-${themePrimary}`
-                    : `bg-transparent hover:text-${themeWhite} text-${themePrimary} hover:bg-${themePrimary} border-${themePrimary}`
+                    : `bg-transparent hover:text-${themeWhite} text-${themeBlack} hover:bg-${themePrimary} border-${themePrimary}`
                 }`}
                 onClick={() => handleCategoryFilter("all")}
               >
@@ -132,7 +140,7 @@ const Blog: React.FC<BlogProps> = () => {
                   tailwindClasses={`border-2 py-1 px-4 rounded-xl cursor-pointer transition-colors ${
                     selectedCategory === cat 
                       ? `bg-${themePrimary} text-${themeWhite} border-${themePrimary}`
-                      : `bg-transparent hover:text-${themeWhite} text-${themePrimary} hover:bg-${themePrimary} border-${themePrimary}`
+                      : `bg-transparent hover:text-${themeWhite} text-${themeBlack} hover:bg-${themePrimary} border-${themePrimary}`
                   }`}
                   onClick={() => handleCategoryFilter(cat)}
                 >
@@ -155,17 +163,17 @@ const Blog: React.FC<BlogProps> = () => {
         )}
       </Container>
 
-      <Container tailwindClasses="flex-row items-center justify-between mb-4">
+      <Container tailwindClasses="flex-row items-center justify-between ml-1 my-4">
         <Text 
           text={`${filteredAndSortedPosts.length} post${filteredAndSortedPosts.length !== 1 ? 's' : ''} found${
             selectedCategory !== "all" ? ` in "${selectedCategory}"` : ""
           }`}
-          tailwindClasses={`text-sm text-gray-600`}
+          tailwindClasses={`text-sm text-gray-500`}
         />
         {filteredAndSortedPosts.length > 0 && totalPages > 1 && (
           <Text 
             text={`Page ${currentPage} of ${totalPages}`}
-            tailwindClasses="text-sm text-gray-600"
+            tailwindClasses="text-sm text-gray-500"
           />
         )}
       </Container>
@@ -174,14 +182,18 @@ const Blog: React.FC<BlogProps> = () => {
         {currentPosts.map((post: BlogPost) => (
           <Container 
             key={post.postID}
-            tailwindClasses="flex-col w-full shadow-xl relative bg-white rounded-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300"
+            tailwindClasses="flex-col w-full min-h-[450px] shadow-xl relative bg-white rounded-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300 cursor-pointer"
+            onClick={() => handlePostClick(post.postID)}
           >
             <div className="relative">
-              <Image 
+              <PlaceholderImage 
                 width="100%" 
-                height="200px" 
-                src={post.postImage}
-                alt={post.postTitle}
+                height="150px" 
+                src={post.postImage.src}
+                cellSize={post.postImage.cellSize}
+                variance={post.postImage.variance}
+                xColors={post.postImage.xColors}
+                yColors={post.postImage.yColors}
               />
               <Container 
                 tailwindClasses={`absolute top-2 right-2 py-1 px-3 rounded-xl bg-${themeWhite} shadow-md`}
@@ -196,18 +208,18 @@ const Blog: React.FC<BlogProps> = () => {
             <Container tailwindClasses="flex-col p-4 flex-grow">
               <Text 
                 text={post.postTitle} 
-                tailwindClasses={`text-xl mb-3 font-mono text-${themeBlack} line-clamp-2`} 
+                tailwindClasses={`text-xl mb-3 font-mono text-${themeBlack} truncate`} 
               />
               <Text 
                 text={post.postExcerpt} 
-                tailwindClasses={`mb-4 text-${themeBlack} text-sm leading-relaxed line-clamp-3 flex-grow`} 
+                tailwindClasses={`mt-4 text-gray-500 leading-relaxed line-clamp-3 flex-grow`} 
               />
               
               <div className="h-px bg-gray-300 my-4"></div>
               
               <Container tailwindClasses="flex-row text-sm text-gray-500 justify-between items-center">
                 <Container tailwindClasses="flex-col">
-                  <Text text={post.postAuthor} tailwindClasses="font-medium" />
+                  <Text text={post.postAuthor} tailwindClasses={`font-medium text-${themePrimary}`} />
                 </Container>
                 <Container tailwindClasses="flex-col">
                   <Text text={formatDate(post.postDate)} tailwindClasses="text-right" />
@@ -219,52 +231,44 @@ const Blog: React.FC<BlogProps> = () => {
       </div>
 
       {totalPages > 1 && (
-        <nav className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6" aria-label="Pagination">
-          <div className="hidden sm:block">
-            <p className="text-sm text-gray-700">
-              Showing <span className="font-medium">{startIndex + 1}</span> to{' '}
-              <span className="font-medium">{Math.min(endIndex, totalPosts)}</span> of{' '}
-              <span className="font-medium">{totalPosts}</span> results
-            </p>
-          </div>
-          <div className="flex flex-1 justify-between sm:justify-end">
-            <button
+        <nav className="flex items-center justify-center px-4 py-3 sm:px-6" aria-label="Pagination">
+          
+          <div className="flex flex-1 justify-center">
+            <Button
               onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-              disabled={currentPage === 1}
-              className="relative inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0 disabled:opacity-50 disabled:cursor-not-allowed"
+              tailwindClasses={`mr-3 ${currentPage === 1 ? 'cursor-not-allowed' : 'cursor-pointer'}`}
             >
-              <Icon iconName="SkipBack" color="amber" intensity={500} />
-            </button>
+              <Icon iconName="SkipBack" color={currentPage === 1 ? "gray" : "amber"} intensity={currentPage === 1 ? 300 : 500} size={15} />
+            </Button>
             
-            <div className="hidden md:-mt-px md:flex">
+            <Container tailwindClasses="flex-row">
               {getPageNumbers().map((pageNum) => (
-                <button
+                <Button
                   key={pageNum}
                   onClick={() => setCurrentPage(pageNum)}
-                  className={`relative inline-flex items-center px-4 py-2 text-sm font-semibold ${
+                  tailwindClasses={`relative cursor-pointer inline-flex items-center px-4 py-2 text-sm font-semibold ${
                     pageNum === currentPage
-                      ? `z-10 bg-${themePrimary} text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-${themePrimary}`
-                      : 'text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0'
+                      ? `z-10 bg-${themePrimary} border-1 border-${themePrimary} text-white`
+                      : `border-1 border-${themePrimary} text-gray-900`
                   }`}
                 >
                   {pageNum}
-                </button>
+                </Button>
               ))}
-            </div>
+            </Container>
             
-            <button
+            <Button
               onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-              disabled={currentPage === totalPages}
-              className="relative ml-3 inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0 disabled:opacity-50 disabled:cursor-not-allowed"
+              tailwindClasses={`ml-3 ${currentPage === totalPages ? 'cursor-not-allowed' : 'cursor-pointer'}`}
             >
-              <Icon iconName="SkipForward" color="amber" intensity={500} />
-            </button>
+              <Icon iconName="SkipForward" color={currentPage === totalPages ? "gray" : "amber"} intensity={currentPage === totalPages ? 300 : 500} size={15} />
+            </Button>
           </div>
         </nav>
       )}
 
       {currentPosts.length === 0 && (
-        <Container tailwindClasses="flex-col items-center justify-center py-12">
+        <Container tailwindClasses="flex-col flex-grow items-center justify-center pb-12">
           <Text 
             text="No posts found" 
             tailwindClasses={`text-xl text-gray-500 mb-2`} 

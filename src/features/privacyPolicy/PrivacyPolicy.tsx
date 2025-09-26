@@ -9,7 +9,7 @@ const PrivacyPolicy: React.FC<PrivacyPolicyProps> = () => {
 
       <Text
         text="Privacy Policy"
-        tailwindClasses={`text-xl font-mono text-${useGetTheme('black')}`}
+        tailwindClasses={`text-3xl font-mono text-${useGetTheme('black')}`}
       />
       <Text
         text="Effective Date: [Insert Date]"

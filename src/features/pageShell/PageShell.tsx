@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import BlogPost from '../blog/BlogPost';
 import Blog from '../blog/Blog';
 import PrivacyPolicy from '../privacyPolicy/PrivacyPolicy';
 import { Container } from 'rkitech-components';
@@ -42,6 +43,7 @@ const PageShell: React.FC<PageData> = ({
       {activePage.activePageName === 'Home' && <Home />}
       {/* cli generated pages should appear here */}
       {activePage.activePageName === 'PageNotFound' && <PageNotFound />}{' '}
+      {activePage.activePageName === 'BlogPost' && <BlogPost />}{' '}
       {activePage.activePageName === 'Blog' && <Blog />}{' '}
       {activePage.activePageName === 'PrivacyPolicy' && <PrivacyPolicy />} <Footer />
     </Container>
