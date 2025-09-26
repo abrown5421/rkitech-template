@@ -1,5 +1,3 @@
-import { PlaceholderConfig, PlaceholderImageProps } from "rkitech-components";
-
 export type BlogPost = {
   postID: string;
   postTitle: string;
@@ -8,7 +6,7 @@ export type BlogPost = {
   postExcerpt: string;
   postBody: string;
   postDate: string; 
-  postImage: PlaceholderImageProps;
+  postImage: string;
 };
 
 export type BlogConfig = {
