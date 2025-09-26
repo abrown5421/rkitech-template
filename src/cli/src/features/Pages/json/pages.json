@@ -42,5 +42,16 @@
     "pageEntranceAnimation": "animate__fadeIn",
     "pageExitAnimation": "animate__fadeOut",
     "pageID": "b9fc830e-acf9-4aa8-8680-c8af0e52d80b"
+  },
+  {
+    "pageName": "BlogPost",
+    "pagePath": "/blog/:postID",
+    "pageRenderMethod": "static",
+    "pageActive": true,
+    "pageColor": "white",
+    "pageIntensity": false,
+    "pageEntranceAnimation": "animate__fadeIn",
+    "pageExitAnimation": "animate__fadeOut",
+    "pageID": "d113d744-fd29-49cb-9c1c-d094c44ffc50"
   }
 ]

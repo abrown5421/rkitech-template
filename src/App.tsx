@@ -6,11 +6,10 @@ import Navbar from './features/navbar/Navbar';
 import Modal from './features/modal/Modal';
 import Alert from './features/alert/Alert';
 import Drawer from './features/drawer/Drawer';
-import { Route, Routes } from 'react-router-dom';
+import { matchPath, Route, Routes } from 'react-router-dom';
 import PageShell from './features/pageShell/PageShell';
 import { useLocation } from "react-router-dom";
 import { setActivePage } from './features/pageShell/activePageSlice';
-import type { PageData } from './cli/src/features/Pages/types/pageTypes';
 import { useLoadApplication } from './hooks/useLoadApplication';
 import { useGetTheme } from './hooks/useGetTheme';
 
@@ -25,13 +24,15 @@ const App: React.FC = () => {
   );
 
   useEffect(() => {
-    if (!pages || pages.length === 0) return; 
+    if (!pages || pages.length === 0) return;
 
-    const page = pages.find((p) => p.pagePath === location.pathname) as PageData | undefined;
+    const page = pages.find(p =>
+      matchPath({ path: p.pagePath, end: true }, location.pathname)
+    );
 
-    const pageNotFound = pages.find((p) => p.pageName === 'PageNotFound') as PageData | undefined;
+    const pageNotFound = pages.find((p) => p.pageName === 'PageNotFound');
 
-    if (page?.pageActive) {
+    if (page) {
       dispatch(setActivePage(page));
     } else if (pageNotFound) {
       dispatch(setActivePage(pageNotFound));
