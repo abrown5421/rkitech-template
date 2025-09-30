@@ -1,4 +1,4 @@
-import { TailwindColor, TailwindIntensity } from "rkitech-components"
+import { TailwindColor, TailwindIntensity, ThemeOptions } from "rkitech-components"
 
 export type ColorObject = {
     color: TailwindColor,
@@ -13,4 +13,11 @@ export interface Theme {
     quinary: ColorObject,
     black: ColorObject,
     white: ColorObject,
+}
+
+export interface EditThemeOptions {
+  themeOption?: ThemeOptions;
+  color?: TailwindColor;
+  intensity?: TailwindIntensity;
+  skipPrompts?: boolean;
 }
