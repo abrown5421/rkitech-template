@@ -2,7 +2,7 @@ import { select, confirm } from '@inquirer/prompts';
 import fs from 'fs/promises';
 import path from 'path';
 import prettier from 'prettier';
-import { PageData } from '../types/pageTypes.js';
+import { DeletePageOptions, PageData } from '../types/pageTypes.js';
 import { formatFile } from '../../../shared/utils/formatFile.js';
 import { Footer } from '../../Footer/types/footerTypes.js';
 import { Navbar } from '../../Navbar/types/navTypes.js';
@@ -11,7 +11,12 @@ function toCamelCase(str: string): string {
   return str.charAt(0).toLowerCase() + str.slice(1);
 }
 
-export async function deletePage() {
+export async function deletePage(options?: DeletePageOptions): Promise<boolean> {
+  const {
+    pageID: optPageID,
+    skipPrompts
+  } = options || {};
+
   const pagesJsonPath = path.resolve(
     process.cwd(),
     'src/cli/src/features/Pages/json/pages.json'
@@ -32,7 +37,7 @@ export async function deletePage() {
   } catch (error) {
     console.error(`❌ Could not find pages.json at: ${pagesJsonPath}`);
     console.log('Please ensure the pages.json file exists in the correct location.');
-    return;
+    return false;
   }
 
   let pages: PageData[];
@@ -41,15 +46,15 @@ export async function deletePage() {
     pages = JSON.parse(pagesRaw);
   } catch (error) {
     console.error('❌ Error reading or parsing pages.json:', error);
-    return;
+    return false;
   }
 
   if (pages.length === 0) {
     console.log('❌ No pages found to delete.');
-    return;
+    return false;
   }
 
-  const pageToDelete = await select({
+  const pageToDelete = skipPrompts && optPageID ? optPageID : await select({
     message: 'Select a page to delete:',
     choices: pages.map((page) => ({
       name: `${page.pageName} (${page.pagePath}) - ${page.pageRenderMethod}`,
@@ -60,17 +65,17 @@ export async function deletePage() {
   const selectedPage = pages.find((p) => p.pageID === pageToDelete);
   if (!selectedPage) {
     console.error('❌ Selected page not found.');
-    return;
+    return false;
   }
 
-  const confirmDelete = await confirm({
+  const confirmDelete = skipPrompts ? true : await confirm({
     message: `Are you sure you want to delete "${selectedPage.pageName}"? This action cannot be undone.`,
     default: false,
   });
 
   if (!confirmDelete) {
     console.log('❌ Deletion cancelled.');
-    return;
+    return false;
   }
 
   const pageName = selectedPage.pageName;
@@ -83,9 +88,10 @@ export async function deletePage() {
       parser: 'json',
     });
     await fs.writeFile(pagesJsonPath, formattedPages, 'utf-8');
+    console.log(`✅ Page "${pageName}" removed from pages.json`);
   } catch (error) {
     console.error('❌ Error writing to pages.json:', error);
-    return;
+    return false;
   }
 
   try {
@@ -117,7 +123,6 @@ export async function deletePage() {
       console.warn('⚠️ Footer.json not found, skipping footer cleanup.');
     }
 
-    // Navbar
     try {
       const navbarRaw = await fs.readFile(navbarJsonPath, 'utf-8');
       navbar = JSON.parse(navbarRaw);
@@ -145,6 +150,7 @@ export async function deletePage() {
     try {
       await fs.access(featuresDir);
       await fs.rm(featuresDir, { recursive: true, force: true });
+      console.log(`✅ Feature directory ${folderName} deleted`);
     } catch {
       console.log(`ℹ️ Feature directory ${featuresDir} not found (normal for dynamic pages)`);
     }
@@ -170,11 +176,19 @@ export async function deletePage() {
       pageShellContent = pageShellContent.replace(renderPattern, '');
 
       await fs.writeFile(pageShellPath, pageShellContent, 'utf-8');
-      formatFile(pageShellPath);
+      console.log(`✅ PageShell updated - removed ${pageName}`);
     } catch (error) {
       console.error('❌ Error updating PageShell:', error);
+      return false;
+    } finally {
+      const pageShellPath = path.resolve(
+        process.cwd(),
+        'src/features/PageShell/PageShell.tsx'
+      );
+      formatFile(pageShellPath);
     }
   }
 
   console.log(`✅ Successfully deleted page "${pageName}" and cleaned up references.`);
+  return true;
 }

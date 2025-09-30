@@ -5,9 +5,9 @@ import { input, number, select, confirm } from '@inquirer/prompts';
 import { TailwindColor, TailwindIntensity, ThemeOptions } from "rkitech-components";
 import { COLORS, INTENSITIES, THEME_COLORS } from "../../../shared/constants/tailwindConstants.js";
 import { ENTRANCE_ANIMATIONS, EXIT_ANIMATIONS } from "../../../shared/constants/animationConstants.js";
-import { PageData, RenderMethod } from "../../Pages/types/pageTypes.js";
-import { createGUID } from "../../../shared/utils/createGUID.js";
+import { PageData } from "../../Pages/types/pageTypes.js";
 import { newPage } from "../../Pages/commands/newPage.js";
+import { newMenuItem } from "../../Navbar/commands/newMenuItem.js";
 
 export async function initBlog(mode: "manage" | "new") {
     const blogJsonPath = path.resolve(
@@ -18,21 +18,20 @@ export async function initBlog(mode: "manage" | "new") {
     try {
         await fs.access(blogJsonPath);
     } catch (error) {
-        console.error(`❌ Could not find navbar.json at: ${blogJsonPath}`);
-        console.log('Please ensure the navbar.json file exists in the correct location.');
+        console.error(`❌ Could not find blog.json at: ${blogJsonPath}`);
+        console.log('Please ensure the blog.json file exists in the correct location.');
         return;
     }
     
     let blog: BlogConfig;
     let pageColor: TailwindColor | ThemeOptions;
     let pageIntensity: TailwindIntensity | false;
-    let blogPageData: PageData;
 
     try {
         const blogRaw = await fs.readFile(blogJsonPath, 'utf-8');
         blog = JSON.parse(blogRaw);
     } catch (error) {
-        console.error('❌ Error reading or parsing navbar.json:', error);
+        console.error('❌ Error reading or parsing blog.json:', error);
         return;
     }
     
@@ -79,6 +78,12 @@ export async function initBlog(mode: "manage" | "new") {
         message: "Do you want to allow for sorting by category?",
         default: blog.postCategoryFilter
     });
+
+    blog.blogTitle = blogTitle;
+    blog.postsPerPage = postsPerPage as number;
+    blog.postsPerRow = postsPerRow as number;
+    blog.postSorter = postSorter;
+    blog.postCategoryFilter = postCategoryFilter;
 
     if (mode === "new") {
         const pagesJsonPath = path.resolve(
@@ -175,7 +180,7 @@ export async function initBlog(mode: "manage" | "new") {
             })),
         });
 
-        await newPage({
+        const blogPageID = await newPage({
             pageName: pageName,
             pagePath: pagePath,
             pageRenderMethod: 'static',
@@ -200,6 +205,33 @@ export async function initBlog(mode: "manage" | "new") {
             chosenTemplate: 'Blog Post',
             skipPrompts: true
         });
+
+        await newMenuItem({
+            itemName: pageName,
+            itemType: 'page',
+            itemID: blogPageID || '', 
+            itemColor: 'black',
+            itemIntensity: false,
+            itemHoverColor: 'primary',
+            itemHoverIntensity: false,
+            itemActiveColor: 'primary',
+            itemActiveIntensity: false,
+            itemEntranceAnimation: 'animate__fadeIn',
+            itemExitAnimation: 'animate__fadeOut',
+            syncWithFooter: true,
+            skipPrompts: true
+        });
     }
-    ;
+
+    try {
+        await fs.writeFile(
+            blogJsonPath, 
+            JSON.stringify(blog, null, 2), 
+            'utf-8'
+        );
+        console.log('✅ Blog configuration saved successfully!');
+    } catch (error) {
+        console.error('❌ Error writing blog.json:', error);
+        return;
+    }
 }

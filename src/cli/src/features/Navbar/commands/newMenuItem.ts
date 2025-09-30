@@ -6,11 +6,28 @@ import { PageData } from '../../Pages/types/pageTypes.js';
 import { ENTRANCE_ANIMATIONS, EXIT_ANIMATIONS } from '../../../shared/constants/animationConstants.js';
 import { createGUID } from '../../../shared/utils/createGUID.js';
 import { selectColorAndIntensity } from '../../../shared/utils/menuItemHelpers.js';
-import { Navbar } from '../types/navTypes.js';
+import { Navbar, NewMenuItemOptions } from '../types/navTypes.js';
 import { Footer } from '../../Footer/types/footerTypes.js';
 import { NavItem } from '../../../shared/types/navItemTypes.js';
 
-export async function newMenuItem() {
+export async function newMenuItem(options?: NewMenuItemOptions) {
+  const {
+    itemName: optItemName,
+    itemType: optItemType,
+    itemID: optItemID,
+    itemLink: optItemLink,
+    itemColor: optItemColor,
+    itemIntensity: optItemIntensity,
+    itemHoverColor: optItemHoverColor,
+    itemHoverIntensity: optItemHoverIntensity,
+    itemActiveColor: optItemActiveColor,
+    itemActiveIntensity: optItemActiveIntensity,
+    itemEntranceAnimation: optItemEntranceAnimation,
+    itemExitAnimation: optItemExitAnimation,
+    syncWithFooter: optSyncWithFooter,
+    skipPrompts
+  } = options || {};
+
   const navbarJsonPath = path.resolve(process.cwd(), 'src/cli/src/features/Navbar/json/navbar.json');
   const footerJsonPath = path.resolve(process.cwd(), 'src/cli/src/features/Footer/json/footer.json');
   const pagesJsonPath = path.resolve(process.cwd(), 'src/cli/src/features/Pages/json/pages.json');
@@ -33,7 +50,9 @@ export async function newMenuItem() {
     footer = JSON.parse(footerRaw);
     footerExists = true;
   } catch (error) {
-    console.warn('⚠️ Footer.json not found - skipping footer synchronization');
+    if (!skipPrompts) {
+      console.warn('⚠️ Footer.json not found - skipping footer synchronization');
+    }
   }
 
   let pages: PageData[] = [];
@@ -46,9 +65,11 @@ export async function newMenuItem() {
     return;
   }
 
-  console.log('\n🔧 Adding new menu item to Navbar\n');
+  if (!skipPrompts) {
+    console.log('\n🔧 Adding new menu item to Navbar\n');
+  }
 
-  const itemName = await input({
+  const itemName = skipPrompts && optItemName ? optItemName : await input({
     message: 'Enter the menu item name:',
     validate: (input: string) => {
       if (!input) return 'Menu item name is required';
@@ -59,13 +80,13 @@ export async function newMenuItem() {
     },
   });
 
-  const itemType = await select({
+  const itemType = skipPrompts && optItemType ? optItemType : await select({
     message: 'Select menu item type:',
     choices: [
       { name: 'page', value: 'page' },
       { name: 'link', value: 'link' },
     ],
-  });
+  }) as 'page' | 'link';
 
   let itemID = '';
   let itemLink = '';
@@ -77,53 +98,89 @@ export async function newMenuItem() {
       return;
     }
 
-    itemID = await select({
-      message: 'Select a page to link to:',
-      choices: activePages.map((page) => ({
-        name: `${page.pageName} (${page.pagePath})`,
-        value: page.pageID,
-      })),
-    });
+    if (skipPrompts && optItemID) {
+      itemID = optItemID;
+    } else {
+      itemID = await select({
+        message: 'Select a page to link to:',
+        choices: activePages.map((page) => ({
+          name: `${page.pageName} (${page.pagePath})`,
+          value: page.pageID,
+        })),
+      });
+    }
   } else {
-    itemLink = await input({
-      message: 'Enter the external link URL:',
-      validate: (input: string) => {
-        if (!input) return 'Link URL is required';
-        try {
-          new URL(input);
-          return true;
-        } catch {
-          return 'Please enter a valid URL';
-        }
-      },
-    });
-    itemID = createGUID();
+    if (skipPrompts && optItemLink) {
+      itemLink = optItemLink;
+      itemID = optItemID || createGUID();
+    } else {
+      itemLink = await input({
+        message: 'Enter the external link URL:',
+        validate: (input: string) => {
+          if (!input) return 'Link URL is required';
+          try {
+            new URL(input);
+            return true;
+          } catch {
+            return 'Please enter a valid URL';
+          }
+        },
+      });
+      itemID = createGUID();
+    }
   }
 
-  const { color: itemColor, intensity: itemIntensity } = await selectColorAndIntensity('item');
-  const { color: itemHoverColor, intensity: itemHoverIntensity } = await selectColorAndIntensity('item hover');
-  const { color: itemActiveColor, intensity: itemActiveIntensity } = await selectColorAndIntensity('item active');
+  let itemColor, itemIntensity, itemHoverColor, itemHoverIntensity, itemActiveColor, itemActiveIntensity;
 
-  const itemEntranceAnimation = await select({
+  if (skipPrompts) {
+    itemColor = optItemColor!;
+    itemIntensity = optItemIntensity!;
+    itemHoverColor = optItemHoverColor!;
+    itemHoverIntensity = optItemHoverIntensity!;
+    itemActiveColor = optItemActiveColor!;
+    itemActiveIntensity = optItemActiveIntensity!;
+  } else {
+    const itemColors = await selectColorAndIntensity('item');
+    itemColor = itemColors.color;
+    itemIntensity = itemColors.intensity;
+
+    const itemHoverColors = await selectColorAndIntensity('item hover');
+    itemHoverColor = itemHoverColors.color;
+    itemHoverIntensity = itemHoverColors.intensity;
+
+    const itemActiveColors = await selectColorAndIntensity('item active');
+    itemActiveColor = itemActiveColors.color;
+    itemActiveIntensity = itemActiveColors.intensity;
+  }
+
+  const itemEntranceAnimation = skipPrompts && optItemEntranceAnimation ? optItemEntranceAnimation : await select({
     message: 'Select entrance animation:',
     choices: ENTRANCE_ANIMATIONS.map((animation) => ({ name: animation, value: animation })),
   });
 
-  const itemExitAnimation = await select({
+  const itemExitAnimation = skipPrompts && optItemExitAnimation ? optItemExitAnimation : await select({
     message: 'Select exit animation:',
     choices: EXIT_ANIMATIONS.map((animation) => ({ name: animation, value: animation })),
   });
   
   let syncWithFooter = false;
   if (footerExists && footer) {
-    syncWithFooter = await confirm({
-      message: 'Also add this menu item to the footer primary menu?',
-      default: true,
-    });
+    if (skipPrompts && optSyncWithFooter !== undefined) {
+      syncWithFooter = optSyncWithFooter;
+      if (syncWithFooter && footer.footerPrimaryMenuItems.some((item) => item.itemName === itemName)) {
+        console.log('❌ Menu item name already exists in footer primary menu. Adding to navbar only.');
+        syncWithFooter = false;
+      }
+    } else {
+      syncWithFooter = await confirm({
+        message: 'Also add this menu item to the footer primary menu?',
+        default: true,
+      });
 
-    if (syncWithFooter && footer.footerPrimaryMenuItems.some((item) => item.itemName === itemName)) {
-      console.log('❌ Menu item name already exists in footer primary menu. Adding to navbar only.');
-      syncWithFooter = false;
+      if (syncWithFooter && footer.footerPrimaryMenuItems.some((item) => item.itemName === itemName)) {
+        console.log('❌ Menu item name already exists in footer primary menu. Adding to navbar only.');
+        syncWithFooter = false;
+      }
     }
   }
 

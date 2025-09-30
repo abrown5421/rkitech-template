@@ -2,18 +2,32 @@ import { input, select, confirm } from '@inquirer/prompts';
 import fs from 'fs/promises';
 import path from 'path';
 import prettier from 'prettier';
-import { PageData } from '../types/pageTypes.js';
+import { EditPageOptions, PageData } from '../types/pageTypes.js';
 import { COLORS, INTENSITIES, THEME_COLORS } from '../../../shared/constants/tailwindConstants.js';
 import { ENTRANCE_ANIMATIONS, EXIT_ANIMATIONS } from '../../../shared/constants/animationConstants.js';
 import { TEMPLATES } from '../../../shared/constants/templateConstants.js';
 import { formatFile } from '../../../shared/utils/formatFile.js';
-import { TailwindColor, TailwindIntensity, ThemeOptions } from 'rkitech-components';
+import { EntranceAnimation, ExitAnimation, TailwindColor, TailwindIntensity, ThemeOptions } from 'rkitech-components';
 
 function toCamelCase(str: string): string {
   return str.charAt(0).toLowerCase() + str.slice(1);
 }
 
-export async function editPage() {
+export async function editPage(options?: EditPageOptions): Promise<string | undefined> {
+  const {
+    pageID: optPageID,
+    pageName: optName,
+    pagePath: optPath,
+    pageRenderMethod: optRender,
+    pageActive: optActive,
+    pageColor: optColor,
+    pageIntensity: optIntensity,
+    pageEntranceAnimation: optEntrance,
+    pageExitAnimation: optExit,
+    chosenTemplate: optTemplate,
+    skipPrompts
+  } = options || {};
+
   const pagesJsonPath = path.resolve(
     process.cwd(),
     'src/cli/src/features/Pages/json/pages.json'
@@ -24,26 +38,24 @@ export async function editPage() {
   } catch (error) {
     console.error(`❌ Could not find pages.json at: ${pagesJsonPath}`);
     console.log('Please ensure the pages.json file exists in the correct location.');
-    return;
+    return undefined;
   }
 
   let pages: PageData[];
-  let pageColor: TailwindColor | ThemeOptions;
-  let pageIntensity: TailwindIntensity | false;
   try {
     const pagesRaw = await fs.readFile(pagesJsonPath, 'utf-8');
     pages = JSON.parse(pagesRaw);
   } catch (error) {
     console.error('❌ Error reading or parsing pages.json:', error);
-    return;
+    return undefined;
   }
 
   if (pages.length === 0) {
     console.log('❌ No pages found to edit.');
-    return;
+    return undefined;
   }
 
-  const pageToEdit = await select({
+  const pageToEdit = skipPrompts && optPageID ? optPageID : await select({
     message: 'Select a page to edit:',
     choices: pages.map((page) => ({
       name: `${page.pageName} (${page.pagePath})`,
@@ -54,13 +66,13 @@ export async function editPage() {
   const selectedPage = pages.find((p) => p.pageID === pageToEdit);
   if (!selectedPage) {
     console.error('❌ Selected page not found.');
-    return;
+    return undefined;
   }
 
   const originalPageName = selectedPage.pageName;
   const originalFolderName = toCamelCase(originalPageName);
 
-  const newPageName = await input({
+  const newPageName = skipPrompts && optName ? optName : await input({
     message: 'Enter the page name:',
     default: selectedPage.pageName,
     validate: (input: string) => {
@@ -72,7 +84,7 @@ export async function editPage() {
     },
   });
 
-  const newPagePath = await input({
+  const newPagePath = skipPrompts && optPath ? optPath : await input({
     message: 'Enter the page path (without /, e.g., about):',
     default: selectedPage.pagePath.substring(1), 
     validate: (input: string) => {
@@ -86,7 +98,7 @@ export async function editPage() {
     },
   });
 
-  const newPageRenderMethod = await select({
+  const newPageRenderMethod = skipPrompts && optRender ? optRender : await select({
     message: 'Select render method:',
     choices: [
       { name: 'static', value: 'static' },
@@ -96,49 +108,59 @@ export async function editPage() {
   });
 
   let chosenTemplate: string | null = null;
-  if (newPageRenderMethod === 'static') {
+  if (newPageRenderMethod === 'static' && !skipPrompts) {
     chosenTemplate = await select({
       message: 'Select a template:',
       choices: Object.keys(TEMPLATES).map((tpl) => ({ name: tpl, value: tpl })),
     });
+  } else if (skipPrompts && optTemplate) {
+    chosenTemplate = optTemplate;
   }
 
-  const newPageActive = await confirm({
+  const newPageActive = skipPrompts && optActive !== undefined ? optActive : await confirm({
     message: 'Should this page be active by default?',
     default: selectedPage.pageActive,
   });
 
-  const colorType = await select({
-    message: 'Select color type:',
-    choices: [
-      { name: 'Tailwind Color', value: 'tailwind' },
-      { name: 'Theme Color', value: 'theme' }
-    ],
-  });
+  let pageColor: TailwindColor | ThemeOptions;
+  let pageIntensity: TailwindIntensity | false;
 
-  if (colorType === 'tailwind') {
-    pageColor = await select({
-      message: 'Select a Tailwind color:',
-      choices: COLORS.map((color) => ({ name: color, value: color })),
+  if (!skipPrompts) {
+    const colorType = await select({
+      message: 'Select color type:',
+      choices: [
+        { name: 'Tailwind Color', value: 'tailwind' },
+        { name: 'Theme Color', value: 'theme' }
+      ],
     });
 
-    pageIntensity = await select({
-      message: 'Select a page intensity:',
-      choices: INTENSITIES.map((intensity) => ({
-        name: intensity.toString(),
-        value: intensity,
-      })),
-    });
+    if (colorType === 'tailwind') {
+      pageColor = await select({
+        message: 'Select a Tailwind color:',
+        choices: COLORS.map((color) => ({ name: color, value: color })),
+      });
+
+      pageIntensity = await select({
+        message: 'Select a page intensity:',
+        choices: INTENSITIES.map((intensity) => ({
+          name: intensity.toString(),
+          value: intensity,
+        })),
+      });
+    } else {
+      pageColor = await select({
+        message: 'Select a theme color:',
+        choices: THEME_COLORS.map((color) => ({ name: color, value: color })),
+      });
+      
+      pageIntensity = false; 
+    }
   } else {
-    pageColor = await select({
-      message: 'Select a theme color:',
-      choices: THEME_COLORS.map((color) => ({ name: color, value: color })),
-    });
-    
-    pageIntensity = false; 
+    pageColor = optColor!;
+    pageIntensity = optIntensity!;
   }
 
-  const newPageEntranceAnimation = await select({
+  const newPageEntranceAnimation = skipPrompts && optEntrance ? optEntrance : await select({
     message: 'Select entrance animation:',
     choices: ENTRANCE_ANIMATIONS.map((animation) => ({
       name: animation,
@@ -147,7 +169,7 @@ export async function editPage() {
     default: selectedPage.pageEntranceAnimation,
   });
 
-  const newPageExitAnimation = await select({
+  const newPageExitAnimation = skipPrompts && optExit ? optExit : await select({
     message: 'Select exit animation:',
     choices: EXIT_ANIMATIONS.map((animation) => ({
       name: animation,
@@ -155,6 +177,7 @@ export async function editPage() {
     })),
     default: selectedPage.pageExitAnimation,
   });
+
   const updatedPageData: PageData = {
     ...selectedPage,
     pageName: newPageName,
@@ -163,8 +186,8 @@ export async function editPage() {
     pageActive: newPageActive,
     pageColor: pageColor,
     pageIntensity: pageIntensity,
-    pageEntranceAnimation: newPageEntranceAnimation,
-    pageExitAnimation: newPageExitAnimation,
+    pageEntranceAnimation: newPageEntranceAnimation as EntranceAnimation,
+    pageExitAnimation: newPageExitAnimation as ExitAnimation,
   };
 
   const pageIndex = pages.findIndex((p) => p.pageID === pageToEdit);
@@ -175,9 +198,10 @@ export async function editPage() {
       parser: 'json',
     });
     await fs.writeFile(pagesJsonPath, formattedPages, 'utf-8');
+    console.log(`✅ Page "${updatedPageData.pageName}" updated in pages.json`);
   } catch (error) {
     console.error('❌ Error writing to pages.json:', error);
-    return;
+    return undefined;
   }
 
   if (originalPageName !== newPageName && selectedPage.pageRenderMethod === 'static') {
@@ -203,10 +227,7 @@ export async function editPage() {
           'utf-8'
         );
 
-        const typeFileContent = `export interface ${newPageName}Props {
-    
-}
-`;
+        const typeFileContent = `export interface ${newPageName}Props {}\n`;
         await fs.writeFile(
           path.join(newFeaturesDir, `${newFolderName}Types.ts`),
           typeFileContent,
@@ -246,16 +267,16 @@ export async function editPage() {
       }
 
       await fs.writeFile(pageShellPath, pageShellContent, 'utf-8');
-
       await fs.rm(oldFeaturesDir, { recursive: true, force: true });
 
       console.log(`✅ Feature renamed from ${originalFolderName} to ${newFolderName}`);
       console.log(`✅ PageShell updated with ${newPageName}`);
-
-      formatFile(pageShellPath);
-
     } catch (error) {
       console.error('❌ Error updating feature files:', error);
+      return undefined;
+    } finally {
+      const pageShellPath = path.resolve(process.cwd(), 'src/features/PageShell/PageShell.tsx');
+      formatFile(pageShellPath);
     }
   } else if (newPageRenderMethod === 'static' && chosenTemplate && selectedPage.pageRenderMethod !== 'static') {
     const newFolderName = toCamelCase(newPageName);
@@ -276,10 +297,7 @@ export async function editPage() {
         'utf-8'
       );
 
-      const typeFileContent = `export interface ${newPageName}Props {
-    
-}
-`;
+      const typeFileContent = `export interface ${newPageName}Props {}\n`;
       await fs.writeFile(
         path.join(newFeaturesDir, `${newFolderName}Types.ts`),
         typeFileContent,
@@ -312,12 +330,15 @@ export async function editPage() {
       }
 
       await fs.writeFile(pageShellPath, pageShellContent, 'utf-8');
-
-      formatFile(pageShellPath);
-
+      console.log(`✅ Template files generated for ${newPageName}`);
     } catch (error) {
       console.error('❌ Error generating template files:', error);
+      return undefined;
+    } finally {
+      const pageShellPath = path.resolve(process.cwd(), 'src/features/PageShell/PageShell.tsx');
+      formatFile(pageShellPath);
     }
   }
 
+  return updatedPageData.pageID;
 }

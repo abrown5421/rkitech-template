@@ -1,9 +1,9 @@
 {
-  "blogActive": false,
-  "blogTitle": "Rkitech Blog",
-  "postsPerPage": 12,
+  "blogActive": true,
+  "blogTitle": "Frontend Blog",
+  "postsPerPage": 3,
   "postsPerRow": 3,
-  "postSorter": true,
+  "postSorter": false,
   "postCategoryFilter": true,
   "blogCategories": [
     "Frontend",
