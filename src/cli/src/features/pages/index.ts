@@ -1,6 +1,9 @@
 import { selectFromMenu } from "../../shared/components/prompts.js";
 import { showSection, showInfo } from "../../shared/components/messages.js";
 import type { ModuleContext, MenuItem } from "../../core/types.js";
+import { createPage } from "./commands/createPage.js";
+import { editPage } from "./commands/editPage.js";
+import { deletePage } from "./commands/deletePage.js";
 
 const pagesMenuItems: MenuItem[] = [
   {
@@ -40,13 +43,13 @@ export async function pagesModule(context: ModuleContext): Promise<void> {
 
     switch (selection) {
       case "create":
-        showInfo("Create page feature - Coming soon!");
+        createPage();
         break;
       case "edit":
-        showInfo("Edit page feature - Coming soon!");
+        editPage()
         break;
       case "delete":
-        showInfo("Delete page feature - Coming soon!");
+        deletePage()
         break;
     }
 
