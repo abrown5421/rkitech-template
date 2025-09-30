@@ -1,0 +1,23 @@
+{
+  "name": "rkitech-cli",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "rkitech-cli": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "ts-node src/index.ts"
+  },
+  "dependencies": {
+    "figlet": "^1.7.0",
+    "inquirer": "^12.9.6"
+  },
+  "devDependencies": {
+    "@types/figlet": "^1.7.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  }
+}
