@@ -11,6 +11,7 @@ import { editTheme } from "./features/Theme/commands/editTheme.js";
 import { BlogConfig } from "./features/Blog/types/blogTypes.js";
 import { blogManager } from "./features/Blog/blogManager.js";
 import { initBlog } from "./features/Blog/commands/initBlog.js";
+import { themeManager } from "./features/Theme/themeManager.js";
 
 const program = new Command();
 
@@ -60,7 +61,7 @@ async function mainMenu() {
 
     switch (mainChoice) {
       case "Manage Theme":
-        await editTheme();
+        await themeManager();
         break;
       case "Manage Pages":
         await pageManager();

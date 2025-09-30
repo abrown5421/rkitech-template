@@ -31,117 +31,59 @@ async function saveTheme(theme: Theme): Promise<void> {
   }
 }
 
-function displayCurrentTheme(theme: Theme): void {
-  console.log('\n📋 Current Theme Configuration:');
-  console.log('================================');
-  
-  Object.entries(theme).forEach(([key, value]) => {
-    console.log(`${key.padEnd(12)}: ${value.color}-${value.intensity}`);
-  });
-  console.log('================================\n');
-}
 
 export async function editTheme(): Promise<void> {
   try {
-    console.log('🎨 Welcome to the Theme Editor!');
-    console.log('================================');
-    
+    console.log('Theme Menu - choose a property to edit (Use arrow keys)');
+
     const theme = await loadTheme();
-    displayCurrentTheme(theme);
-    
-    while (true) {
-      const { themeOption } = await inquirer.prompt<{ themeOption: ThemeOptions }>([
-        {
-          type: 'list',
-          name: 'themeOption',
-          message: '🎯 Select a theme property to edit:',
-          choices: THEME_COLORS.map(option => ({
-            name: `${option} (current: ${theme[option as ThemeOptions].color}-${theme[option as ThemeOptions].intensity})`,
-            value: option
-          }))
-        }
-      ]);
-      
-      console.log(`\n📝 Editing: ${themeOption}`);
-      console.log(`Current value: ${theme[themeOption].color}-${theme[themeOption].intensity}`);
-      
-      const { selectedColor } = await inquirer.prompt([
-        {
-          type: 'list',
-          name: 'selectedColor',
-          message: '🌈 Select a base color:',
-          choices: COLORS,
-          pageSize: 15
-        }
-      ]);
-      
-      const { selectedIntensity } = await inquirer.prompt([
-        {
-          type: 'list',
-          name: 'selectedIntensity',
-          message: '⚡ Select color intensity:',
-          choices: INTENSITIES.map(intensity => ({
-            name: intensity.toString(),
-            value: intensity
-          }))
-        }
-      ]);
-      
-      theme[themeOption] = {
-        color: selectedColor,
-        intensity: selectedIntensity
-      };
-      
-      console.log(`\n✨ Updated ${themeOption} to: ${selectedColor}-${selectedIntensity}`);
-      
-      const { continueEditing } = await inquirer.prompt([
-        {
-          type: 'confirm',
-          name: 'continueEditing',
-          message: '❓ Do you want to edit another property?',
-          default: false
-        }
-      ]);
-      
-      if (!continueEditing) {
-        break;
-      }
-    }
-    
-    displayCurrentTheme(theme);
-    
-    const { confirmSave } = await inquirer.prompt([
+
+    const { themeOption } = await inquirer.prompt<{ themeOption: ThemeOptions }>([
       {
-        type: 'confirm',
-        name: 'confirmSave',
-        message: '💾 Save changes to theme.json?',
-        default: true
+        type: 'list',
+        name: 'themeOption',
+        message: 'Select a theme property to edit:',
+        choices: THEME_COLORS.map(option => ({
+          name: `${option} (current: ${theme[option as ThemeOptions].color}-${theme[option as ThemeOptions].intensity})`,
+          value: option
+        }))
       }
     ]);
-    
-    if (confirmSave) {
-      await saveTheme(theme);
-    } else {
-      console.log('❌ Changes discarded.');
-    }
-    
-    await inquirer.prompt([
+
+    console.log(`\nEditing: ${themeOption}`);
+    console.log(`Current value: ${theme[themeOption].color}-${theme[themeOption].intensity}`);
+
+    const { selectedColor } = await inquirer.prompt([
       {
-        type: 'input',
-        name: 'continue',
-        message: 'Press Enter to return to main menu...'
+        type: 'list',
+        name: 'selectedColor',
+        message: 'Select a base color:',
+        choices: COLORS,
+        pageSize: 15
       }
     ]);
-    
+
+    const { selectedIntensity } = await inquirer.prompt([
+      {
+        type: 'list',
+        name: 'selectedIntensity',
+        message: 'Select color intensity:',
+        choices: INTENSITIES.map(intensity => ({
+          name: intensity.toString(),
+          value: intensity
+        }))
+      }
+    ]);
+
+    theme[themeOption] = {
+      color: selectedColor,
+      intensity: selectedIntensity
+    };
+
+    await saveTheme(theme);
+
+    console.log('Returning to main menu...');
   } catch (error) {
     console.error('❌ An error occurred:', error);
-    
-    await inquirer.prompt([
-      {
-        type: 'input',
-        name: 'continue',
-        message: 'Press Enter to return to main menu...'
-      }
-    ]);
   }
 }
