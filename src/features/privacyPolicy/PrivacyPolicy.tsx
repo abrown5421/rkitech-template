@@ -5,11 +5,11 @@ import { useGetTheme } from "../../hooks/useGetTheme";
 
 const PrivacyPolicy: React.FC<PrivacyPolicyProps> = () => {
   return (
-    <Container tailwindClasses="flex-col w-full min-h-[calc(100vh-50px)] p-5 mx-auto md:w-4/5 xl:w-3/5">
+    <Container tailwindClasses="flex-col w-full min-h-[calc(100vh-50px)] p-5 mx-auto md:w-4/5">
 
       <Text
         text="Privacy Policy"
-        tailwindClasses={`text-xl font-mono text-${useGetTheme('black')}`}
+        tailwindClasses={`text-3xl font-mono text-${useGetTheme('black')}`}
       />
       <Text
         text="Effective Date: [Insert Date]"

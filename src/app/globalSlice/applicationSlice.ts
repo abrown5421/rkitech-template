@@ -5,6 +5,7 @@ import type { Navbar } from "../../cli/src/features/Navbar/types/navTypes";
 import type { PageData } from "../../cli/src/features/Pages/types/pageTypes";
 import type { Footer } from "../../cli/src/features/Footer/types/footerTypes";
 import type { Theme } from "../../cli/src/features/Theme/types/themeTypes";
+import type { BlogConfig } from "../../cli/src/features/Blog/types/blogTypes";
 
 const initialState: ApplicationProps = {
   pages: [],
@@ -58,6 +59,16 @@ const initialState: ApplicationProps = {
       color: "gray", 
       intensity: 50
     }
+  },
+  blog: {
+    blogActive: false,
+    blogTitle: "Rkitech Blog",
+    postsPerPage: 12,
+    postsPerRow: 3,
+    postSorter: true,
+    postCategoryFilter: true,
+    blogCategories: [],
+    blogPosts: []
   }
 };
 
@@ -77,8 +88,11 @@ const applicationSlice = createSlice({
     setTheme(state, action: PayloadAction<Theme>) {
       state.theme = action.payload;
     },
+    setBlog(state, action: PayloadAction<BlogConfig>) {
+      state.blog = action.payload;
+    },
   },
 });
 
-export const { setNavbar, setPages, setFooter, setTheme } = applicationSlice.actions;
+export const { setNavbar, setPages, setFooter, setTheme, setBlog } = applicationSlice.actions;
 export default applicationSlice.reducer;
