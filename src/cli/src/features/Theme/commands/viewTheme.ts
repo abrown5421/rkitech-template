@@ -20,4 +20,5 @@ async function loadTheme(): Promise<Theme> {
 export async function viewTheme() {
     const theme = await loadTheme();
     console.log(theme)
+    return theme;
 }
