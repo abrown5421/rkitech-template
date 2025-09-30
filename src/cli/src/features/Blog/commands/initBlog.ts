@@ -5,8 +5,9 @@ import { input, number, select, confirm } from '@inquirer/prompts';
 import { TailwindColor, TailwindIntensity, ThemeOptions } from "rkitech-components";
 import { COLORS, INTENSITIES, THEME_COLORS } from "../../../shared/constants/tailwindConstants.js";
 import { ENTRANCE_ANIMATIONS, EXIT_ANIMATIONS } from "../../../shared/constants/animationConstants.js";
-import { PageData } from "../../Pages/types/pageTypes.js";
+import { PageData, RenderMethod } from "../../Pages/types/pageTypes.js";
 import { createGUID } from "../../../shared/utils/createGUID.js";
+import { newPage } from "../../Pages/commands/newPage.js";
 
 export async function initBlog(mode: "manage" | "new") {
     const blogJsonPath = path.resolve(
@@ -164,7 +165,7 @@ export async function initBlog(mode: "manage" | "new") {
                 name: animation,
                 value: animation,
             })),
-        });
+        }); 
     
         const pageExitAnimation = await select({
             message: 'Select exit blog page animation:',
@@ -174,17 +175,31 @@ export async function initBlog(mode: "manage" | "new") {
             })),
         });
 
-        blogPageData = {
-            pageName,
-            pagePath: `/${pagePath}`,
+        await newPage({
+            pageName: pageName,
+            pagePath: pagePath,
             pageRenderMethod: 'static',
-            pageActive,
-            pageColor,
-            pageIntensity,
-            pageEntranceAnimation,
-            pageExitAnimation,
-            pageID: createGUID(),
-        }
+            pageActive: pageActive,
+            pageColor: pageColor,
+            pageIntensity: pageIntensity,
+            pageEntranceAnimation: pageEntranceAnimation,
+            pageExitAnimation: pageExitAnimation,
+            chosenTemplate: 'Blog',
+            skipPrompts: true
+        });
+
+        await newPage({
+            pageName: pageName + 'Post',
+            pagePath: pagePath + '/:postID',
+            pageRenderMethod: 'static',
+            pageActive: pageActive,
+            pageColor: pageColor,
+            pageIntensity: pageIntensity,
+            pageEntranceAnimation: pageEntranceAnimation,
+            pageExitAnimation: pageExitAnimation,
+            chosenTemplate: 'Blog Post',
+            skipPrompts: true
+        });
     }
     ;
 }

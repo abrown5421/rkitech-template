@@ -1,5 +1,5 @@
 {
-  "blogActive": true,
+  "blogActive": false,
   "blogTitle": "Rkitech Blog",
   "postsPerPage": 12,
   "postsPerRow": 3,

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import BlogPost from '../blog/BlogPost';
+import BlogPost from '../blogPost/BlogPost';
 import Blog from '../blog/Blog';
 import PrivacyPolicy from '../privacyPolicy/PrivacyPolicy';
 import { Container } from 'rkitech-components';
