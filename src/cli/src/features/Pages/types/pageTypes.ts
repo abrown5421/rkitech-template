@@ -26,3 +26,22 @@ export interface NewPageOptions {
   chosenTemplate?: string;
   skipPrompts?: boolean;
 }
+
+export interface EditPageOptions {
+  pageID?: string;
+  pageName?: string;
+  pagePath?: string;
+  pageRenderMethod?: 'static' | 'dynamic';
+  pageActive?: boolean;
+  pageColor?: TailwindColor | ThemeOptions;
+  pageIntensity?: TailwindIntensity | false;
+  pageEntranceAnimation?: EntranceAnimation;
+  pageExitAnimation?: ExitAnimation;
+  chosenTemplate?: string;
+  skipPrompts?: boolean;
+}
+
+export interface DeletePageOptions {
+  pageID?: string;
+  skipPrompts?: boolean;
+}

@@ -14,7 +14,7 @@ function toCamelCase(str: string): string {
   return str.charAt(0).toLowerCase() + str.slice(1);
 }
 
-export async function newPage(options?: NewPageOptions) {
+export async function newPage(options?: NewPageOptions): Promise<string | undefined> {
   const { 
     pageName: optName,
     pagePath: optPath,
@@ -34,7 +34,7 @@ export async function newPage(options?: NewPageOptions) {
     await fs.access(pagesJsonPath);
   } catch {
     console.error(`❌ Could not find pages.json at: ${pagesJsonPath}`);
-    return;
+    return undefined;
   }
 
   let pages: PageData[];
@@ -43,7 +43,7 @@ export async function newPage(options?: NewPageOptions) {
     pages = JSON.parse(pagesRaw);
   } catch {
     console.error('❌ Error reading or parsing pages.json');
-    return;
+    return undefined;
   }
 
   const pageName = skipPrompts && optName ? optName : await input({
@@ -150,6 +150,7 @@ export async function newPage(options?: NewPageOptions) {
     console.log(`✅ Page "${newPageData.pageName}" added to pages.json`);
   } catch {
     console.error('❌ Error writing to pages.json');
+    return undefined;
   }
 
   if (pageRenderMethod === 'static' && chosenTemplate) {
@@ -181,8 +182,11 @@ export async function newPage(options?: NewPageOptions) {
       await fs.writeFile(pageShellPath, pageShellContent, 'utf-8');
     } catch (error) {
       console.error('❌ Error generating template files:', error);
+      return undefined;
     } finally {
       formatFile(pageShellPath);
     }
   }
+
+  return newPageData.pageID;
 }

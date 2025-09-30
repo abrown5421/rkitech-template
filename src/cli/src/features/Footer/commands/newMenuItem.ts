@@ -6,11 +6,40 @@ import { PageData } from '../../Pages/types/pageTypes.js';
 import { ENTRANCE_ANIMATIONS, EXIT_ANIMATIONS } from '../../../shared/constants/animationConstants.js';
 import { createGUID } from '../../../shared/utils/createGUID.js';
 import { selectColorAndIntensity } from '../../../shared/utils/menuItemHelpers.js';
-import { Footer } from '../types/footerTypes.js';
+import { Footer, NewFooterMenuItemOptions } from '../types/footerTypes.js';
 import { Navbar } from '../../Navbar/types/navTypes.js';
 import { NavItem } from '../../../shared/types/navItemTypes.js';
+import { EntranceAnimation, ExitAnimation } from 'rkitech-components';
 
-export async function newMenuItem(source: "main" | "aux") {
+export async function newMenuItem(sourceOrOptions: "main" | "aux" | NewFooterMenuItemOptions): Promise<string | undefined> {
+  let source: "main" | "aux";
+  let options: NewFooterMenuItemOptions | undefined;
+  
+  if (typeof sourceOrOptions === 'string') {
+    source = sourceOrOptions;
+    options = { source, skipPrompts: false };
+  } else {
+    options = sourceOrOptions;
+    source = options.source;
+  }
+
+  const {
+    itemName: optItemName,
+    itemType: optItemType,
+    itemID: optItemID,
+    itemLink: optItemLink,
+    itemColor: optItemColor,
+    itemIntensity: optItemIntensity,
+    itemHoverColor: optItemHoverColor,
+    itemHoverIntensity: optItemHoverIntensity,
+    itemActiveColor: optItemActiveColor,
+    itemActiveIntensity: optItemActiveIntensity,
+    itemEntranceAnimation: optItemEntranceAnimation,
+    itemExitAnimation: optItemExitAnimation,
+    syncWithNavbar: optSyncWithNavbar,
+    skipPrompts
+  } = options;
+
   const footerJsonPath = path.resolve(process.cwd(), 'src/cli/src/features/Footer/json/footer.json');
   const navbarJsonPath = path.resolve(process.cwd(), 'src/cli/src/features/Navbar/json/navbar.json');
   const pagesJsonPath = path.resolve(process.cwd(), 'src/cli/src/features/Pages/json/pages.json');
@@ -25,7 +54,7 @@ export async function newMenuItem(source: "main" | "aux") {
     footer = JSON.parse(footerRaw);
   } catch (error) {
     console.error(`❌ Could not find or read footer.json at: ${footerJsonPath}`);
-    return;
+    return undefined;
   }
 
   let navbar: Navbar | null = null;
@@ -37,7 +66,9 @@ export async function newMenuItem(source: "main" | "aux") {
       navbar = JSON.parse(navbarRaw);
       navbarExists = true;
     } catch (error) {
-      console.warn('⚠️ Navbar.json not found - skipping navbar synchronization');
+      if (!skipPrompts) {
+        console.warn('⚠️ Navbar.json not found - skipping navbar synchronization');
+      }
     }
   }
 
@@ -48,12 +79,14 @@ export async function newMenuItem(source: "main" | "aux") {
     pages = JSON.parse(pagesRaw);
   } catch (error) {
     console.error('❌ Error reading pages.json:', error);
-    return;
+    return undefined;
   }
 
-  console.log(`\n🔧 Adding new menu item to ${menuTypeName} Footer Menu\n`);
+  if (!skipPrompts) {
+    console.log(`\n🔧 Adding new menu item to ${menuTypeName} Footer Menu\n`);
+  }
 
-  const itemName = await input({
+  const itemName = skipPrompts && optItemName ? optItemName : await input({
     message: 'Enter the menu item name:',
     validate: (input: string) => {
       if (!input) return 'Menu item name is required';
@@ -64,13 +97,13 @@ export async function newMenuItem(source: "main" | "aux") {
     },
   });
 
-  const itemType = await select({
+  const itemType = skipPrompts && optItemType ? optItemType : await select({
     message: 'Select menu item type:',
     choices: [
       { name: 'page', value: 'page' },
       { name: 'link', value: 'link' },
     ],
-  });
+  }) as 'page' | 'link';
 
   let itemID = '';
   let itemLink = '';
@@ -79,56 +112,92 @@ export async function newMenuItem(source: "main" | "aux") {
     const activePages = pages.filter((page) => page.pageActive);
     if (activePages.length === 0) {
       console.log('❌ No active pages found. Please create and activate a page first.');
-      return;
+      return undefined;
     }
 
-    itemID = await select({
-      message: 'Select a page to link to:',
-      choices: activePages.map((page) => ({
-        name: `${page.pageName} (${page.pagePath})`,
-        value: page.pageID,
-      })),
-    });
+    if (skipPrompts && optItemID) {
+      itemID = optItemID;
+    } else {
+      itemID = await select({
+        message: 'Select a page to link to:',
+        choices: activePages.map((page) => ({
+          name: `${page.pageName} (${page.pagePath})`,
+          value: page.pageID,
+        })),
+      });
+    }
   } else {
-    itemLink = await input({
-      message: 'Enter the external link URL:',
-      validate: (input: string) => {
-        if (!input) return 'Link URL is required';
-        try {
-          new URL(input);
-          return true;
-        } catch {
-          return 'Please enter a valid URL';
-        }
-      },
-    });
-    itemID = createGUID();
+    if (skipPrompts && optItemLink) {
+      itemLink = optItemLink;
+      itemID = optItemID || createGUID();
+    } else {
+      itemLink = await input({
+        message: 'Enter the external link URL:',
+        validate: (input: string) => {
+          if (!input) return 'Link URL is required';
+          try {
+            new URL(input);
+            return true;
+          } catch {
+            return 'Please enter a valid URL';
+          }
+        },
+      });
+      itemID = createGUID();
+    }
   }
 
-  const { color: itemColor, intensity: itemIntensity } = await selectColorAndIntensity('item');
-  const { color: itemHoverColor, intensity: itemHoverIntensity } = await selectColorAndIntensity('item hover');
-  const { color: itemActiveColor, intensity: itemActiveIntensity } = await selectColorAndIntensity('item active');
+  let itemColor, itemIntensity, itemHoverColor, itemHoverIntensity, itemActiveColor, itemActiveIntensity;
 
-  const itemEntranceAnimation = await select({
+  if (skipPrompts) {
+    itemColor = optItemColor!;
+    itemIntensity = optItemIntensity!;
+    itemHoverColor = optItemHoverColor!;
+    itemHoverIntensity = optItemHoverIntensity!;
+    itemActiveColor = optItemActiveColor!;
+    itemActiveIntensity = optItemActiveIntensity!;
+  } else {
+    const itemColors = await selectColorAndIntensity('item');
+    itemColor = itemColors.color;
+    itemIntensity = itemColors.intensity;
+
+    const itemHoverColors = await selectColorAndIntensity('item hover');
+    itemHoverColor = itemHoverColors.color;
+    itemHoverIntensity = itemHoverColors.intensity;
+
+    const itemActiveColors = await selectColorAndIntensity('item active');
+    itemActiveColor = itemActiveColors.color;
+    itemActiveIntensity = itemActiveColors.intensity;
+  }
+
+  const itemEntranceAnimation = skipPrompts && optItemEntranceAnimation ? optItemEntranceAnimation : await select({
     message: 'Select entrance animation:',
     choices: ENTRANCE_ANIMATIONS.map((animation) => ({ name: animation, value: animation })),
   });
 
-  const itemExitAnimation = await select({
+  const itemExitAnimation = skipPrompts && optItemExitAnimation ? optItemExitAnimation : await select({
     message: 'Select exit animation:',
     choices: EXIT_ANIMATIONS.map((animation) => ({ name: animation, value: animation })),
   });
 
   let syncWithNavbar = false;
   if (source === "main" && navbarExists && navbar) {
-    syncWithNavbar = await confirm({
-      message: 'Also add this menu item to the navbar?',
-      default: true,
-    });
+    if (skipPrompts && optSyncWithNavbar !== undefined) {
+      syncWithNavbar = optSyncWithNavbar;
+      if (syncWithNavbar && navbar.navbarMenuItems.some((item) => item.itemName === itemName)) {
+        console.log('❌ Menu item name already exists in navbar. Adding to footer only.');
+        syncWithNavbar = false;
+      }
+    } else {
+      syncWithNavbar = await confirm({
+        message: 'Also add this menu item to the navbar?',
+        default: true,
+      });
 
-    if (syncWithNavbar && navbar.navbarMenuItems.some((item) => item.itemName === itemName)) {
-      console.log('❌ Menu item name already exists in navbar. Adding to footer only.');
-      syncWithNavbar = false;
+      if (syncWithNavbar && navbar.navbarMenuItems.some((item) => item.itemName === itemName)) {
+        console.log('❌ Menu item name already exists in navbar. Adding to footer only.');
+        syncWithNavbar = false;
+      }
     }
   }
 
@@ -142,8 +211,8 @@ export async function newMenuItem(source: "main" | "aux") {
     itemHoverIntensity,
     itemActiveColor,
     itemActiveIntensity,
-    itemEntranceAnimation,
-    itemExitAnimation,
+    itemEntranceAnimation: itemEntranceAnimation as EntranceAnimation,
+    itemExitAnimation: itemExitAnimation as ExitAnimation,
     ...(itemType === 'link' && { itemLink }),
   };
 
@@ -164,5 +233,8 @@ export async function newMenuItem(source: "main" | "aux") {
     }
   } catch (error) {
     console.error('❌ Error writing files:', error);
+    return undefined;
   }
+
+  return newMenuItem.itemID;
 }

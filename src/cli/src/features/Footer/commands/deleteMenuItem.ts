@@ -2,10 +2,27 @@ import { select, confirm } from '@inquirer/prompts';
 import fs from 'fs/promises';
 import path from 'path';
 import prettier from 'prettier';
-import { Footer } from '../types/footerTypes.js';
+import { Footer, DeleteFooterMenuItemOptions } from '../types/footerTypes.js';
 import { Navbar } from '../../Navbar/types/navTypes.js';
 
-export async function deleteMenuItem(source: "main" | "aux") {
+export async function deleteMenuItem(sourceOrOptions: "main" | "aux" | DeleteFooterMenuItemOptions): Promise<boolean> {
+  let source: "main" | "aux";
+  let options: DeleteFooterMenuItemOptions | undefined;
+  
+  if (typeof sourceOrOptions === 'string') {
+    source = sourceOrOptions;
+    options = { source, skipPrompts: false };
+  } else {
+    options = sourceOrOptions;
+    source = options.source;
+  }
+
+  const {
+    itemID: optItemID,
+    deleteFromNavbar: optDeleteFromNavbar,
+    skipPrompts
+  } = options;
+
   const footerJsonPath = path.resolve(
     process.cwd(),
     'src/cli/src/features/Footer/json/footer.json'
@@ -24,7 +41,7 @@ export async function deleteMenuItem(source: "main" | "aux") {
   } catch (error) {
     console.error(`❌ Could not find footer.json at: ${footerJsonPath}`);
     console.log('Please ensure the footer.json file exists in the correct location.');
-    return;
+    return false;
   }
 
   let footer: Footer;
@@ -33,7 +50,7 @@ export async function deleteMenuItem(source: "main" | "aux") {
     footer = JSON.parse(footerRaw);
   } catch (error) {
     console.error('❌ Error reading or parsing footer.json:', error);
-    return;
+    return false;
   }
 
   let navbar: Navbar | null = null;
@@ -45,18 +62,22 @@ export async function deleteMenuItem(source: "main" | "aux") {
       navbar = JSON.parse(navbarRaw);
       navbarExists = true;
     } catch (error) {
-      console.warn('⚠️ Navbar.json not found - skipping navbar synchronization');
+      if (!skipPrompts) {
+        console.warn('⚠️ Navbar.json not found - skipping navbar synchronization');
+      }
     }
   }
 
   if (footer[menuArrayKey].length === 0) {
     console.log(`❌ No menu items found in ${menuTypeName.toLowerCase()} menu to delete.`);
-    return;
+    return false;
   }
 
-  console.log(`\n🗑️ Deleting menu item from ${menuTypeName} Footer Menu\n`);
+  if (!skipPrompts) {
+    console.log(`\n🗑️ Deleting menu item from ${menuTypeName} Footer Menu\n`);
+  }
 
-  const itemToDelete = await select({
+  const itemToDelete = skipPrompts && optItemID ? optItemID : await select({
     message: `Select a menu item to delete from ${menuTypeName.toLowerCase()} menu:`,
     choices: footer[menuArrayKey].map((item) => ({
       name: `${item.itemName} (${item.itemType})`,
@@ -67,7 +88,7 @@ export async function deleteMenuItem(source: "main" | "aux") {
   const selectedItem = footer[menuArrayKey].find((item) => item.itemID === itemToDelete);
   if (!selectedItem) {
     console.error('❌ Selected menu item not found.');
-    return;
+    return false;
   }
 
   let existsInNavbar = false;
@@ -79,20 +100,24 @@ export async function deleteMenuItem(source: "main" | "aux") {
 
   let deleteFromBoth = false;
   if (existsInNavbar) {
-    deleteFromBoth = await confirm({
-      message: `"${selectedItem.itemName}" also exists in the navbar. Delete from both footer and navbar?`,
-      default: true,
-    });
+    if (skipPrompts && optDeleteFromNavbar !== undefined) {
+      deleteFromBoth = optDeleteFromNavbar;
+    } else {
+      deleteFromBoth = await confirm({
+        message: `"${selectedItem.itemName}" also exists in the navbar. Delete from both footer and navbar?`,
+        default: true,
+      });
+    }
   }
 
-  const confirmDelete = await confirm({
+  const confirmDelete = skipPrompts ? true : await confirm({
     message: `Are you sure you want to delete "${selectedItem.itemName}"${deleteFromBoth ? ' from both footer and navbar' : ` from the ${menuTypeName.toLowerCase()} menu`}? This action cannot be undone.`,
     default: false,
   });
 
   if (!confirmDelete) {
     console.log('❌ Deletion cancelled.');
-    return;
+    return false;
   }
 
   footer[menuArrayKey] = footer[menuArrayKey].filter((item) => item.itemID !== itemToDelete);
@@ -119,5 +144,8 @@ export async function deleteMenuItem(source: "main" | "aux") {
     }
   } catch (error) {
     console.error('❌ Error writing files:', error);
+    return false;
   }
+
+  return true;
 }
