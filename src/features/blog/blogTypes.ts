@@ -1,7 +1,1 @@
-export interface BlogProps {
-    
-}
-      
-export interface BlogPostProps {
-
-}
+export interface BlogProps {}

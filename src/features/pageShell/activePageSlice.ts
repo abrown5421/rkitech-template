@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import type { ActivePageState } from "../../features/pageShell/pageShellTypes";
-import type { PageData } from "../../cli/src/shared/types/pageTypes";
+import type { PageData } from "../../cli/src/features/Pages/types/pageTypes";
 
 const initialState: ActivePageState = {
   activePageName: "Home",
@@ -16,7 +16,6 @@ const initialState: ActivePageState = {
     pageIntensity: 500,
     pageEntranceAnimation: "animate__fadeIn",
     pageExitAnimation: "animate__fadeOut",
-    pageContent: ""
   }
 };
 

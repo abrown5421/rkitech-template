@@ -13,3 +13,16 @@ export interface PageData {
   pageExitAnimation: ExitAnimation;
   pageID: string;
 }
+
+export interface NewPageOptions {
+  pageName?: string;
+  pagePath?: string;
+  pageRenderMethod?: 'static' | 'dynamic';
+  pageActive?: boolean;
+  pageColor?: TailwindColor | ThemeOptions;
+  pageIntensity?: TailwindIntensity | false;
+  pageEntranceAnimation?: EntranceAnimation;
+  pageExitAnimation?: ExitAnimation;
+  chosenTemplate?: string;
+  skipPrompts?: boolean;
+}
