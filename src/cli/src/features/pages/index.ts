@@ -24,35 +24,40 @@ const pagesMenuItems: MenuItem[] = [
 ];
 
 export async function pagesModule(context: ModuleContext): Promise<void> {
-  while (true) {
-    showSection("Pages Management");
+  showSection("Pages Management");
 
-    const selection = await selectFromMenu(
-      "Choose a pages action:",
-      pagesMenuItems
-    );
+  const selection = await selectFromMenu(
+    "Choose a pages action:",
+    [
+      { name: "Create New Page", value: "create" },
+      { name: "Edit Existing Page", value: "edit" },
+      { name: "Delete Page", value: "delete" }
+    ]
+  );
 
-    if (selection === "back" || selection === "main") {
-      if (selection === "back") {
-        await context.navigateBack();
-      } else {
-        await context.navigateToMain();
-      }
-      return;
-    }
+  switch (selection) {
+    case "create":
+      await createPage(); 
+      break;
+    case "edit":
+      await editPage();
+      break;
+    case "delete":
+      await deletePage();
+      break;
+  }
 
-    switch (selection) {
-      case "create":
-        createPage();
-        break;
-      case "edit":
-        editPage()
-        break;
-      case "delete":
-        deletePage()
-        break;
-    }
+  const postAction = await selectFromMenu(
+    "What would you like to do next?",
+    [
+      { name: "Go Back", value: "back" },
+      { name: "Main Menu", value: "main" },
+    ]
+  );
 
-    console.log();
+  if (postAction === "back") {
+    await context.navigateBack();
+  } else {
+    await context.navigateToMain();
   }
 }
