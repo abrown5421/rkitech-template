@@ -31,5 +31,27 @@
     "pageEntranceAnimation": "animate__fadeIn",
     "pageExitAnimation": "animate__fadeOut",
     "pageID": "1a5f02ae-a602-4408-8e0b-8b361867078c"
+  },
+  {
+    "pageName": "Blog",
+    "pagePath": "/blog",
+    "pageRenderMethod": "static",
+    "pageActive": true,
+    "pageColor": "white",
+    "pageIntensity": false,
+    "pageEntranceAnimation": "animate__fadeIn",
+    "pageExitAnimation": "animate__fadeOut",
+    "pageID": "ad4c0d66-ba01-42dc-9487-4941d9624612"
+  },
+  {
+    "pageName": "BlogPost",
+    "pagePath": "/blog/:postID",
+    "pageRenderMethod": "static",
+    "pageActive": true,
+    "pageColor": "white",
+    "pageIntensity": false,
+    "pageEntranceAnimation": "animate__fadeIn",
+    "pageExitAnimation": "animate__fadeOut",
+    "pageID": "c79b3851-9f95-4c59-810b-ad2645f1a6fa"
   }
 ]
