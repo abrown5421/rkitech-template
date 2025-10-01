@@ -112,14 +112,15 @@ export async function newBlogPost(options?: NewBlogPostOptions): Promise<string 
     });
 
     const variance = await number({
-      message: 'Enter the placeholder image variance (0-1):',
-      default: 0.5,
-      validate: (input) => {
-        const value = Number(input);
-        if (isNaN(value)) return 'Please enter a valid number.';
-        if (value < 0 || value > 1) return 'Variance must be between 0 and 1.';
-        return true;
-      },
+        message: 'Enter the placeholder image variance (0.1-1):',
+        default: 0.5,
+        step: 0.01, 
+        validate: (input) => {
+            const value = Number(input);
+            if (isNaN(value)) return 'Please enter a valid number.';
+            if (value < 0.1 || value > 1) return 'Variance must be between 0.1 and 1.';
+            return true;
+        },
     });
 
     postImage = {
