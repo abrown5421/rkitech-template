@@ -1,9 +1,9 @@
 {
   "blogActive": true,
-  "blogTitle": "Frontend Blog",
-  "postsPerPage": 3,
+  "blogTitle": "Rkitech Blog",
+  "postsPerPage": 12,
   "postsPerRow": 3,
-  "postSorter": false,
+  "postSorter": true,
   "postCategoryFilter": true,
   "blogCategories": [
     "Frontend",
@@ -106,16 +106,18 @@
     },
     {
       "postID": "6ec55343-061f-4951-bfc0-cf51b42e3b75",
-      "postTitle": "Developing A CLI and Why You Should",
+      "postTitle": "Developing A CLI",
       "postAuthor": "Rkitech Blog",
-      "postCategory": "Backend",
+      "postCategory": "State Management",
       "postExcerpt": "How a Command Line Interface can elevate your development lifecycle and make scaffolding easier.",
       "postBody": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
       "postDate": "2025-09-16",
       "postImage": {
         "src": "",
+        "width": "100%",
+        "height": "150px",
         "cellSize": 33,
-        "variance": 0.15,
+        "variance": 0.2,
         "xColors": [
           {
             "color": "amber",
