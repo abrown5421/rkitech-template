@@ -41,7 +41,7 @@
     "pageIntensity": false,
     "pageEntranceAnimation": "animate__fadeIn",
     "pageExitAnimation": "animate__fadeOut",
-    "pageID": "ad4c0d66-ba01-42dc-9487-4941d9624612"
+    "pageID": "58025af6-1498-4205-99f1-1def9ae9f773"
   },
   {
     "pageName": "BlogPost",
@@ -52,6 +52,6 @@
     "pageIntensity": false,
     "pageEntranceAnimation": "animate__fadeIn",
     "pageExitAnimation": "animate__fadeOut",
-    "pageID": "c79b3851-9f95-4c59-810b-ad2645f1a6fa"
+    "pageID": "fcea7282-a8d4-4e56-87a8-020e19130479"
   }
 ]
