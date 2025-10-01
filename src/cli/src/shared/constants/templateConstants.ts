@@ -1,4 +1,3 @@
-import { authTemplate } from "../../templates/Auth.js";
 import { blankTemplate } from "../../templates/blank.js";
 import { privacyPolicyTemplate } from "../../templates/privacyPolicy.js";
 import { sidebarLeftTemplate } from "../../templates/sidebarLeft.js";
@@ -8,6 +7,7 @@ import { twoByTwoGridTemplate } from "../../templates/twoByTwoGrid.js";
 import { twoColumnTemplate } from "../../templates/twoColumn.js";
 import { blogTemplate } from "../../templates/blog.js";
 import { blogPostTemplate } from "../../templates/blogPost.js";
+import { authTemplate } from "../../templates/Auth.js";
 
 export const TEMPLATES: Record<string, (componentName: string, folderName: string) => string> = {
   "Blank": blankTemplate,

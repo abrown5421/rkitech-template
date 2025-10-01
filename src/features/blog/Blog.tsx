@@ -134,7 +134,7 @@ const Blog: React.FC<BlogProps> = () => {
     <Container tailwindClasses="flex-col w-full md:w-4/5 mx-auto h-full min-h-[calc(100vh-50px)] p-5">
       <Text
         text={application.blog.blogTitle}
-        tailwindClasses="text-3xl my-5 font-mono text-${themeBlack}"
+        tailwindClasses={`text-3xl my-5 font-mono text-${themeBlack}`}
       />
 
       <Container tailwindClasses="flex-row flex-wrap items-center justify-between gap-4">
