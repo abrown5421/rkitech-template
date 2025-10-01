@@ -5,12 +5,7 @@
   "postsPerRow": 3,
   "postSorter": true,
   "postCategoryFilter": true,
-  "blogCategories": [
-    "Frontend",
-    "State Management",
-    "Backend",
-    "Architecture"
-  ],
+  "blogCategories": ["Frontend", "State Management", "Backend", "Architecture"],
   "blogPosts": [
     {
       "postID": "6ab71482-57cc-4da0-885d-a2c3565cef87",
@@ -25,36 +20,15 @@
         "cellSize": 28,
         "variance": 0.3,
         "xColors": [
-          {
-            "color": "yellow",
-            "intensity": 700
-          },
-          {
-            "color": "gray",
-            "intensity": 50
-          },
-          {
-            "color": "orange",
-            "intensity": 700
-          },
-          {
-            "color": "amber",
-            "intensity": 700
-          }
+          { "color": "yellow", "intensity": 700 },
+          { "color": "gray", "intensity": 50 },
+          { "color": "orange", "intensity": 700 },
+          { "color": "amber", "intensity": 700 }
         ],
         "yColors": [
-          {
-            "color": "gray",
-            "intensity": 900
-          },
-          {
-            "color": "gray",
-            "intensity": 50
-          },
-          {
-            "color": "yellow",
-            "intensity": 700
-          }
+          { "color": "gray", "intensity": 900 },
+          { "color": "gray", "intensity": 50 },
+          { "color": "yellow", "intensity": 700 }
         ]
       }
     },
@@ -71,36 +45,15 @@
         "cellSize": 28,
         "variance": 0.9,
         "xColors": [
-          {
-            "color": "gray",
-            "intensity": 900
-          },
-          {
-            "color": "orange",
-            "intensity": 700
-          },
-          {
-            "color": "amber",
-            "intensity": 500
-          },
-          {
-            "color": "gray",
-            "intensity": 50
-          },
-          {
-            "color": "yellow",
-            "intensity": 700
-          }
+          { "color": "gray", "intensity": 900 },
+          { "color": "orange", "intensity": 700 },
+          { "color": "amber", "intensity": 500 },
+          { "color": "gray", "intensity": 50 },
+          { "color": "yellow", "intensity": 700 }
         ],
         "yColors": [
-          {
-            "color": "amber",
-            "intensity": 600
-          },
-          {
-            "color": "yellow",
-            "intensity": 700
-          }
+          { "color": "amber", "intensity": 600 },
+          { "color": "yellow", "intensity": 700 }
         ]
       }
     },
@@ -119,32 +72,14 @@
         "cellSize": 33,
         "variance": 0.2,
         "xColors": [
-          {
-            "color": "amber",
-            "intensity": 600
-          },
-          {
-            "color": "yellow",
-            "intensity": 600
-          },
-          {
-            "color": "amber",
-            "intensity": 600
-          }
+          { "color": "amber", "intensity": 600 },
+          { "color": "yellow", "intensity": 600 },
+          { "color": "amber", "intensity": 600 }
         ],
         "yColors": [
-          {
-            "color": "amber",
-            "intensity": 600
-          },
-          {
-            "color": "orange",
-            "intensity": 600
-          },
-          {
-            "color": "amber",
-            "intensity": 700
-          }
+          { "color": "amber", "intensity": 600 },
+          { "color": "orange", "intensity": 600 },
+          { "color": "amber", "intensity": 700 }
         ]
       }
     },
@@ -161,28 +96,13 @@
         "cellSize": 14,
         "variance": 0.8,
         "xColors": [
-          {
-            "color": "amber",
-            "intensity": 700
-          },
-          {
-            "color": "yellow",
-            "intensity": 600
-          },
-          {
-            "color": "amber",
-            "intensity": 600
-          }
+          { "color": "amber", "intensity": 700 },
+          { "color": "yellow", "intensity": 600 },
+          { "color": "amber", "intensity": 600 }
         ],
         "yColors": [
-          {
-            "color": "amber",
-            "intensity": 500
-          },
-          {
-            "color": "gray",
-            "intensity": 900
-          }
+          { "color": "amber", "intensity": 500 },
+          { "color": "gray", "intensity": 900 }
         ]
       }
     }
