@@ -3,6 +3,7 @@ import { initBlog } from "./commands/initBlog.js";
 import { newBlogPost } from "./commands/newBlogPost.js";
 import { editBlogPost } from "./commands/editBlogPost.js";
 import { deleteBlogPost } from "./commands/deleteBlogPost.js";
+import { deactivateBlog } from "./commands/deactivateBlog.js";
 
 export async function blogManager() {
     const { blogAction } = await inquirer.prompt([
@@ -12,6 +13,7 @@ export async function blogManager() {
       message: "Blog Menu - choose an action",
       choices: [
         "Manage Blog",
+        "Deactivate Blog",
         "Manage Blog Posts",
         "Back to Main Menu"
       ]
@@ -21,6 +23,9 @@ export async function blogManager() {
   switch (blogAction) {
     case "Manage Blog":
       await initBlog('manage');
+      break;
+    case "Deactivate Blog":
+      await deactivateBlog();
       break;
     case "Manage Blog Posts":
       const { blogPostAction } = await inquirer.prompt([

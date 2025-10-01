@@ -108,27 +108,7 @@ export async function initBlog(mode: "manage" | "new") {
             console.error('❌ Error reading or parsing pages.json:', error);
             return;
         }
-        
-        const pageName = await input({
-            message: 'Enter the blog page name:',
-            validate: (input: string) => {
-                if (!input) return 'Page name is required';
-                if (pages.some((p) => p.pageName === input)) return 'Page name already exists';
-                return true;
-            },
-        });
-    
-        const pagePath = await input({
-            message: 'Enter the page path (without /, e.g., about):',
-            validate: (input: string) => {
-                if (!input) return 'Path is required';
-                if (input.includes('/')) return 'Do not include "/" — it will be added automatically';
-                const formatted = `/${input}`;
-                if (pages.some((p) => p.pagePath === formatted)) return 'Page path already exists';
-                return true;
-            },
-        });
-    
+
         const pageActive = await confirm({
             message: 'Should the blog be active?',
             default: true,
@@ -181,8 +161,8 @@ export async function initBlog(mode: "manage" | "new") {
         });
 
         const blogPageID = await newPage({
-            pageName: pageName,
-            pagePath: pagePath,
+            pageName: 'Blog',
+            pagePath: 'blog',
             pageRenderMethod: 'static',
             pageActive: pageActive,
             pageColor: pageColor,
@@ -194,8 +174,8 @@ export async function initBlog(mode: "manage" | "new") {
         });
 
         await newPage({
-            pageName: pageName + 'Post',
-            pagePath: pagePath + '/:postID',
+            pageName: 'BlogPost',
+            pagePath: 'blog/:postID',
             pageRenderMethod: 'static',
             pageActive: pageActive,
             pageColor: pageColor,
@@ -207,7 +187,7 @@ export async function initBlog(mode: "manage" | "new") {
         });
 
         await newMenuItem({
-            itemName: pageName,
+            itemName: 'Blog',
             itemType: 'page',
             itemID: blogPageID || '', 
             itemColor: 'black',

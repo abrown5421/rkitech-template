@@ -21,3 +21,31 @@ export type BlogConfig = {
   blogCategories: string[];
   blogPosts: BlogPost[];
 };
+
+export interface NewBlogPostOptions {
+  postTitle?: string;
+  postAuthor?: string;
+  postCategory?: string;
+  postExcerpt?: string;
+  postBody?: string;
+  postDate?: string;
+  postImage?: PlaceholderImageProps;
+  skipPrompts?: boolean;
+}
+
+export interface EditBlogPostOptions {
+  postID?: string;
+  postTitle?: string;
+  postAuthor?: string;
+  postCategory?: string;
+  postExcerpt?: string;
+  postBody?: string;
+  postDate?: string;
+  postImage?: PlaceholderImageProps;
+  skipPrompts?: boolean;
+}
+
+export interface DeleteBlogPostOptions {
+  postID?: string;
+  skipPrompts?: boolean;
+}
