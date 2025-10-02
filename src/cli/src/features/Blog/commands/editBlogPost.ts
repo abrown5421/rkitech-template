@@ -96,14 +96,7 @@ export async function editBlogPost(options?: EditBlogPostOptions): Promise<strin
     },
   });
 
-  const newPostBody = skipPrompts && optBody ? optBody : await input({
-    message: 'Enter the post body (full content):',
-    default: selectedPost.postBody,
-    validate: (input: string) => {
-      if (!input) return 'Post body is required';
-      return true;
-    },
-  });
+  const newPostBody = skipPrompts && optBody ? optBody : selectedPost.postBody;
 
   const newPostDate = skipPrompts && optDate ? optDate : await input({
     message: 'Enter the post date (YYYY-MM-DD):',

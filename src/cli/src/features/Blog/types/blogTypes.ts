@@ -40,7 +40,7 @@ export interface NewBlogPostOptions {
   postAuthor?: string;
   postCategory?: string;
   postExcerpt?: string;
-  postBody?: string;
+  postBody: ParentNode;
   postDate?: string;
   postImage?: PlaceholderImageProps;
   skipPrompts?: boolean;
@@ -52,7 +52,7 @@ export interface EditBlogPostOptions {
   postAuthor?: string;
   postCategory?: string;
   postExcerpt?: string;
-  postBody?: string;
+  postBody: ParentNode;
   postDate?: string;
   postImage?: PlaceholderImageProps;
   skipPrompts?: boolean;
