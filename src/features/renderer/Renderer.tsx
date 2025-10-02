@@ -152,6 +152,8 @@ export const Renderer: React.FC<RendererProps> = ({ tree }) => {
       if (['Container', 'Button', 'List', 'ListItem'].includes(type)) {
         componentProps.children = children.map((child, idx) => renderNode(child, idx));
       }
+    } else if (typeof children === "string" || typeof children === "number") {
+      componentProps.children = <>{children}</>;
     }
 
     if (type === 'Text' && !componentProps.text) {

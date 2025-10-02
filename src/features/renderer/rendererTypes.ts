@@ -8,7 +8,7 @@ export interface BaseNode {
 }
 
 export interface ParentNode extends BaseNode {
-  children?: ParentNode[];
+  children?: ParentNode[] | string | number;
 }
 
 export interface RendererProps {
