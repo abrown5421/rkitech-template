@@ -4,6 +4,7 @@ import { useAppSelector } from "../../app/hooks";
 import { Container, Text, PlaceholderImage } from "rkitech-components";
 import { useGetTheme } from "../../hooks/useGetTheme";
 import { formatDate } from "../../utils/formatDate";
+import Renderer from "../renderer/Renderer";
 
 const BlogPost: React.FC = () => {
   const { postID } = useParams<{ postID: string }>();
@@ -18,7 +19,7 @@ const BlogPost: React.FC = () => {
 
   return (
     <Container
-      tailwindClasses={`flex-col w-full md:w-4/5 mx-auto h-full min-h-[calc(100vh-50px)] p-5 text-${themeBlack}`}
+      tailwindClasses={`flex-col w-full h-full min-h-[calc(100vh-50px)] text-${themeBlack}`}
     >
       <div className="relative">
         <PlaceholderImage
@@ -39,20 +40,21 @@ const BlogPost: React.FC = () => {
           />
         </Container>
       </div>
-
-      <Text text={post.postTitle} tailwindClasses="text-3xl my-4" />
-      <Container tailwindClasses="flex-row items-center justify-between">
-        <Text
-          text={post.postAuthor}
-          tailwindClasses={`font-medium text-${themePrimary}`}
-        />
-        <Text
-          text={formatDate(post.postDate)}
-          tailwindClasses="text-sm text-gray-500"
-        />
+      <Container tailwindClasses='flex-col w-full md:w-4/5 mx-auto pt-4 pr-4 pl-4 pb-8'>
+        <Text text={post.postTitle} tailwindClasses="text-3xl my-4" />
+        <Container tailwindClasses="flex-row items-center justify-between">
+          <Text
+            text={post.postAuthor}
+            tailwindClasses={`font-medium text-${themePrimary}`}
+          />
+          <Text
+            text={formatDate(post.postDate)}
+            tailwindClasses="text-sm text-gray-500"
+          />
+        </Container>
+        <div className="h-px bg-gray-300 my-4"></div>
+        <Renderer tree={post.postBody} />
       </Container>
-      <div className="h-px bg-gray-300 my-4"></div>
-      <Text text={post.postBody} tailwindClasses="mt-4 text-gray-700" />
     </Container>
   );
 };
