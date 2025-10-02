@@ -11,16 +11,40 @@
       "type": "Container",
       "tailwindClasses": "flex-1 flex-row gap-4 justify-between",
       "children": [
-        { "type": "Container", "tailwindClasses": "flex-col flex-1", "children": ["Row One Column One"] },
-        { "type": "Container", "tailwindClasses": "flex-col flex-1", "children": ["Row One Column Two"] }
+        { "type": "Container", "tailwindClasses": "flex-col flex-1", "children": [
+            {
+              "type": "Text",
+              "text": "Row One Column One"
+            }
+          ]
+        },
+        { "type": "Container", "tailwindClasses": "flex-col flex-1", "children": [
+            {
+              "type": "Text",
+              "text": "Row One Column Two"
+            }
+          ]
+        }
       ]
     },
     {
       "type": "Container",
       "tailwindClasses": "flex-1 flex-row gap-4 justify-between",
       "children": [
-        { "type": "Container", "tailwindClasses": "flex-col flex-1", "children": ["Row Two Column One"] },
-        { "type": "Container", "tailwindClasses": "flex-col flex-1", "children": ["Row Two Column Two"] }
+        { "type": "Container", "tailwindClasses": "flex-col flex-1", "children": [
+            {
+              "type": "Text",
+              "text": "Row Two Column One"
+            }
+          ]
+        },
+        { "type": "Container", "tailwindClasses": "flex-col flex-1", "children": [
+            {
+              "type": "Text",
+              "text": "Row Two Column Two"
+            }
+          ]
+        }
       ]
     }
   ]

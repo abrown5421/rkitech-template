@@ -14,12 +14,22 @@
         {
           "type": "Container",
           "tailwindClasses": "flex-col flex-3",
-          "children": "Column One"
+          "children": [
+            {
+              "type": "Text",
+              "text": "Column One"
+            }
+          ]
         },
         {
           "type": "Container",
           "tailwindClasses": "flex-col flex-9",
-          "children": "Column Two"
+          "children": [
+            {
+              "type": "Text",
+              "text": "Column Two"
+            }
+          ]
         }
       ]
     }

@@ -12,9 +12,27 @@
       "type": "Container",
       "tailwindClasses": "flex-row gap-4 justify-between",
       "children": [
-        { "type": "Container", "tailwindClasses": "flex-col flex-1", "children": ["Column One"] },
-        { "type": "Container", "tailwindClasses": "flex-col flex-1", "children": ["Column Two"] },
-        { "type": "Container", "tailwindClasses": "flex-col flex-1", "children": ["Column Three"]}
+        { "type": "Container", "tailwindClasses": "flex-col flex-1", "children": [
+            {
+              "type": "Text",
+              "text": "Column One"
+            }
+          ]
+        },
+        { "type": "Container", "tailwindClasses": "flex-col flex-1", "children": [
+            {
+              "type": "Text",
+              "text": "Column Two"
+            }
+          ]
+        },
+        { "type": "Container", "tailwindClasses": "flex-col flex-1", "children": [
+            {
+              "type": "Text",
+              "text": "Column Three"
+            }
+          ]
+        }
       ]
     }
   ]

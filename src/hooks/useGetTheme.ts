@@ -7,3 +7,8 @@ export const useGetTheme = (themeKey: ThemeOptions) => {
   const colorObj = theme[themeKey];
   return `${colorObj.color}-${colorObj.intensity}`;
 };
+
+export const useGetFullTheme = () => {
+  const theme = useAppSelector((state) => state.application.theme) as Theme;
+  return theme; 
+};
