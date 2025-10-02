@@ -7,7 +7,7 @@ import { twoByTwoGridTemplate } from "../../templates/twoByTwoGrid.js";
 import { twoColumnTemplate } from "../../templates/twoColumn.js";
 import { blogTemplate } from "../../templates/blog.js";
 import { blogPostTemplate } from "../../templates/blogPost.js";
-import { authTemplate } from "../../templates/Auth.js";
+import { authTemplate } from "../../templates/auth.js";
 
 export const TEMPLATES: Record<string, (componentName: string, folderName: string) => string> = {
   "Blank": blankTemplate,
