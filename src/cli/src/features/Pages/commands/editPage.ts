@@ -28,6 +28,8 @@ export async function editPage(options?: EditPageOptions): Promise<string | unde
     skipPrompts
   } = options || {};
 
+  const excludeFromRenaming = ['Home', 'Blog'];
+
   const pagesJsonPath = path.resolve(
     process.cwd(),
     'src/cli/src/features/Pages/json/pages.json'
@@ -72,31 +74,40 @@ export async function editPage(options?: EditPageOptions): Promise<string | unde
   const originalPageName = selectedPage.pageName;
   const originalFolderName = toCamelCase(originalPageName);
 
-  const newPageName = skipPrompts && optName ? optName : await input({
-    message: 'Enter the page name:',
-    default: selectedPage.pageName,
-    validate: (input: string) => {
-      if (!input) return 'Page name is required';
-      if (input !== selectedPage.pageName && pages.some((p) => p.pageName === input)) {
-        return 'Page name already exists';
-      }
-      return true;
-    },
-  });
+  let newPageName: string;
+  let newPagePath: string;
 
-  const newPagePath = skipPrompts && optPath ? optPath : await input({
-    message: 'Enter the page path (without /, e.g., about):',
-    default: selectedPage.pagePath.substring(1), 
-    validate: (input: string) => {
-      if (!input) return 'Path is required';
-      if (input.includes('/')) return 'Do not include "/" — it will be added automatically';
-      const formatted = `/${input}`;
-      if (formatted !== selectedPage.pagePath && pages.some((p) => p.pagePath === formatted)) {
-        return 'Page path already exists';
-      }
-      return true;
-    },
-  });
+  if (excludeFromRenaming.includes(selectedPage.pageName)) {
+    console.log(`ℹ️ "${selectedPage.pageName}" is excluded from renaming.`);
+    newPageName = selectedPage.pageName;
+    newPagePath = selectedPage.pagePath.substring(1); 
+  } else {
+    newPageName = skipPrompts && optName ? optName : await input({
+      message: 'Enter the page name:',
+      default: selectedPage.pageName,
+      validate: (input: string) => {
+        if (!input) return 'Page name is required';
+        if (input !== selectedPage.pageName && pages.some((p) => p.pageName === input)) {
+          return 'Page name already exists';
+        }
+        return true;
+      },
+    });
+
+    newPagePath = skipPrompts && optPath ? optPath : await input({
+      message: 'Enter the page path (without /, e.g., about):',
+      default: selectedPage.pagePath.substring(1), 
+      validate: (input: string) => {
+        if (!input) return 'Path is required';
+        if (input.includes('/')) return 'Do not include "/" — it will be added automatically';
+        const formatted = `/${input}`;
+        if (formatted !== selectedPage.pagePath && pages.some((p) => p.pagePath === formatted)) {
+          return 'Page path already exists';
+        }
+        return true;
+      },
+    });
+  }
 
   const newPageRenderMethod = skipPrompts && optRender ? optRender : await select({
     message: 'Select render method:',
@@ -108,7 +119,7 @@ export async function editPage(options?: EditPageOptions): Promise<string | unde
   });
 
   let chosenTemplate: string | null = null;
-  if (newPageRenderMethod === 'static' && !skipPrompts) {
+  if (selectedPage.pageRenderMethod === 'static' && !skipPrompts) {
     chosenTemplate = await select({
       message: 'Select a template:',
       choices: Object.keys(TEMPLATES).map((tpl) => ({ name: tpl, value: tpl })),
