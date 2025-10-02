@@ -5,7 +5,7 @@ import {
   List, ListItem, Loader, Radio, Select, Switch, Text, 
   type ThemeOptions
 } from 'rkitech-components';
-import { useGetTheme } from '../../hooks/useGetTheme';
+import { useGetFullTheme } from '../../hooks/useGetTheme';
 
 const componentMap: Record<string, React.ComponentType<any>> = {
   Button,
@@ -25,7 +25,12 @@ const componentMap: Record<string, React.ComponentType<any>> = {
 
 export const Renderer: React.FC<RendererProps> = ({ tree }) => {
   const [componentState, setComponentState] = useState<Record<string, any>>({});
-  const getTheme = useGetTheme;
+  const theme = useGetFullTheme();
+
+  const getThemeValue = (themeKey: ThemeOptions) => {
+    const colorObj = theme[themeKey];
+    return `${colorObj.color}-${colorObj.intensity}`;
+  };
 
   const getStateKey = (node: ParentNode, index: number): string => {
     return node.stateId || `${node.type}-${index}`;
@@ -47,12 +52,10 @@ export const Renderer: React.FC<RendererProps> = ({ tree }) => {
     let newClasses = classes;
     const matches = classes.match(/\{\{([^}]+)\}\}/g);
     if (matches) {
-      matches.forEach((match: string) => {
+      matches.forEach((match) => {
         const colorKey = match.replace(/\{\{|\}\}/g, '').trim();
-        const colorValue = getTheme(colorKey as ThemeOptions);
-        if (colorValue) {
-          newClasses = newClasses.replace(match, colorValue);
-        }
+        const colorValue = getThemeValue(colorKey as ThemeOptions); 
+        if (colorValue) newClasses = newClasses.replace(match, colorValue);
       });
     }
     return newClasses;

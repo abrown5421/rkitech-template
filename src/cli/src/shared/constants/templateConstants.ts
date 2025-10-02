@@ -8,6 +8,7 @@ import { twoColumnTemplate } from "../../templates/columns/twoColumn.js";
 import { blogTemplate } from "../../templates/blog/blog.js";
 import { blogPostTemplate } from "../../templates/blog/blogPost.js";
 import { authTemplate } from "../../templates/auth/auth.js";
+import { twoByThreeGridTemplate } from "../../templates/grids/twoByThreeGrid.js";
 
 export const TEMPLATES: Record<string, (componentName: string, folderName: string) => string> = {
   "Blank": blankTemplate,
@@ -16,6 +17,7 @@ export const TEMPLATES: Record<string, (componentName: string, folderName: strin
   "Two Column": twoColumnTemplate,
   "Three Column": threeColumnTemplate,
   "Two By Two Grid": twoByTwoGridTemplate,
+  "Two By Three Grid": twoByThreeGridTemplate,
   "Auth": authTemplate,
   "Privacy Policy": privacyPolicyTemplate,
   "Blog": blogTemplate,

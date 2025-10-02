@@ -9,6 +9,7 @@ import { createGUID } from '../../../shared/utils/createGUID.js';
 import { TEMPLATES } from '../../../shared/constants/templateConstants.js';
 import { formatFile } from '../../../shared/utils/formatFile.js';
 import { EntranceAnimation, ExitAnimation, TailwindColor, TailwindIntensity, ThemeOptions } from 'rkitech-components';
+import { getJsonTemplate } from '../../../shared/utils/getJsonTemplate.js';
 
 function toCamelCase(str: string): string {
   return str.charAt(0).toLowerCase() + str.slice(1);
@@ -74,7 +75,7 @@ export async function newPage(options?: NewPageOptions): Promise<string | undefi
   });
 
   let chosenTemplate = skipPrompts && optTemplate ? optTemplate : null;
-  if (pageRenderMethod === 'static' && !skipPrompts) {
+  if (!skipPrompts) {
     chosenTemplate = await select({
       message: 'Select a template:',
       choices: Object.keys(TEMPLATES).map((tpl) => ({ name: tpl, value: tpl })),
@@ -140,6 +141,7 @@ export async function newPage(options?: NewPageOptions): Promise<string | undefi
     pageEntranceAnimation: pageEntranceAnimation as EntranceAnimation,
     pageExitAnimation: pageExitAnimation as ExitAnimation,
     pageID: createGUID(),
+    ...(pageRenderMethod === 'dynamic' && chosenTemplate && { pageContent: getJsonTemplate(chosenTemplate)}),
   };
 
   pages.push(newPageData);

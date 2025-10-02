@@ -13,13 +13,23 @@
       "children": [
         {
           "type": "Container",
-          "tailwindClasses": "flex-col flex-3",
-          "children": "Column One"
+          "tailwindClasses": "flex-col flex-9",
+          "children": [
+            {
+              "type": "Text",
+              "text": "Column One"
+            }
+          ]
         },
         {
           "type": "Container",
-          "tailwindClasses": "flex-col flex-9",
-          "children": "Column Two"
+          "tailwindClasses": "flex-col flex-3",
+          "children": [
+            {
+              "type": "Text",
+              "text": "Column Two"
+            }
+          ]
         }
       ]
     }

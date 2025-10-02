@@ -4,7 +4,7 @@
   "children": [
     {
       "type": "Text",
-      "text": "Sidebar Left",
+      "text": "Blank",
       "tailwindClasses": "text-xl font-mono text-gray-900"
     }
   ]
