@@ -1,0 +1,27 @@
+{
+  "type": "Container",
+  "tailwindClasses": "flex-col w-full min-h-[calc(100vh-50px)] p-5",
+  "children": [
+    {
+      "type": "Text",
+      "text": "Sidebar Right",
+      "tailwindClasses": "text-xl font-mono text-gray-900"
+    },
+    {
+      "type": "Container",
+      "tailwindClasses": "flex-row gap-4 justify-between",
+      "children": [
+        {
+          "type": "Container",
+          "tailwindClasses": "flex-col flex-3",
+          "children": "Column One"
+        },
+        {
+          "type": "Container",
+          "tailwindClasses": "flex-col flex-9",
+          "children": "Column Two"
+        }
+      ]
+    }
+  ]
+}

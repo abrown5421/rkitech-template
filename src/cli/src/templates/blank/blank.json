@@ -1,0 +1,12 @@
+{
+  "type": "Container",
+  "tailwindClasses": "w-full h-full min-h-[calc(100vh-50px)] p-5",
+  "children": [
+    {
+      "type": "Text",
+      "text": "Sidebar Left",
+      "tailwindClasses": "text-xl font-mono text-gray-900"
+    }
+  ]
+}
+

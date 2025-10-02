@@ -1,6 +1,11 @@
 import React, { useState, useCallback } from 'react';
 import type { RendererProps, ParentNode } from './rendererTypes';
-import { Button, Checkbox, Container, Icon, Image, Input, List, ListItem, Loader, Radio, Select, Switch, Text } from 'rkitech-components';
+import { 
+  Button, Checkbox, Container, Icon, Image, Input, 
+  List, ListItem, Loader, Radio, Select, Switch, Text, 
+  type ThemeOptions
+} from 'rkitech-components';
+import { useGetTheme } from '../../hooks/useGetTheme';
 
 const componentMap: Record<string, React.ComponentType<any>> = {
   Button,
@@ -20,6 +25,7 @@ const componentMap: Record<string, React.ComponentType<any>> = {
 
 export const Renderer: React.FC<RendererProps> = ({ tree }) => {
   const [componentState, setComponentState] = useState<Record<string, any>>({});
+  const getTheme = useGetTheme;
 
   const getStateKey = (node: ParentNode, index: number): string => {
     return node.stateId || `${node.type}-${index}`;
@@ -36,6 +42,22 @@ export const Renderer: React.FC<RendererProps> = ({ tree }) => {
     return componentState[stateId] ?? defaultValue;
   };
 
+  const resolveThemeClasses = (classes?: string): string | undefined => {
+    if (!classes) return classes;
+    let newClasses = classes;
+    const matches = classes.match(/\{\{([^}]+)\}\}/g);
+    if (matches) {
+      matches.forEach((match: string) => {
+        const colorKey = match.replace(/\{\{|\}\}/g, '').trim();
+        const colorValue = getTheme(colorKey as ThemeOptions);
+        if (colorValue) {
+          newClasses = newClasses.replace(match, colorValue);
+        }
+      });
+    }
+    return newClasses;
+  };
+
   const renderNode = (node: ParentNode, index: number = 0): React.ReactNode => {
     if (!node || !node.type) {
       console.warn('Invalid node:', node);
@@ -43,15 +65,18 @@ export const Renderer: React.FC<RendererProps> = ({ tree }) => {
     }
 
     const Component = componentMap[node.type];
-    
     if (!Component) {
       console.warn(`Component type "${node.type}" not found in component map`);
       return null;
     }
 
-    const { children, type, stateId, statePath, ...props } = node as ParentNode & { stateId?: string; statePath?: string };
+    const { children, type, stateId, statePath, tailwindClasses, ...props } = node as ParentNode & { stateId?: string; statePath?: string; tailwindClasses?: string };
     const componentProps: Record<string, any> = { ...props, key: index };
     const uniqueStateKey = getStateKey(node, index);
+
+    if (tailwindClasses) {
+      componentProps.tailwindClasses = resolveThemeClasses(tailwindClasses);
+    }
 
     if (type === 'Input') {
       const currentValue = getComponentState(uniqueStateKey, props.value || '');
@@ -98,37 +123,36 @@ export const Renderer: React.FC<RendererProps> = ({ tree }) => {
     }
 
     if (type === 'Select') {
-        const currentValue = getComponentState(uniqueStateKey, props.value || '');
-        componentProps.value = currentValue;
-        componentProps.onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-            updateComponentState(uniqueStateKey, e.target.value);
-            if (props.onChange) props.onChange(e);
-        };
+      const currentValue = getComponentState(uniqueStateKey, props.value || '');
+      componentProps.value = currentValue;
+      componentProps.onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        updateComponentState(uniqueStateKey, e.target.value);
+        if (props.onChange) props.onChange(e);
+      };
 
-        if (children && Array.isArray(children)) {
-            componentProps.children = children.map((child, idx) => {
-            if (child.type === 'Text') {
-                return (
-                <option key={idx} value={child.text}>
-                    {child.text}
-                </option>
-                );
-            }
-            if (child.type === 'Option') {
-                return (
-                <option key={idx} value={child.value}>
-                    {child.label}
-                </option>
-                );
-            }
-            return null; 
-            });
-        }
+      if (children && Array.isArray(children)) {
+        componentProps.children = children.map((child, idx) => {
+          if (child.type === 'Text') {
+            return (
+              <option key={idx} value={child.text}>
+                {child.text}
+              </option>
+            );
+          }
+          if (child.type === 'Option') {
+            return (
+              <option key={idx} value={child.value}>
+                {child.label}
+              </option>
+            );
+          }
+          return null;
+        });
+      }
     }
 
     if (type === 'Text' && props.text) {
       let processedText = props.text;
-      
       const stateReferences = props.text.match(/\{\{([^}]+)\}\}/g);
       if (stateReferences) {
         stateReferences.forEach((ref: string) => {
@@ -137,22 +161,22 @@ export const Renderer: React.FC<RendererProps> = ({ tree }) => {
           processedText = processedText.replace(ref, stateValue);
         });
       }
-      
       componentProps.text = processedText;
     }
 
     if (type === 'Button') {
-        componentProps.onClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-            if (props.onClick) {
-            props.onClick(componentState, e); 
-            }
-        };
+      componentProps.onClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+        if (props.onClick) {
+          props.onClick(componentState, e);
+        }
+      };
     }
+
     if (children && Array.isArray(children)) {
       if (['Container', 'Button', 'List', 'ListItem'].includes(type)) {
         componentProps.children = children.map((child, idx) => renderNode(child, idx));
       }
-    } else if (typeof children === "string" || typeof children === "number") {
+    } else if (typeof children === 'string' || typeof children === 'number') {
       componentProps.children = <>{children}</>;
     }
 
@@ -160,17 +184,14 @@ export const Renderer: React.FC<RendererProps> = ({ tree }) => {
       console.warn('Text component missing required "text" prop');
       return null;
     }
-
     if (type === 'Icon' && !componentProps.iconName) {
       console.warn('Icon component missing required "iconName" prop');
       return null;
     }
-
     if (type === 'Image' && !componentProps.src) {
       console.warn('Image component missing required "src" prop');
       return null;
     }
-
     if (type === 'Loader') {
       if (componentProps.show === undefined) componentProps.show = true;
       if (!componentProps.loaderType) componentProps.loaderType = 'Spinner';
