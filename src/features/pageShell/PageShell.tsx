@@ -10,9 +10,12 @@ import PageNotFound from '../pagenotfound/PageNotFound';
 import type { PageData } from '../../cli/src/features/Pages/types/pageTypes';
 import Footer from '../footer/Footer';
 import { getThemeColorKey } from '../../utils/getThemeColorKey';
+import Renderer from '../renderer/Renderer';
 
 const PageShell: React.FC<PageData> = ({
   pageName,
+  pageRenderMethod,
+  pageContent,
   pageColor,
   pageIntensity,
   pageEntranceAnimation,
@@ -40,13 +43,22 @@ const PageShell: React.FC<PageData> = ({
       }}
       tailwindClasses={`flex-col bg-${colorString}`}
     >
-      {/* add manually generated pages here */}
-      {activePage.activePageName === 'Home' && <Home />}
-      {/* cli generated pages should appear here */}
-      {activePage.activePageName === 'PageNotFound' && <PageNotFound />}{' '}
-      {activePage.activePageName === 'BlogPost' && <BlogPost />}{' '}
-      {activePage.activePageName === 'Blog' && <Blog />}{' '}
-      {activePage.activePageName === 'PrivacyPolicy' && <PrivacyPolicy />} <Footer />
+      {pageRenderMethod === 'static' ? (
+        <Container>
+          {/* add manually generated pages here */}
+          {activePage.activePageName === 'Home' && <Home />}
+          {/* cli generated pages should appear here */}
+          {activePage.activePageName === 'PageNotFound' && <PageNotFound />}{' '}
+          {activePage.activePageName === 'BlogPost' && <BlogPost />}{' '}
+          {activePage.activePageName === 'Blog' && <Blog />}{' '}
+          {activePage.activePageName === 'PrivacyPolicy' && <PrivacyPolicy />} 
+        </Container>
+      ) : (
+        <Container>
+          <Renderer tree={pageContent} />
+        </Container>
+      )}
+      <Footer />
     </Container>
   );
 };

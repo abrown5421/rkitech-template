@@ -1,0 +1,31 @@
+{
+  "type": "Container",
+  "tailwindClasses": "flex-col w-full min-h-[calc(100vh-50px)] p-5",
+  "children": [
+    {
+      "type": "Text",
+      "text": "Two by Two Grid",
+      "tailwindClasses": "text-xl font-mono text-gray-900"
+    },
+    {
+      "type": "Container",
+      "tailwindClasses": "flex-1 flex-row gap-4 justify-between",
+      "children": [
+        { "type": "Container", "tailwindClasses": "flex-col flex-1", "children": ["Row One Column One"] },
+        { "type": "Container", "tailwindClasses": "flex-col flex-1", "children": ["Row One Column Two"] },
+        { "type": "Container", "tailwindClasses": "flex-col flex-1", "children": ["Row One Column Three"] }
+      ]
+    },
+    {
+      "type": "Container",
+      "props": {
+        "tailwindClasses": "flex-1 flex-row gap-4 justify-between"
+      },
+      "children": [
+        { "type": "Container", "tailwindClasses": "flex-col flex-1", "children": ["Row Two Column One"] },
+        { "type": "Container", "tailwindClasses": "flex-col flex-1", "children": ["Row Two Column Two"] },
+        { "type": "Container", "tailwindClasses": "flex-col flex-1", "children": ["Row Two Column Three"] }
+      ]
+    }
+  ]
+}

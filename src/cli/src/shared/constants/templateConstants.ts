@@ -1,13 +1,13 @@
-import { blankTemplate } from "../../templates/blank.js";
-import { privacyPolicyTemplate } from "../../templates/privacyPolicy.js";
-import { sidebarLeftTemplate } from "../../templates/sidebarLeft.js";
-import { sidebarRightTemplate } from "../../templates/sidebarRight.js";
-import { threeColumnTemplate } from "../../templates/threeColumn.js";
-import { twoByTwoGridTemplate } from "../../templates/twoByTwoGrid.js";
-import { twoColumnTemplate } from "../../templates/twoColumn.js";
-import { blogTemplate } from "../../templates/blog.js";
-import { blogPostTemplate } from "../../templates/blogPost.js";
-import { authTemplate } from "../../templates/auth.js";
+import { blankTemplate } from "../../templates/blank/blank.js";
+import { privacyPolicyTemplate } from "../../templates/privacyPolicy/privacyPolicy.js";
+import { sidebarLeftTemplate } from "../../templates/sidebar/sidebarLeft.js";
+import { sidebarRightTemplate } from "../../templates/sidebar/sidebarRight.js";
+import { threeColumnTemplate } from "../../templates/columns/threeColumn.js";
+import { twoByTwoGridTemplate } from "../../templates/grids/twoByTwoGrid.js";
+import { twoColumnTemplate } from "../../templates/columns/twoColumn.js";
+import { blogTemplate } from "../../templates/blog/blog.js";
+import { blogPostTemplate } from "../../templates/blog/blogPost.js";
+import { authTemplate } from "../../templates/auth/auth.js";
 
 export const TEMPLATES: Record<string, (componentName: string, folderName: string) => string> = {
   "Blank": blankTemplate,

@@ -1,4 +1,5 @@
 import { EntranceAnimation, ExitAnimation, TailwindColor, TailwindIntensity, ThemeOptions } from "rkitech-components";
+import { ParentNode } from "../../../shared/types/rendererTypes.js";
 
 export type RenderMethod = 'static' | 'dynamic'
 
@@ -12,6 +13,7 @@ export interface PageData {
   pageEntranceAnimation: EntranceAnimation;
   pageExitAnimation: ExitAnimation;
   pageID: string;
+  pageContent?: ParentNode;
 }
 
 export interface NewPageOptions {
