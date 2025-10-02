@@ -10,7 +10,7 @@ const GlobalLoader: React.FC<LoaderProps> = ({ target, type, variant, color, int
     <Container tailwindClasses={`h-${size} w-${size} justify-center items-center`}>
         <Loader
             show={isLoading}
-            type={type}
+            loaderType={type}
             variant={variant}
             color={color}
             intensity={intensity}
