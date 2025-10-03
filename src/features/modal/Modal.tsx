@@ -48,7 +48,7 @@ const Modal: React.FC = () => {
                 }}
                 tailwindClasses={`flex-col bg-${useGetTheme('white')} rounded-2xl p-4 m-4 w-full md:w-1/2 lg:w-1/3 xl:w-1/4`}
             >
-                <Text text={modal.title} tailwindClasses={`text-xl font-mono text-${useGetTheme('black')}`} />
+                <Text text={modal.title} tailwindClasses={`text-xl primary-font text-${useGetTheme('black')}`} />
                 <Text text={modal.body} tailwindClasses="mt-2" />
                 <div className="mt-6 h-px bg-gray-300 w-full" />
                 <Container tailwindClasses="mt-4 flex justify-end gap-2">

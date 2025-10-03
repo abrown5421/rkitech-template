@@ -1,7 +1,22 @@
+@font-face {
+  font-family: 'PrimaryFont';
+  src: url('./assets/fonts/primary.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'SecondaryFont';
+  src: url('./assets/fonts/secondary.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 html, body {
   margin: 0px;
   padding: 0px;
   overflow-x: hidden !important;
+  font-family: 'SecondaryFont', sans-serif
 }
 
 ::-webkit-scrollbar {
@@ -10,4 +25,12 @@ html, body {
 
 .component-root {
   transition: all 0.3s ease;
+}
+
+.primary-font {
+  font-family: 'PrimaryFont', sans-serif;
+}
+
+.secondary-font {
+  font-family: 'SecondaryFont', sans-serif;
 }

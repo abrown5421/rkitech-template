@@ -9,7 +9,7 @@ const PrivacyPolicy: React.FC<PrivacyPolicyProps> = () => {
 
       <Text
         text="Privacy Policy"
-        tailwindClasses={`text-3xl font-mono text-${useGetTheme('black')}`}
+        tailwindClasses={`text-3xl primary-font text-${useGetTheme('black')}`}
       />
       <Text
         text="Effective Date: 10/02/2025"
@@ -23,7 +23,7 @@ const PrivacyPolicy: React.FC<PrivacyPolicyProps> = () => {
 
       <Text
         text="1. Information We Collect"
-        tailwindClasses="font-mono mt-4 mb-2"
+        tailwindClasses="primary-font mt-4 mb-2"
       />
       <List tailwindClasses="mb-4" gap={2}>
         <ListItem tailwindClasses="ml-4">
@@ -45,7 +45,7 @@ const PrivacyPolicy: React.FC<PrivacyPolicyProps> = () => {
 
       <Text
         text="2. How We Use Your Information"
-        tailwindClasses="font-mono mt-4 mb-2"
+        tailwindClasses="primary-font mt-4 mb-2"
       />
       <List tailwindClasses="mb-4" gap={2}>
         <ListItem tailwindClasses="ml-4">
@@ -70,7 +70,7 @@ const PrivacyPolicy: React.FC<PrivacyPolicyProps> = () => {
 
       <Text
         text="3. Cookies and Tracking"
-        tailwindClasses="font-mono mt-4 mb-2"
+        tailwindClasses="primary-font mt-4 mb-2"
       />
       <List tailwindClasses="mb-4" gap={2}>
         <ListItem tailwindClasses="ml-4">
@@ -92,7 +92,7 @@ const PrivacyPolicy: React.FC<PrivacyPolicyProps> = () => {
 
       <Text
         text="4. Data Sharing and Disclosure"
-        tailwindClasses="font-mono mt-4 mb-2"
+        tailwindClasses="primary-font mt-4 mb-2"
       />
       <List tailwindClasses="mb-4" gap={2}>
         <ListItem tailwindClasses="ml-4">
@@ -111,13 +111,13 @@ const PrivacyPolicy: React.FC<PrivacyPolicyProps> = () => {
         </ListItem>
       </List>
 
-      <Text text="5. Data Security" tailwindClasses="font-mono mt-4 mb-2" />
+      <Text text="5. Data Security" tailwindClasses="primary-font mt-4 mb-2" />
       <Text
         text="We implement reasonable safeguards to protect your information. However, no method of transmission over the Internet or electronic storage is completely secure."
         tailwindClasses="mb-4 text-gray-700"
       />
 
-      <Text text="6. Your Choices" tailwindClasses="font-mono mt-4 mb-2" />
+      <Text text="6. Your Choices" tailwindClasses="primary-font mt-4 mb-2" />
       <List tailwindClasses="mb-4" gap={2}>
         <ListItem tailwindClasses="ml-4">
           Account Information: Access, update, or delete your account info
@@ -134,7 +134,7 @@ const PrivacyPolicy: React.FC<PrivacyPolicyProps> = () => {
 
       <Text
         text="7. Children’s Privacy"
-        tailwindClasses="font-mono mt-4 mb-2"
+        tailwindClasses="primary-font mt-4 mb-2"
       />
       <Text
         text="Our services are not directed to individuals under 13 (or applicable age). We do not knowingly collect information from children."
@@ -143,14 +143,14 @@ const PrivacyPolicy: React.FC<PrivacyPolicyProps> = () => {
 
       <Text
         text="8. Changes to This Privacy Policy"
-        tailwindClasses="font-mono mt-4 mb-2"
+        tailwindClasses="primary-font mt-4 mb-2"
       />
       <Text
         text="We may update this Privacy Policy periodically. Updated versions will be posted on our website with the 'Effective Date' updated."
         tailwindClasses="mb-4 text-gray-700"
       />
 
-      <Text text="9. Contact Us" tailwindClasses="font-mono mt-4 mb-2" />
+      <Text text="9. Contact Us" tailwindClasses="primary-font mt-4 mb-2" />
       <Text
         text="If you have questions about this Privacy Policy or how we handle your data, please contact us at:"
         tailwindClasses="mb-6 text-gray-700 whitespace-pre-line"

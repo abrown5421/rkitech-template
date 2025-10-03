@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Container, Image, Text, type EntranceAnimation, type ExitAnimation } from 'rkitech-components';
-import logo from '../../../public/assets/logo.png';
+import logo from '../../assets/images/logo.png';
 import { useNavigationHook } from '../../hooks/useNavigationHook';
 import { useAppSelector } from '../../app/hooks';
 import type { PageData } from '../../cli/src/features/Pages/types/pageTypes';
@@ -47,7 +47,7 @@ const Navbar: React.FC = () => {
         tailwindClasses='flex-row px-5 items-center'
       >
         <Image src={logo} tailwindClasses='h-[50px]' />
-        <Text tailwindClasses={`text-xl font-mono text-${useGetTheme('black')}`} text={application.navbar.navbarTitle} />
+        <Text tailwindClasses={`text-xl primary-font text-${useGetTheme('black')}`} text={application.navbar.navbarTitle} />
       </Container>
 
       <Container tailwindClasses='flex-col px-5'>

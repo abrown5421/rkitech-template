@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Container, Image, Text } from 'rkitech-components';
 import type { PageNotFoundProps } from './pagenotfoundTypes';
 import { useNavigationHook } from '../../hooks/useNavigationHook';
-import imageSrc from '../../../public/assets/404.png';
+import imageSrc from '../../assets/images/404.png';
 import { useAppSelector } from '../../app/hooks';
 import { useGetTheme } from '../../hooks/useGetTheme';
 
@@ -18,9 +18,9 @@ const PageNotFound: React.FC<PageNotFoundProps> = () => {
         >
             <Container tailwindClasses='flex-col justify-center items-center w-full md:w-1/3'>
                 
-                <Text text='404' tailwindClasses={`text-9xl font-mono text-${useGetTheme('primary')} font-bold`} />
+                <Text text='404' tailwindClasses={`text-9xl primary-font text-${useGetTheme('primary')} font-bold`} />
                 <Image src={imageSrc} tailwindClasses='w-full my-4' />
-                <Text text="Not all who wander are lost. But you sure are" tailwindClasses={`text-xl font-mono text-${useGetTheme('black')}`} />
+                <Text text="Not all who wander are lost. But you sure are" tailwindClasses={`text-xl primary-font text-${useGetTheme('black')}`} />
                 {homePage?.pagePath && (
                     <Button 
                         onClick={() => navigate(homePage)()}

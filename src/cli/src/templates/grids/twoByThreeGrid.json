@@ -5,7 +5,7 @@
     {
       "type": "Text",
       "text": "Two by Two Grid",
-      "tailwindClasses": "text-xl font-mono text-gray-900"
+      "tailwindClasses": "text-xl primary-font text-gray-900"
     },
     {
       "type": "Container",

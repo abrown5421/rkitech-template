@@ -5,7 +5,7 @@
     {
       "type": "Text",
       "text": "Privacy Policy",
-      "tailwindClasses": "text-3xl font-mono text-{{black}}"
+      "tailwindClasses": "text-3xl primary-font text-{{black}}"
     },
     {
       "type": "Text",
@@ -20,7 +20,7 @@
     {
       "type": "Text",
       "text": "1. Information We Collect",
-      "tailwindClasses": "font-mono mt-4 mb-2"
+      "tailwindClasses": "primary-font mt-4 mb-2"
     },
     {
       "type": "List",
@@ -52,7 +52,7 @@
     {
       "type": "Text",
       "text": "2. How We Use Your Information",
-      "tailwindClasses": "font-mono mt-4 mb-2"
+      "tailwindClasses": "primary-font mt-4 mb-2"
     },
     {
       "type": "List",
@@ -94,7 +94,7 @@
     {
       "type": "Text",
       "text": "3. Cookies and Tracking",
-      "tailwindClasses": "font-mono mt-4 mb-2"
+      "tailwindClasses": "primary-font mt-4 mb-2"
     },
     {
       "type": "List",
@@ -126,7 +126,7 @@
     {
       "type": "Text",
       "text": "4. Data Sharing and Disclosure",
-      "tailwindClasses": "font-mono mt-4 mb-2"
+      "tailwindClasses": "primary-font mt-4 mb-2"
     },
     {
       "type": "List",
@@ -158,7 +158,7 @@
     {
       "type": "Text",
       "text": "5. Data Security",
-      "tailwindClasses": "font-mono mt-4 mb-2"
+      "tailwindClasses": "primary-font mt-4 mb-2"
     },
     {
       "type": "Text",
@@ -168,7 +168,7 @@
     {
       "type": "Text",
       "text": "6. Your Choices",
-      "tailwindClasses": "font-mono mt-4 mb-2"
+      "tailwindClasses": "primary-font mt-4 mb-2"
     },
     {
       "type": "List",
@@ -195,7 +195,7 @@
     {
       "type": "Text",
       "text": "7. Children’s Privacy",
-      "tailwindClasses": "font-mono mt-4 mb-2"
+      "tailwindClasses": "primary-font mt-4 mb-2"
     },
     {
       "type": "Text",
@@ -205,7 +205,7 @@
     {
       "type": "Text",
       "text": "8. Changes to This Privacy Policy",
-      "tailwindClasses": "font-mono mt-4 mb-2"
+      "tailwindClasses": "primary-font mt-4 mb-2"
     },
     {
       "type": "Text",
@@ -215,7 +215,7 @@
     {
       "type": "Text",
       "text": "9. Contact Us",
-      "tailwindClasses": "font-mono mt-4 mb-2"
+      "tailwindClasses": "primary-font mt-4 mb-2"
     },
     {
       "type": "Text",

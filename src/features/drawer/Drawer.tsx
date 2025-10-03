@@ -55,7 +55,7 @@ const Drawer: React.FC = () => {
                     <Container tailwindClasses="flex-row p-2 justify-between">
                         <Text 
                             text={drawer.title || ''} 
-                            tailwindClasses={`text-xl font-mono text-${useGetTheme('black')}`}
+                            tailwindClasses={`text-xl primary-font text-${useGetTheme('black')}`}
                         />
                         <Button tailwindClasses="absolute top-2 right-2 cursor-pointer" onClick={handleClose}>
                             <Icon iconName="X" />
