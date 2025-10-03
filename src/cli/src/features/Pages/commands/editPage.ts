@@ -7,6 +7,7 @@ import { COLORS, INTENSITIES, THEME_COLORS } from '../../../shared/constants/tai
 import { ENTRANCE_ANIMATIONS, EXIT_ANIMATIONS } from '../../../shared/constants/animationConstants.js';
 import { TEMPLATES } from '../../../shared/constants/templateConstants.js';
 import { formatFile } from '../../../shared/utils/formatFile.js';
+import { getJsonTemplate } from '../../../shared/utils/getJsonTemplate.js';
 import { EntranceAnimation, ExitAnimation, TailwindColor, TailwindIntensity, ThemeOptions } from 'rkitech-components';
 
 function toCamelCase(str: string): string {
@@ -73,6 +74,7 @@ export async function editPage(options?: EditPageOptions): Promise<string | unde
 
   const originalPageName = selectedPage.pageName;
   const originalFolderName = toCamelCase(originalPageName);
+  const originalRenderMethod = selectedPage.pageRenderMethod;
 
   let newPageName: string;
   let newPagePath: string;
@@ -87,6 +89,7 @@ export async function editPage(options?: EditPageOptions): Promise<string | unde
       default: selectedPage.pageName,
       validate: (input: string) => {
         if (!input) return 'Page name is required';
+        if (!/^[A-Z]/.test(input)) return 'Page name must start with a capital letter';
         if (input !== selectedPage.pageName && pages.some((p) => p.pageName === input)) {
           return 'Page name already exists';
         }
@@ -96,10 +99,11 @@ export async function editPage(options?: EditPageOptions): Promise<string | unde
 
     newPagePath = skipPrompts && optPath ? optPath : await input({
       message: 'Enter the page path (without /, e.g., about):',
-      default: selectedPage.pagePath.substring(1), 
+      default: selectedPage.pagePath.substring(1),
       validate: (input: string) => {
         if (!input) return 'Path is required';
         if (input.includes('/')) return 'Do not include "/" — it will be added automatically';
+        if (input !== input.toLowerCase()) return 'Path must be all lowercase';
         const formatted = `/${input}`;
         if (formatted !== selectedPage.pagePath && pages.some((p) => p.pagePath === formatted)) {
           return 'Page path already exists';
@@ -118,10 +122,29 @@ export async function editPage(options?: EditPageOptions): Promise<string | unde
     default: selectedPage.pageRenderMethod,
   });
 
+  const isConvertingToDynamic = originalRenderMethod === 'static' && newPageRenderMethod === 'dynamic';
+  
+  if (isConvertingToDynamic && !skipPrompts) {
+    const confirmConversion = await confirm({
+      message: '⚠️ Converting from static to dynamic will DELETE the existing static page component. Any custom changes made to the static page will be LOST. Continue?',
+      default: false,
+    });
+
+    if (!confirmConversion) {
+      console.log('❌ Page edit cancelled.');
+      return undefined;
+    }
+  }
+
   let chosenTemplate: string | null = null;
-  if (selectedPage.pageRenderMethod === 'static' && !skipPrompts) {
+  if (newPageRenderMethod === 'static' && !skipPrompts) {
     chosenTemplate = await select({
       message: 'Select a template:',
+      choices: Object.keys(TEMPLATES).map((tpl) => ({ name: tpl, value: tpl })),
+    });
+  } else if (newPageRenderMethod === 'dynamic' && !skipPrompts) {
+    chosenTemplate = await select({
+      message: 'Select a template for dynamic rendering:',
       choices: Object.keys(TEMPLATES).map((tpl) => ({ name: tpl, value: tpl })),
     });
   } else if (skipPrompts && optTemplate) {
@@ -201,6 +224,12 @@ export async function editPage(options?: EditPageOptions): Promise<string | unde
     pageExitAnimation: newPageExitAnimation as ExitAnimation,
   };
 
+  if (newPageRenderMethod === 'dynamic' && chosenTemplate) {
+    updatedPageData.pageContent = getJsonTemplate(chosenTemplate);
+  } else if (newPageRenderMethod === 'static') {
+    delete updatedPageData.pageContent;
+  }
+
   const pageIndex = pages.findIndex((p) => p.pageID === pageToEdit);
   pages[pageIndex] = updatedPageData;
 
@@ -215,7 +244,47 @@ export async function editPage(options?: EditPageOptions): Promise<string | unde
     return undefined;
   }
 
-  if (originalPageName !== newPageName && selectedPage.pageRenderMethod === 'static') {
+  if (isConvertingToDynamic) {
+    console.log('🔄 Converting static page to dynamic...');
+    const oldFeaturesDir = path.resolve(process.cwd(), 'src/features', originalFolderName);
+    
+    try {
+      await fs.access(oldFeaturesDir);
+      await fs.rm(oldFeaturesDir, { recursive: true, force: true });
+      console.log(`✅ Deleted static feature directory: ${originalFolderName}`);
+    } catch {
+      console.log(`ℹ️ Feature directory ${oldFeaturesDir} not found`);
+    }
+
+    const pageShellPath = path.resolve(process.cwd(), 'src/features/PageShell/PageShell.tsx');
+    try {
+      let pageShellContent = await fs.readFile(pageShellPath, 'utf-8');
+
+      const importPattern = new RegExp(
+        `import ${originalPageName} from '../${originalFolderName}/${originalPageName}';\\n?`,
+        'g'
+      );
+      pageShellContent = pageShellContent.replace(importPattern, '');
+
+      const renderPattern = new RegExp(
+        `\\s*\\{activePage\\.activePageName === '${originalPageName}' && <${originalPageName} />\\}\\s*`,
+        'g'
+      );
+      pageShellContent = pageShellContent.replace(renderPattern, '');
+
+      await fs.writeFile(pageShellPath, pageShellContent, 'utf-8');
+      console.log(`✅ Removed ${originalPageName} from PageShell`);
+    } catch (error) {
+      console.error('❌ Error updating PageShell:', error);
+    } finally {
+      formatFile(pageShellPath);
+    }
+
+    console.log(`✅ Successfully converted "${newPageName}" from static to dynamic`);
+    return updatedPageData.pageID;
+  }
+
+  if (originalPageName !== newPageName && newPageRenderMethod === 'static') {
     const oldFeaturesDir = path.resolve(process.cwd(), 'src/features', originalFolderName);
     const newFolderName = toCamelCase(newPageName);
     const newFeaturesDir = path.resolve(process.cwd(), 'src/features', newFolderName);
@@ -289,7 +358,7 @@ export async function editPage(options?: EditPageOptions): Promise<string | unde
       const pageShellPath = path.resolve(process.cwd(), 'src/features/PageShell/PageShell.tsx');
       formatFile(pageShellPath);
     }
-  } else if (newPageRenderMethod === 'static' && chosenTemplate && selectedPage.pageRenderMethod !== 'static') {
+  } else if (originalRenderMethod === 'dynamic' && newPageRenderMethod === 'static' && chosenTemplate) {
     const newFolderName = toCamelCase(newPageName);
     const newFeaturesDir = path.resolve(process.cwd(), 'src/features', newFolderName);
 

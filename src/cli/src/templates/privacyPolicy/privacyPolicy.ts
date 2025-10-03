@@ -14,7 +14,7 @@ const ${componentName}: React.FC<${componentName}Props> = () => {
 
       <Text
         text="Privacy Policy"
-        tailwindClasses=${`\`text-3xl font-mono text-\${themeBlack}\``}
+        tailwindClasses={\`text-3xl font-mono text-\${themeBlack}\`}
       />
       <Text
         text="Effective Date: [Insert Date]"

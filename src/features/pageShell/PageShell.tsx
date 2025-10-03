@@ -11,6 +11,7 @@ import type { PageData } from '../../cli/src/features/Pages/types/pageTypes';
 import Footer from '../footer/Footer';
 import { getThemeColorKey } from '../../utils/getThemeColorKey';
 import Renderer from '../renderer/Renderer';
+import type { ParentNode } from '../renderer/rendererTypes';
 
 const PageShell: React.FC<PageData> = ({
   pageName,
@@ -55,7 +56,7 @@ const PageShell: React.FC<PageData> = ({
         </Container>
       ) : (
         <Container>
-          <Renderer tree={pageContent} />
+          <Renderer tree={pageContent as ParentNode} />
         </Container>
       )}
       <Footer />
