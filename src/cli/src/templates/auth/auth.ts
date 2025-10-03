@@ -134,7 +134,7 @@ const ${componentName}: React.FC<${componentName}Props> = () => {
             <Container tailwindClasses=${`\`flex-col justify-center items-center w-full md:w-1/3 rounded-xl p-4 bg-\${themeBlack}\``}>
                 <Text 
                     text={isSignup ? 'Sign Up' : 'Login'} 
-                    tailwindClasses=${`\`text-3xl font-mono mb-4 text-\${themeBlack}\``} 
+                    tailwindClasses=${`\`text-3xl primary-font mb-4 text-\${themeBlack}\``} 
                 />
 
                 {isSignup && (

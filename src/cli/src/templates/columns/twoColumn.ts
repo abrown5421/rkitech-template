@@ -13,7 +13,7 @@ const ${componentName}: React.FC<${componentName}Props> = () => {
         <Container 
             tailwindClasses='flex-col w-full min-h-[calc(100vh-50px)] p-5'
         >    
-            <Text text="${componentName}" tailwindClasses="text-xl font-mono text-gray-900"/>
+            <Text text="${componentName}" tailwindClasses="text-xl primary-font text-gray-900"/>
             <Container 
                 tailwindClasses='flex-row gap-4 justify-between'
             >
