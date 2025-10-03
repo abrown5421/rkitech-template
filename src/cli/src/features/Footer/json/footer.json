@@ -32,19 +32,6 @@
   ],
   "footerAuxilaryMenuItems": [
     {
-      "itemName": "Privacy Policy",
-      "itemType": "page",
-      "itemID": "1a5f02ae-a602-4408-8e0b-8b361867078c",
-      "itemColor": "gray",
-      "itemIntensity": 500,
-      "itemHoverColor": "primary",
-      "itemHoverIntensity": false,
-      "itemActiveColor": "primary",
-      "itemActiveIntensity": false,
-      "itemEntranceAnimation": "animate__fadeIn",
-      "itemExitAnimation": "animate__fadeOut"
-    },
-    {
       "itemName": "Documentation",
       "itemType": "link",
       "itemID": "c2226bd3-5b26-4b83-ba99-b5cc7c1200f6",

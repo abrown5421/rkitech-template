@@ -52,6 +52,7 @@ export async function newPage(options?: NewPageOptions): Promise<string | undefi
     validate: (input: string) => {
       if (!input) return 'Page name is required';
       if (pages.some((p) => p.pageName === input)) return 'Page name already exists';
+      if (!/^[A-Z]/.test(input)) return 'Page name must start with a capital letter';
       return true;
     },
   });
@@ -62,6 +63,7 @@ export async function newPage(options?: NewPageOptions): Promise<string | undefi
       if (!input) return 'Path is required';
       if (input.includes('/')) return 'Do not include "/" — it will be added automatically';
       if (pages.some((p) => p.pagePath === `/${input}`)) return 'Page path already exists';
+      if (input !== input.toLowerCase()) return 'Path must be all lowercase';
       return true;
     },
   });
