@@ -7,11 +7,11 @@ import inquirer from "inquirer";
 import { pageManager } from "./features/Pages/pageManager.js";
 import { navbarManager } from "./features/Navbar/navbarManager.js";
 import { footerManager } from "./features/Footer/footerManager.js";
-import { editTheme } from "./features/Theme/commands/editTheme.js";
 import { BlogConfig } from "./features/Blog/types/blogTypes.js";
 import { blogManager } from "./features/Blog/blogManager.js";
 import { initBlog } from "./features/Blog/commands/initBlog.js";
 import { themeManager } from "./features/Theme/themeManager.js";
+import { assetManager } from "./features/Assets/assetManager.js";
 
 const program = new Command();
 
@@ -55,11 +55,14 @@ async function mainMenu() {
         type: "list",
         name: "mainChoice",
         message: "What would you like to do?",
-        choices: ["Manage Theme", "Manage Pages", "Manage Navbar", "Manage Footer", (blog.blogActive ? "Manage Blog" : "Create Blog"), "Exit"]
+        choices: ["Manage Assets", "Manage Theme", "Manage Pages", "Manage Navbar", "Manage Footer", (blog.blogActive ? "Manage Blog" : "Create Blog"), "Exit"]
       }
     ]);
 
     switch (mainChoice) {
+      case "Manage Assets":
+        await assetManager();
+        break;
       case "Manage Theme":
         await themeManager();
         break;

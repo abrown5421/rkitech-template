@@ -1,33 +1,38 @@
 {
-    "fonts": [
-        {
-            "fontName": "Primary",
-            "fontSrc": "assets/fonts/primary.ttf",
-            "fontUUID": "a2c5d1ae-aebb-4d52-bfdc-55c688b8c481"
-        },
-        {
-            "fontName": "Secondary",
-            "fontSrc": "assets/fonts/secondary.png",
-            "fontUUID": "a66cb90b-33d9-4db8-8129-08d101db314a"
-        }
-    ],
-    "images": [
-        {
-            "imageName": "Logo",
-            "imageSrc": "assets/images/logo.png",
-            "imageUUID": "6e86fae7-659f-46b3-936c-2e3d44a2d002"
-        },
-        {
-            "imageName": "Favicon",
-            "imageSrc": "assets/images/logo-inv.png",
-            "imageUUID": "9976e4aa-0efe-4df0-a6d2-7be395fe27ff"
-        },
-        {
-            "imageName": "404",
-            "imageSrc": "assets/images/404.png",
-            "imageUUID": "15d44b1c-9cdb-4d8a-ac75-ed4b4bca7458"
-        }
-    ],
-    "pdfs": [],
-    "videos": []
+  "fonts": [
+    {
+      "fontName": "Primary",
+      "fontSrc": "assets/fonts/primary.ttf",
+      "fontUUID": "a2c5d1ae-aebb-4d52-bfdc-55c688b8c481",
+      "fontDeletable": false
+    },
+    {
+      "fontName": "Secondary",
+      "fontSrc": "assets/fonts/secondary.png",
+      "fontUUID": "a66cb90b-33d9-4db8-8129-08d101db314a",
+      "fontDeletable": false
+    }
+  ],
+  "images": [
+    {
+      "imageName": "Logo",
+      "imageSrc": "assets/images/logo.png",
+      "imageUUID": "6e86fae7-659f-46b3-936c-2e3d44a2d002",
+      "imageDeletable": false
+    },
+    {
+      "imageName": "Favicon",
+      "imageSrc": "assets/images/logo-inv.png",
+      "imageUUID": "9976e4aa-0efe-4df0-a6d2-7be395fe27ff",
+      "imageDeletable": false
+    },
+    {
+      "imageName": "404",
+      "imageSrc": "assets/images/404.png",
+      "imageUUID": "15d44b1c-9cdb-4d8a-ac75-ed4b4bca7458",
+      "imageDeletable": false
+    }
+  ],
+  "pdfs": [],
+  "videos": []
 }

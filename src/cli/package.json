@@ -24,6 +24,8 @@
   "dependencies": {
     "commander": "^14.0.1",
     "figlet": "^1.9.3",
-    "inquirer": "^12.9.6"
+    "inquirer": "^12.9.6",
+    "inquirer-file-selector": "^0.1.0",
+    "open-file-explorer": "^1.0.2"
   }
 }
