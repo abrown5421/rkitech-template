@@ -10,8 +10,8 @@ import { footerManager } from "./features/Footer/footerManager.js";
 import { BlogConfig } from "./features/Blog/types/blogTypes.js";
 import { blogManager } from "./features/Blog/blogManager.js";
 import { initBlog } from "./features/Blog/commands/initBlog.js";
-import { themeManager } from "./features/Theme/themeManager.js";
 import { assetManager } from "./features/Assets/assetManager.js";
+import { generalSettingsManager } from "./features/GeneralSettings/generalSettingsManager.js";
 
 const program = new Command();
 
@@ -55,16 +55,16 @@ async function mainMenu() {
         type: "list",
         name: "mainChoice",
         message: "What would you like to do?",
-        choices: ["Manage Assets", "Manage Theme", "Manage Pages", "Manage Navbar", "Manage Footer", (blog.blogActive ? "Manage Blog" : "Create Blog"), "Exit"]
+        choices: ["General Settings", "Manage Assets", "Manage Pages", "Manage Navbar", "Manage Footer", (blog.blogActive ? "Manage Blog" : "Create Blog"), "Exit"]
       }
     ]);
 
     switch (mainChoice) {
+      case "General Settings":
+        await generalSettingsManager();
+        break;
       case "Manage Assets":
         await assetManager();
-        break;
-      case "Manage Theme":
-        await themeManager();
         break;
       case "Manage Pages":
         await pageManager();
