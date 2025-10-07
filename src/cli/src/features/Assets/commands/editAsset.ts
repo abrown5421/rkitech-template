@@ -48,14 +48,6 @@ function getAssetKey(assetType: SingleAssetType): keyof AssetData {
   return keyMap[assetType];
 }
 
-function getAssetType(assets: AssetData, uuid: string): SingleAssetType | null {
-  if (assets.fonts.some(a => a.fontUUID === uuid)) return 'font';
-  if (assets.images.some(a => a.imageUUID === uuid)) return 'image';
-  if (assets.pdfs.some(a => a.pdfUUID === uuid)) return 'pdf';
-  if (assets.videos.some(a => a.videoUUID === uuid)) return 'video';
-  return null;
-}
-
 export async function editAsset(options?: EditAssetOptions): Promise<string | undefined> {
   const {
     assetUUID: optAssetUUID,

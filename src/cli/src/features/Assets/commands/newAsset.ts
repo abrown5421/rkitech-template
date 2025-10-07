@@ -2,13 +2,8 @@ import { input, select } from '@inquirer/prompts';
 import fs from 'fs/promises';
 import path from 'path';
 import prettier from 'prettier';
-import { open } from 'node:fs/promises';
-import { exec } from 'child_process';
-import { promisify } from 'util';
 import { NewAssetOptions, AssetData, SingleAssetType, FontAsset, ImageAsset, PdfAsset, VideoAsset } from '../types/assetTypes.js';
 import { createGUID } from '../../../shared/utils/createGUID.js';
-
-const execAsync = promisify(exec);
 
 const ASSET_FOLDERS: Record<SingleAssetType, string> = {
   font: 'fonts',

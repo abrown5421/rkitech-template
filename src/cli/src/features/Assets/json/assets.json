@@ -2,7 +2,7 @@
   "fonts": [
     {
       "fontName": "Primary",
-      "fontSrc": "assets/fonts/primary.ttf",
+      "fontSrc": "assets/fonts/Primary.ttf",
       "fontUUID": "a2c5d1ae-aebb-4d52-bfdc-55c688b8c481",
       "fontDeletable": false
     },
@@ -16,7 +16,7 @@
   "images": [
     {
       "imageName": "Logo",
-      "imageSrc": "assets/images/logo.png",
+      "imageSrc": "assets/images/Logo.png",
       "imageUUID": "6e86fae7-659f-46b3-936c-2e3d44a2d002",
       "imageDeletable": false
     },
