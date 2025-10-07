@@ -21,10 +21,10 @@ export async function authManager() {
   ]);
 
   switch (authAction) {
-    case "Manage Blog":
+    case "Manage Auth":
       await initAuth('manage');
       break;
-    case "Deactivate Blog":
+    case "Deactivate Auth":
       await deactivateAuth();
       break;
     case "Manage Users":

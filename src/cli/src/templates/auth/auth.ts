@@ -128,13 +128,11 @@ const ${componentName}: React.FC<${componentName}Props> = () => {
     };
 
     return (
-
         <Container tailwindClasses='flex-row w-full min-h-[calc(100vh-50px)] p-5 justify-center items-center'>
-
-            <Container tailwindClasses=${`\`flex-col justify-center items-center w-full md:w-1/3 rounded-xl p-4 bg-\${themeBlack}\``}>
+            <Container tailwindClasses={\`flex-col justify-center items-center w-full md:w-1/3 rounded-xl p-4 bg-\${themeWhite}\`}>
                 <Text 
                     text={isSignup ? 'Sign Up' : 'Login'} 
-                    tailwindClasses=${`\`text-3xl primary-font mb-4 text-\${themeBlack}\``} 
+                    tailwindClasses={\`text-3xl primary-font mb-4 text-\${themeBlack}\`} 
                 />
 
                 {isSignup && (
@@ -151,7 +149,7 @@ const ${componentName}: React.FC<${componentName}Props> = () => {
 
                 <Button
                     onClick={handleSubmit}
-                    tailwindClasses=${`\`mb-4 text-\${themeWhite} border-2 py-1 px-4 rounded-xl cursor-pointer hover:bg-transparent hover:text-\${themePrimary} bg-\${themePrimary} border-\${themePrimary}\``}
+                    tailwindClasses={\`mb-4 text-\${themeWhite} border-2 py-1 px-4 rounded-xl cursor-pointer hover:bg-transparent hover:text-\${themePrimary} bg-\${themePrimary} border-\${themePrimary}\`}
                 >
                     {isLoading ? (
                         <GlobalLoader target="auth" type='Dots' variant={5} color='gray' intensity={50} size={6} />
@@ -160,7 +158,7 @@ const ${componentName}: React.FC<${componentName}Props> = () => {
                     )}
                 </Button>
 
-                <Button onClick={toggleMode} tailwindClasses=${`\`text-sm underline text-\${themeBlack}\``}>
+                <Button onClick={toggleMode} tailwindClasses={\`text-sm underline text-\${themeBlack}\`}>
                     {isSignup ? "Already have an account? Login." : "Don't have an account? Sign Up"}
                 </Button>
             </Container>
@@ -169,4 +167,4 @@ const ${componentName}: React.FC<${componentName}Props> = () => {
 };
 
 export default ${componentName};
-`
+`;
