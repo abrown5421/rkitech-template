@@ -29,7 +29,7 @@ export async function editPage(options?: EditPageOptions): Promise<string | unde
     skipPrompts
   } = options || {};
 
-  const excludeFromRenaming = ['Home', 'Blog'];
+  const excludeFromRenaming = ['Home', 'Blog', 'Auth'];
 
   const pagesJsonPath = path.resolve(
     process.cwd(),

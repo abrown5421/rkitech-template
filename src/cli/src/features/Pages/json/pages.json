@@ -30,7 +30,7 @@
     "pageIntensity": false,
     "pageEntranceAnimation": "animate__fadeIn",
     "pageExitAnimation": "animate__fadeOut",
-    "pageID": "58025af6-1498-4205-99f1-1def9ae9f773"
+    "pageID": "461862e2-72a5-42f8-907c-3677f4217907"
   },
   {
     "pageName": "BlogPost",
@@ -41,6 +41,28 @@
     "pageIntensity": false,
     "pageEntranceAnimation": "animate__fadeIn",
     "pageExitAnimation": "animate__fadeOut",
-    "pageID": "fcea7282-a8d4-4e56-87a8-020e19130479"
+    "pageID": "cadcb85d-acf0-400f-b5e0-8028e93d3a05"
+  },
+  {
+    "pageName": "PrivacyPolicy",
+    "pagePath": "/privacy-policy",
+    "pageRenderMethod": "static",
+    "pageActive": true,
+    "pageColor": "white",
+    "pageIntensity": false,
+    "pageEntranceAnimation": "animate__fadeIn",
+    "pageExitAnimation": "animate__fadeOut",
+    "pageID": "7f2a04a6-b8c2-4cfd-b6e4-cf325b03e0e6"
+  },
+  {
+    "pageName": "Login",
+    "pagePath": "/login",
+    "pageRenderMethod": "static",
+    "pageActive": true,
+    "pageColor": "black",
+    "pageIntensity": false,
+    "pageEntranceAnimation": "animate__slideInUp",
+    "pageExitAnimation": "animate__slideOutDown",
+    "pageID": "80d9da37-fd49-4cbb-9310-a7fc91000c7c"
   }
 ]

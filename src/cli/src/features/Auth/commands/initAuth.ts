@@ -1,11 +1,7 @@
 import path from "path";
 import fs from 'fs/promises';
-import { select, confirm } from '@inquirer/prompts';
 import { AuthConfig } from "../types/authTypes.js";
 import { newPage } from "../../Pages/commands/newPage.js";
-import { PageData } from "../../Pages/types/pageTypes.js";
-import { TailwindColor, TailwindIntensity, ThemeOptions } from "rkitech-components";
-import { COLORS, INTENSITIES, THEME_COLORS } from "../../../shared/constants/tailwindConstants.js";
 import { newMenuItem } from "../../Navbar/commands/newMenuItem.js";
 
 export async function initAuth(mode: "manage" | "new") {
@@ -23,8 +19,6 @@ export async function initAuth(mode: "manage" | "new") {
     }
     
     let auth: AuthConfig;
-    let pageColor: TailwindColor | ThemeOptions;
-    let pageIntensity: TailwindIntensity | false;
 
     try {
         const authRaw = await fs.readFile(authJsonPath, 'utf-8');
@@ -54,15 +48,25 @@ export async function initAuth(mode: "manage" | "new") {
             itemName: 'Login',
             itemType: 'page',
             itemID: authPageID || '', 
-            itemColor: 'black',
+            itemStyle: 'button',
+            itemOrder: 100,
+            itemColor: 'white',
             itemIntensity: false,
             itemHoverColor: 'primary',
             itemHoverIntensity: false,
             itemActiveColor: 'primary',
             itemActiveIntensity: false,
+            itemBackgroundColor: 'primary',
+            itemBackgroundIntensity: false,
+            itemBackgroundHoverColor: 'white',
+            itemBackgroundHoverIntensity: false,
+            itemBorderColor: 'primary',
+            itemBorderIntensity: false,
+            itemBorderHoverColor: 'primary',
+            itemBorderHoverIntensity: false,
             itemEntranceAnimation: 'animate__fadeIn',
             itemExitAnimation: 'animate__fadeOut',
-            syncWithFooter: true,
+            syncWithFooter: false,
             skipPrompts: true
         });
 
