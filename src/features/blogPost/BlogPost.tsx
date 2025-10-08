@@ -4,7 +4,6 @@ import { useAppSelector } from "../../app/hooks";
 import { Container, Text, PlaceholderImage } from "rkitech-components";
 import { useGetTheme } from "../../hooks/useGetTheme";
 import { formatDate } from "../../utils/formatDate";
-import Renderer from "../renderer/Renderer";
 
 const BlogPost: React.FC = () => {
   const { postID } = useParams<{ postID: string }>();
@@ -40,7 +39,7 @@ const BlogPost: React.FC = () => {
           />
         </Container>
       </div>
-      <Container tailwindClasses='flex-col w-full md:w-4/5 mx-auto pt-4 pr-4 pl-4 pb-8'>
+      <Container tailwindClasses="flex-col w-full md:w-4/5 mx-auto pt-4 pr-4 pl-4 pb-8">
         <Text text={post.postTitle} tailwindClasses="text-3xl my-4" />
         <Container tailwindClasses="flex-row items-center justify-between">
           <Text

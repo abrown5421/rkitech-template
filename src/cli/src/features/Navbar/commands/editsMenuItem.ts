@@ -17,6 +17,7 @@ export async function editMenuItem(options?: EditMenuItemOptions): Promise<strin
     itemType: optItemType,
     pageID: optPageID,
     itemLink: optItemLink,
+    itemOrder: optItemOrder,
     itemColor: optItemColor,
     itemIntensity: optItemIntensity,
     itemHoverColor: optItemHoverColor,
@@ -25,6 +26,14 @@ export async function editMenuItem(options?: EditMenuItemOptions): Promise<strin
     itemActiveIntensity: optItemActiveIntensity,
     itemEntranceAnimation: optItemEntranceAnimation,
     itemExitAnimation: optItemExitAnimation,
+    itemBackgroundColor: optItemBackgroundColor,
+    itemBackgroundIntensity: optItemBackgroundIntensity,
+    itemBackgroundHoverColor: optItemBackgroundHoverColor,
+    itemBackgroundHoverIntensity: optItemBackgroundHoverIntensity,
+    itemBorderColor: optItemBorderColor,
+    itemBorderIntensity: optItemBorderIntensity,
+    itemBorderHoverColor: optItemBorderHoverColor,
+    itemBorderHoverIntensity: optItemBorderHoverIntensity,
     skipPrompts
   } = options || {};
 
@@ -99,6 +108,14 @@ export async function editMenuItem(options?: EditMenuItemOptions): Promise<strin
   let newItemID = selectedItem.itemID;
   let newItemLink = selectedItem.itemLink;
 
+  const itemStyle = skipPrompts && options?.itemStyle ? options.itemStyle : await select({
+    message: 'Select menu item style:',
+    choices: [
+      { name: 'string', value: 'string' },
+      { name: 'button', value: 'button' },
+    ],
+  }) as 'string' | 'button';
+
   if (newItemType === 'page') {
     const activePages = pages.filter((page) => page.pageActive);
     if (activePages.length === 0) {
@@ -148,7 +165,20 @@ export async function editMenuItem(options?: EditMenuItemOptions): Promise<strin
     }
   }
 
-  let newItemColor, newItemIntensity, newItemHoverColor, newItemHoverIntensity, newItemActiveColor, newItemActiveIntensity;
+  const newItemOrder = skipPrompts && optItemOrder !== undefined ? optItemOrder : await input({
+    message: 'Enter the menu item order (positive number):',
+    default: String(selectedItem.itemOrder || 1),
+    validate: (input: string) => {
+      const num = parseInt(input, 10);
+      if (isNaN(num) || num < 1) {
+        return 'Please enter a valid positive number';
+      }
+      return true;
+    },
+    transformer: (input: string) => input,
+  }).then((val) => parseInt(val, 10));
+
+  let newItemColor, newItemIntensity, newItemHoverColor, newItemHoverIntensity, newItemActiveColor, newItemActiveIntensity, newItemBackgroundColor, newItemBackgroundIntensity, newItemBackgroundHoverColor, newItemBackgroundHoverIntensity, newItemBorderColor, newItemBorderIntensity, newItemBorderHoverColor, newItemBorderHoverIntensity;
 
   if (skipPrompts) {
     newItemColor = optItemColor!;
@@ -157,6 +187,14 @@ export async function editMenuItem(options?: EditMenuItemOptions): Promise<strin
     newItemHoverIntensity = optItemHoverIntensity!;
     newItemActiveColor = optItemActiveColor!;
     newItemActiveIntensity = optItemActiveIntensity!;
+    newItemBackgroundColor = optItemBackgroundColor!,
+    newItemBackgroundIntensity = optItemBackgroundIntensity!,
+    newItemBackgroundHoverColor = optItemBackgroundHoverColor!,
+    newItemBackgroundHoverIntensity = optItemBackgroundHoverIntensity!;
+    newItemBorderColor = optItemBorderColor;
+    newItemBorderIntensity = optItemBorderIntensity;
+    newItemBorderHoverColor = optItemBorderHoverColor;
+    newItemBorderHoverIntensity = optItemBorderHoverIntensity;
   } else {
     const itemColors = await selectColorAndIntensity(
       'item', 
@@ -181,6 +219,42 @@ export async function editMenuItem(options?: EditMenuItemOptions): Promise<strin
     );
     newItemActiveColor = itemActiveColors.color;
     newItemActiveIntensity = itemActiveColors.intensity;
+
+    let newItemBackgroundColor, newItemBackgroundIntensity, newItemBackgroundHoverColor, newItemBackgroundHoverIntensity;
+
+    if (itemStyle === 'button') {
+      const bgColors = await selectColorAndIntensity(
+        'item background',
+        selectedItem.itemBackgroundColor,
+        selectedItem.itemBackgroundIntensity
+      );
+      newItemBackgroundColor = bgColors.color;
+      newItemBackgroundIntensity = bgColors.intensity;
+
+      const bgHoverColors = await selectColorAndIntensity(
+        'item background hover',
+        selectedItem.itemBackgroundHoverColor,
+        selectedItem.itemBackgroundHoverIntensity
+      );
+      newItemBackgroundHoverColor = bgHoverColors.color;
+      newItemBackgroundHoverIntensity = bgHoverColors.intensity;
+      
+      const borderColors = await selectColorAndIntensity(
+        'item background',
+        selectedItem.itemBorderColor,
+        selectedItem.itemBorderIntensity
+      );
+      newItemBackgroundColor = borderColors.color;
+      newItemBackgroundIntensity = borderColors.intensity;
+
+      const borderHoverColors = await selectColorAndIntensity(
+        'item background hover',
+        selectedItem.itemBorderHoverColor,
+        selectedItem.itemBorderHoverIntensity
+      );
+      newItemBackgroundHoverColor = borderHoverColors.color;
+      newItemBackgroundHoverIntensity = borderHoverColors.intensity;
+    }
   }
 
   const newItemEntranceAnimation = skipPrompts && optItemEntranceAnimation ? optItemEntranceAnimation : await select({
@@ -198,7 +272,9 @@ export async function editMenuItem(options?: EditMenuItemOptions): Promise<strin
   const updatedMenuItem: NavItem = {
     itemName: newItemName,
     itemType: newItemType as 'page' | 'link',
+    itemStyle: itemStyle as 'string' | 'button',
     itemID: newItemID,
+    itemOrder: newItemOrder,
     itemColor: newItemColor,
     itemIntensity: newItemIntensity,
     itemHoverColor: newItemHoverColor,
@@ -207,6 +283,16 @@ export async function editMenuItem(options?: EditMenuItemOptions): Promise<strin
     itemActiveIntensity: newItemActiveIntensity,
     itemEntranceAnimation: newItemEntranceAnimation as EntranceAnimation,
     itemExitAnimation: newItemExitAnimation as ExitAnimation,
+    ...(itemStyle === 'button' && {
+      itemBackgroundColor: newItemBackgroundColor,
+      itemBackgroundIntensity: newItemBackgroundIntensity,
+      itemBackgroundHoverColor: newItemBackgroundHoverColor,
+      itemBackgroundHoverIntensity: newItemBackgroundHoverIntensity,
+      itemBorderColor: newItemBorderColor,
+      itemBorderIntensity: newItemBorderIntensity,
+      itemBorderHoverColor: newItemBorderHoverColor,
+      itemBorderHoverIntensity: newItemBorderHoverIntensity,
+    }),
     ...(newItemType === 'link' && { itemLink: newItemLink }),
   };
 

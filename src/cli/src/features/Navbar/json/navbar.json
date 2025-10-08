@@ -12,6 +12,7 @@
       "itemName": "Home",
       "itemType": "page",
       "itemID": "534db1ae-8e49-45af-a505-2ef5c02c478b",
+      "itemOrder": 1,
       "itemColor": "black",
       "itemIntensity": false,
       "itemHoverColor": "primary",
@@ -24,7 +25,8 @@
     {
       "itemName": "Blog",
       "itemType": "page",
-      "itemID": "58025af6-1498-4205-99f1-1def9ae9f773",
+      "itemID": "461862e2-72a5-42f8-907c-3677f4217907",
+      "itemOrder": 4,
       "itemColor": "black",
       "itemIntensity": false,
       "itemHoverColor": "primary",
@@ -33,6 +35,29 @@
       "itemActiveIntensity": false,
       "itemEntranceAnimation": "animate__fadeIn",
       "itemExitAnimation": "animate__fadeOut"
+    },
+    {
+      "itemName": "Login",
+      "itemType": "page",
+      "itemStyle": "button",
+      "itemID": "80d9da37-fd49-4cbb-9310-a7fc91000c7c",
+      "itemOrder": 100,
+      "itemColor": "white",
+      "itemIntensity": false,
+      "itemHoverColor": "primary",
+      "itemHoverIntensity": false,
+      "itemActiveColor": "primary",
+      "itemActiveIntensity": false,
+      "itemEntranceAnimation": "animate__fadeIn",
+      "itemExitAnimation": "animate__fadeOut",
+      "itemBackgroundColor": "primary",
+      "itemBackgroundIntensity": false,
+      "itemBackgroundHoverColor": "white",
+      "itemBackgroundHoverIntensity": false,
+      "itemBorderColor": "primary",
+      "itemBorderIntensity": false,
+      "itemBorderHoverColor": "primary",
+      "itemBorderHoverIntensity": false
     }
   ]
 }

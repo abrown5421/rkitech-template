@@ -16,12 +16,21 @@ export async function newMenuItem(options?: NewMenuItemOptions) {
     itemType: optItemType,
     itemID: optItemID,
     itemLink: optItemLink,
+    itemOrder: optItemOrder,
     itemColor: optItemColor,
     itemIntensity: optItemIntensity,
     itemHoverColor: optItemHoverColor,
     itemHoverIntensity: optItemHoverIntensity,
     itemActiveColor: optItemActiveColor,
     itemActiveIntensity: optItemActiveIntensity,
+    itemBackgroundColor: optItemBackgroundColor,
+    itemBackgroundIntensity: optItemBackgroundIntensity,
+    itemBackgroundHoverColor: optItemBackgroundHoverColor,
+    itemBackgroundHoverIntensity: optItemBackgroundHoverIntensity,
+    itemBorderColor: optItemBorderColor,
+    itemBorderIntensity: optItemBorderIntensity,
+    itemBorderHoverColor: optItemBorderHoverColor,
+    itemBorderHoverIntensity: optItemBorderHoverIntensity,
     itemEntranceAnimation: optItemEntranceAnimation,
     itemExitAnimation: optItemExitAnimation,
     syncWithFooter: optSyncWithFooter,
@@ -91,6 +100,14 @@ export async function newMenuItem(options?: NewMenuItemOptions) {
   let itemID = '';
   let itemLink = '';
 
+  const itemStyle = skipPrompts && options?.itemStyle ? options.itemStyle : await select({
+    message: 'Select menu item style:',
+    choices: [
+      { name: 'string', value: 'string' },
+      { name: 'button', value: 'button' },
+    ],
+  }) as 'string' | 'button';
+
   if (itemType === 'page') {
     const activePages = pages.filter((page) => page.pageActive);
     if (activePages.length === 0) {
@@ -130,8 +147,20 @@ export async function newMenuItem(options?: NewMenuItemOptions) {
     }
   }
 
-  let itemColor, itemIntensity, itemHoverColor, itemHoverIntensity, itemActiveColor, itemActiveIntensity;
+  const itemOrder = skipPrompts && optItemOrder !== undefined ? optItemOrder : await input({
+    message: 'Enter the menu item order (positive number):',
+    default: String(navbar.navbarMenuItems.length + 1),
+    validate: (input: string) => {
+      const num = parseInt(input, 10);
+      if (isNaN(num) || num < 1) {
+        return 'Please enter a valid positive number';
+      }
+      return true;
+    },
+    transformer: (input: string) => input,
+  }).then((val) => parseInt(val, 10));
 
+  let itemColor, itemIntensity, itemHoverColor, itemHoverIntensity, itemActiveColor, itemActiveIntensity, itemBackgroundColor, itemBackgroundIntensity, itemBackgroundHoverColor, itemBackgroundHoverIntensity, itemBorderColor, itemBorderIntensity, itemBorderHoverColor, itemBorderHoverIntensity;
   if (skipPrompts) {
     itemColor = optItemColor!;
     itemIntensity = optItemIntensity!;
@@ -139,6 +168,14 @@ export async function newMenuItem(options?: NewMenuItemOptions) {
     itemHoverIntensity = optItemHoverIntensity!;
     itemActiveColor = optItemActiveColor!;
     itemActiveIntensity = optItemActiveIntensity!;
+    itemBackgroundColor = optItemBackgroundColor!;
+    itemBackgroundIntensity = optItemBackgroundIntensity!;
+    itemBorderColor = optItemBorderColor!;
+    itemBorderIntensity = optItemBorderIntensity!;
+    itemBorderHoverColor = optItemBorderHoverColor!;
+    itemBorderHoverIntensity = optItemBorderHoverIntensity!;
+    itemBackgroundHoverColor = optItemBackgroundHoverColor!;
+    itemBackgroundHoverIntensity = optItemBackgroundHoverIntensity!;
   } else {
     const itemColors = await selectColorAndIntensity('item');
     itemColor = itemColors.color;
@@ -151,6 +188,24 @@ export async function newMenuItem(options?: NewMenuItemOptions) {
     const itemActiveColors = await selectColorAndIntensity('item active');
     itemActiveColor = itemActiveColors.color;
     itemActiveIntensity = itemActiveColors.intensity;
+
+    if (itemStyle === 'button') {
+      const bgColors = await selectColorAndIntensity('item background');
+      itemBackgroundColor = bgColors.color;
+      itemBackgroundIntensity = bgColors.intensity;
+
+      const bgHoverColors = await selectColorAndIntensity('item background hover');
+      itemBackgroundHoverColor = bgHoverColors.color;
+      itemBackgroundHoverIntensity = bgHoverColors.intensity;
+      
+      const borderColors = await selectColorAndIntensity('item border');
+      itemBorderColor = borderColors.color;
+      itemBorderIntensity = borderColors.intensity;
+
+      const borderHoverColors = await selectColorAndIntensity('item border hover');
+      itemBorderHoverColor = borderHoverColors.color;
+      itemBorderHoverIntensity = borderHoverColors.intensity;
+    }
   }
 
   const itemEntranceAnimation = skipPrompts && optItemEntranceAnimation ? optItemEntranceAnimation : await select({
@@ -187,7 +242,9 @@ export async function newMenuItem(options?: NewMenuItemOptions) {
   const newMenuItem: NavItem = {
     itemName,
     itemType: itemType as 'page' | 'link',
+    itemStyle: itemStyle as 'string' | 'button',
     itemID,
+    itemOrder,
     itemColor,
     itemIntensity,
     itemHoverColor,
@@ -196,6 +253,16 @@ export async function newMenuItem(options?: NewMenuItemOptions) {
     itemActiveIntensity,
     itemEntranceAnimation,
     itemExitAnimation,
+    ...(itemStyle === 'button' && {
+      itemBackgroundColor,
+      itemBackgroundIntensity,
+      itemBackgroundHoverColor,
+      itemBackgroundHoverIntensity,
+      itemBorderColor,
+      itemBorderIntensity,
+      itemBorderHoverColor,
+      itemBorderHoverIntensity,
+    }),
     ...(itemType === 'link' && { itemLink }),
   };
 

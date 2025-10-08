@@ -1,11 +1,7 @@
 import path from "path";
 import fs from 'fs/promises';
 import { BlogConfig } from "../types/blogTypes.js";
-import { input, number, select, confirm } from '@inquirer/prompts';
-import { TailwindColor, TailwindIntensity, ThemeOptions } from "rkitech-components";
-import { COLORS, INTENSITIES, THEME_COLORS } from "../../../shared/constants/tailwindConstants.js";
-import { ENTRANCE_ANIMATIONS, EXIT_ANIMATIONS } from "../../../shared/constants/animationConstants.js";
-import { PageData } from "../../Pages/types/pageTypes.js";
+import { input, number, confirm } from '@inquirer/prompts';
 import { newPage } from "../../Pages/commands/newPage.js";
 import { newMenuItem } from "../../Navbar/commands/newMenuItem.js";
 
@@ -24,8 +20,6 @@ export async function initBlog(mode: "manage" | "new") {
     }
     
     let blog: BlogConfig;
-    let pageColor: TailwindColor | ThemeOptions;
-    let pageIntensity: TailwindIntensity | false;
 
     try {
         const blogRaw = await fs.readFile(blogJsonPath, 'utf-8');
@@ -86,89 +80,15 @@ export async function initBlog(mode: "manage" | "new") {
     blog.postCategoryFilter = postCategoryFilter;
 
     if (mode === "new") {
-        const pagesJsonPath = path.resolve(
-            process.cwd(),
-            'src/cli/src/features/Pages/json/pages.json'
-        );
-
-        try {
-            await fs.access(pagesJsonPath);
-        } catch (error) {
-            console.error(`❌ Could not find pages.json at: ${pagesJsonPath}`);
-            console.log('Please ensure the pages.json file exists in the correct location.');
-            return;
-        }
-
-        let pages: PageData[];
-
-        try {
-            const pagesRaw = await fs.readFile(pagesJsonPath, 'utf-8');
-            pages = JSON.parse(pagesRaw);
-        } catch (error) {
-            console.error('❌ Error reading or parsing pages.json:', error);
-            return;
-        }
-
-        const pageActive = await confirm({
-            message: 'Should the blog be active?',
-            default: true,
-        });
-        
-        const colorType = await select({
-            message: 'Select blog page background color type:',
-            choices: [
-                { name: 'Tailwind Color', value: 'tailwind' },
-                { name: 'Theme Color', value: 'theme' }
-            ],
-        });
-    
-        if (colorType === 'tailwind') {
-            pageColor = await select({
-                message: 'Select a Tailwind background color:',
-                choices: COLORS.map((color) => ({ name: color, value: color })),
-            });
-        
-            pageIntensity = await select({
-                message: 'Select a page background intensity:',
-                choices: INTENSITIES.map((intensity) => ({
-                name: intensity.toString(),
-                value: intensity,
-                })),
-            });
-        } else {
-            pageColor = await select({
-                message: 'Select a theme background color:',
-                choices: THEME_COLORS.map((color) => ({ name: color, value: color })),
-            });
-            
-            pageIntensity = false; 
-        }
-    
-        const pageEntranceAnimation = await select({
-            message: 'Select entrance blog page animation:',
-            choices: ENTRANCE_ANIMATIONS.map((animation) => ({
-                name: animation,
-                value: animation,
-            })),
-        }); 
-    
-        const pageExitAnimation = await select({
-            message: 'Select exit blog page animation:',
-            choices: EXIT_ANIMATIONS.map((animation) => ({
-                name: animation,
-                value: animation,
-            })),
-        });
-
         const blogPageID = await newPage({
             pageName: 'Blog',
             pagePath: 'blog',
             pageRenderMethod: 'static',
-            pageActive: pageActive,
-            pageColor: pageColor,
-            pageIntensity: pageIntensity,
-            pageEntranceAnimation: pageEntranceAnimation,
-            pageExitAnimation: pageExitAnimation,
+            pageActive: true,
+            pageColor: 'white',
+            pageIntensity: false,
+            pageEntranceAnimation: 'animate__fadeIn',
+            pageExitAnimation: 'animate__fadeOut',
             chosenTemplate: 'Blog',
             skipPrompts: true
         });
@@ -177,11 +97,11 @@ export async function initBlog(mode: "manage" | "new") {
             pageName: 'BlogPost',
             pagePath: 'blog/:postID',
             pageRenderMethod: 'static',
-            pageActive: pageActive,
-            pageColor: pageColor,
-            pageIntensity: pageIntensity,
-            pageEntranceAnimation: pageEntranceAnimation,
-            pageExitAnimation: pageExitAnimation,
+            pageActive: true,
+            pageColor: 'white',
+            pageIntensity: false,
+            pageEntranceAnimation: 'animate__fadeIn',
+            pageExitAnimation: 'animate__fadeOut',
             chosenTemplate: 'Blog Post',
             skipPrompts: true
         });
@@ -190,6 +110,8 @@ export async function initBlog(mode: "manage" | "new") {
             itemName: 'Blog',
             itemType: 'page',
             itemID: blogPageID || '', 
+            itemStyle: 'string',
+            itemOrder: 4,
             itemColor: 'black',
             itemIntensity: false,
             itemHoverColor: 'primary',

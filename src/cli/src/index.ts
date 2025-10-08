@@ -34,7 +34,6 @@ async function mainMenu() {
       'src/cli/src/features/Blog/json/blog.json'
     );
 
-
     try {
       await fs.access(blogJsonPath);
     } catch (error) {
@@ -47,7 +46,6 @@ async function mainMenu() {
       process.cwd(),
       'src/cli/src/features/Auth/json/auth.json'
     );
-
 
     try {
       await fs.access(authJsonPath);
@@ -76,12 +74,24 @@ async function mainMenu() {
       return;
     }
 
+    const choices = [
+      "General Settings",
+      "Manage Assets",
+      "Manage Pages",
+      "Manage Navbar",
+      "Manage Footer",
+      (auth.authActive ? "Manage Auth" : "Create Auth"),
+      (blog.blogActive ? "Manage Blog" : "Create Blog"),
+      "Exit"
+    ];
+
     const { mainChoice } = await inquirer.prompt([
       {
         type: "list",
         name: "mainChoice",
         message: "What would you like to do?",
-        choices: ["General Settings", "Manage Assets", "Manage Pages", "Manage Navbar", "Manage Footer", (auth.authActive ? "Manage Auth" : "Create Auth"), (blog.blogActive ? "Manage Blog" : "Create Blog"), "Exit"]
+        choices: choices,
+        pageSize: choices.length  
       }
     ]);
 

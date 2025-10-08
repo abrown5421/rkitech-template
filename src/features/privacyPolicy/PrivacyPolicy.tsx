@@ -4,15 +4,18 @@ import type { PrivacyPolicyProps } from "./privacyPolicyTypes";
 import { useGetTheme } from "../../hooks/useGetTheme";
 
 const PrivacyPolicy: React.FC<PrivacyPolicyProps> = () => {
+  const themeBlack = useGetTheme("black");
+  const themeWhite = useGetTheme("white");
+  const themePrimary = useGetTheme("primary");
+
   return (
     <Container tailwindClasses="flex-col w-full min-h-[calc(100vh-50px)] p-5 mx-auto md:w-4/5">
-
       <Text
         text="Privacy Policy"
-        tailwindClasses={`text-3xl primary-font text-${useGetTheme('black')}`}
+        tailwindClasses={`text-3xl primary-font text-${themeBlack}`}
       />
       <Text
-        text="Effective Date: 10/02/2025"
+        text="Effective Date: [Insert Date]"
         tailwindClasses="text-sm mb-6 text-gray-700"
       />
 

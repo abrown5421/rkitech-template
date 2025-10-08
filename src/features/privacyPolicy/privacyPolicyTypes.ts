@@ -1,4 +1,1 @@
-export interface PrivacyPolicyProps {
-    
-      }
-      
+export interface PrivacyPolicyProps {}

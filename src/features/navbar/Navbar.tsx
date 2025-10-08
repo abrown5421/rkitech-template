@@ -50,47 +50,84 @@ const Navbar: React.FC = () => {
         <Text tailwindClasses={`text-xl primary-font text-${useGetTheme('black')}`} text={application.navbar.navbarTitle} />
       </Container>
 
-      <Container tailwindClasses='flex-col px-5'>
-        <Container tailwindClasses='flex-row gap-4'>
-          {application.navbar.navbarMenuItems.map((i, index) => {
-            let onClickHandler: () => void;
-            let isActive = false;
+      <Container tailwindClasses='flex-col'>
+        <Container tailwindClasses='flex-row gap-5'>
+          {[...application.navbar.navbarMenuItems]
+            .sort((a, b) => a.itemOrder - b.itemOrder)
+            .map((i, index) => {
+              let onClickHandler: () => void;
+              let isActive = false;
+              let hideAuthStyle;
 
-            if (i.itemType === 'page') {
-              const page = application.pages.find((p) => p.pageID === i.itemID) as PageData;
-              if (!page) return null; 
-              isActive = activePage.activePageName === page.pageName;
-              onClickHandler = navigate(page);
-            } else if (i.itemType === 'link') {
-              onClickHandler = () => window.open(i.itemLink || '#', '_blank');
-            } else {
-              return null;
-            }
+              if (i.itemType === 'page') {
+                const page = application.pages.find((p) => p.pageID === i.itemID) as PageData;
+                if (!page) return null;
+                isActive = activePage.activePageName === page.pageName;
+                hideAuthStyle = activePage.activePageName === 'Login' && page.pageName === 'Login' ? 'hideAuth' : 'showAuth mr-4'
+                onClickHandler = navigate(page);
+              } else if (i.itemType === 'link') {
+                onClickHandler = () => window.open(i.itemLink || '#', '_blank');
+              } else {
+                return null;
+              }
 
-            const colorClass = isActive
-              ? getColorClass(i.itemActiveColor, i.itemActiveIntensity)
-              : getColorClass(i.itemColor, i.itemIntensity);
+              if (i.itemStyle === 'button') {
+                const bgColor = isActive
+                  ? getColorClass(i.itemBackgroundColor, i.itemBackgroundIntensity, 'bg')
+                  : getColorClass(i.itemBackgroundColor, i.itemBackgroundIntensity, 'bg');
 
-            const hoverClass = isActive
-              ? `hover:${getColorClass(i.itemColor, i.itemIntensity)}`
-              : `hover:${getColorClass(i.itemHoverColor, i.itemHoverIntensity)}`;
+                const bgHover = `hover:${getColorClass(i.itemBackgroundHoverColor, i.itemBackgroundHoverIntensity, 'bg')}`;
 
-            return (
-              <Button
-                key={i.itemID}
-                tailwindClasses={`${colorClass} cursor-pointer ${hoverClass}`}
-                onClick={onClickHandler}
-                animationObject={{
-                    entranceAnimation: i.itemEntranceAnimation as EntranceAnimation,
-                    exitAnimation: i.itemExitAnimation as ExitAnimation,
-                    isEntering: true,
-                    delay: index * 0.25
-                }}
-              >
-                {i.itemName}
-              </Button>
-            );
-          })}
+                const borderColor = getColorClass(i.itemBorderColor, i.itemBorderIntensity, 'border');
+                const borderHover = `hover:${getColorClass(i.itemBorderHoverColor, i.itemBorderHoverIntensity, 'border')}`;
+
+                const textColor = isActive
+                  ? getColorClass(i.itemActiveColor, i.itemActiveIntensity, 'text')
+                  : getColorClass(i.itemColor, i.itemIntensity, 'text');
+
+                const textHover = `hover:${getColorClass(i.itemHoverColor, i.itemHoverIntensity, 'text')}`;
+
+                return (
+                  <Button
+                    key={i.itemID}
+                    tailwindClasses={`py-1 px-4 rounded-xl cursor-pointer border-2 ${bgColor} ${bgHover} ${borderColor} ${borderHover} ${textColor} ${textHover} ${hideAuthStyle} cursor-pointer`}
+                    onClick={onClickHandler}
+                    animationObject={{
+                      entranceAnimation: i.itemEntranceAnimation as EntranceAnimation,
+                      exitAnimation: i.itemExitAnimation as ExitAnimation,
+                      isEntering: true,
+                      delay: index * 0.25
+                    }}
+                  >
+                    {i.itemName}
+                  </Button>
+                );
+              } else {
+                const colorClass = isActive
+                  ? getColorClass(i.itemActiveColor, i.itemActiveIntensity)
+                  : getColorClass(i.itemColor, i.itemIntensity);
+
+                const hoverClass = isActive
+                  ? `hover:${getColorClass(i.itemColor, i.itemIntensity)}`
+                  : `hover:${getColorClass(i.itemHoverColor, i.itemHoverIntensity)}`;
+
+                return (
+                  <Button
+                    key={i.itemID}
+                    tailwindClasses={`${colorClass} cursor-pointer ${hoverClass}`}
+                    onClick={onClickHandler}
+                    animationObject={{
+                      entranceAnimation: i.itemEntranceAnimation as EntranceAnimation,
+                      exitAnimation: i.itemExitAnimation as ExitAnimation,
+                      isEntering: true,
+                      delay: index * 0.25
+                    }}
+                  >
+                    {i.itemName}
+                  </Button>
+                );
+              }
+            })}
         </Container>
       </Container>
     </Container>
